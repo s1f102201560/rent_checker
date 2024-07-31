@@ -12,6 +12,14 @@ services:
       - ./src:/code
     depends_on:
       - db
+  # FastAPI用
+  fastapi:
+    build: ./fastapi
+    command: uvicorn main:app --host 0.0.0.0 --port 8001
+    expose:
+      - 8001
+    volumes:
+      - ./fastapi:/code
   db:
     image: postgres:15.4
     volumes:
