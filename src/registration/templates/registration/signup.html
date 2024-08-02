@@ -1,0 +1,18 @@
+{% extends "registration/base.html" %}
+{% load static %}
+
+{% block head %}
+  <link rel="stylesheet" type="text/css" href="{% static 'registration/css/form.css' %}">
+  {{ block.super }}
+{% endblock %}
+
+{% block main %}
+  <div>
+    <div>
+      <h2>
+        ユーザー登録
+      </h2>
+      {% include "registration/_form.html" with submit_label="登録" form_type="signup" %}
+    </div>
+  </div>
+{% endblock %}
