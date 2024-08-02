@@ -126,6 +126,7 @@ LOGOUT_REDIRECT_URL = "/"
 AUTH_USER_MODEL = 'registration.User'
 
 # Email
+# FIXME SMTPがちゃんと機能するようにする
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
