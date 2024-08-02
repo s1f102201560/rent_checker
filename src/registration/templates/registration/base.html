@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  {% block head %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RENT CHECKER</title>
+  {% endblock %}
+</head>
+<body>
+  {% block nav %}
+  <nav>
+    <a href={% url "index" %}>RENT CHECKER</a>
+  </nav>
+  {% endblock nav %}
+  <div>
+    {% block main %}
+      <p>※コンテンツがありません。</p>
+    {% endblock %}
+  </div>
+</body>
+</html>

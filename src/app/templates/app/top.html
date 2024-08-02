@@ -1,0 +1,48 @@
+{% extends "app/base.html" %}
+{% load static %}
+
+{% block head %}
+  <link rel="stylesheet" type="text/css" href="{% static 'app/css/top.css' %}">
+  {{ block.super }}
+{% endblock %}
+
+{% block nav %}
+  <nav>
+    <a href={% url "top" %}>RENT CHECKER</a>
+  </nav>
+{% endblock nav %}
+
+{% block main %}
+  <div>
+
+    <!-- 左半分 -->
+    <div>
+      <div>
+        <h1>RENT CHECKER</h1> 
+      </div>
+    </div>
+
+    <!-- 右半分 -->
+    <div>
+      <h2>Get started</h2>
+
+      <div>
+        <!-- ログインボタン -->
+        <a href="{% url 'login' %}">
+          <button>
+            Log in
+          </button>
+        </a>
+      
+        <!-- サインアップボタン -->
+        <a href="{% url 'signup' %}">
+          <button>
+            Sign up
+          </button>
+        </a>
+      </div> 
+      
+    </div>
+
+  </div>
+{% endblock %}

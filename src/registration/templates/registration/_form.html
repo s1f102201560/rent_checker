@@ -1,0 +1,109 @@
+<form method="post">
+  {% csrf_token %}
+  {% if form_type == 'signup' %}
+    <p>
+      <label for="{{ form.username.id_for_label }}">{{ form.username.label }}</label>
+      {{ form.username }}
+      {% if form.username.errors %}
+        <span class="error">{{ form.username.errors.as_text }}</span>
+      {% endif %}
+      {% if form.username.help_text %}
+        <small>{{ form.username.help_text }}</small>
+      {% endif %}
+    </p>
+    <p>
+      <label for="{{ form.email.id_for_label }}">{{ form.email.label }}</label>
+      {{ form.email }}
+      {% if form.email.errors %}
+        <span class="error">{{ form.email.errors.as_text }}</span>
+      {% endif %}
+      {% if form.email.help_text %}
+        <small>{{ form.email.help_text }}</small>
+      {% endif %}
+    </p>
+    <p>
+      <label for="{{ form.password1.id_for_label }}">{{ form.password1.label }}</label>
+      {{ form.password1 }}
+      {% if form.password1.errors %}
+        <span class="error">{{ form.password1.errors.as_text }}</span>
+      {% endif %}
+      {% if form.password1.help_text %}
+        <small>{{ form.password1.help_text }}</small>
+      {% endif %}
+    </p>
+    <p>
+      <label for="{{ form.password2.id_for_label }}">{{ form.password2.label }}</label>
+      {{ form.password2 }}
+      {% if form.password2.errors %}
+        <span class="error">{{ form.password2.errors.as_text }}</span>
+      {% endif %}
+      {% if form.password2.help_text %}
+        <small>{{ form.password2.help_text }}</small>
+      {% endif %}
+    </p>
+  {% elif form_type == 'login' %}
+    <p>
+      <label for="{{ form.username.id_for_label }}">{{ form.username.label }}</label>
+      {{ form.username }}
+      {% if form.username.errors %}
+        <span class="error">{{ form.username.errors.as_text }}</span>
+      {% endif %}
+      {% if form.username.help_text %}
+        <small>{{ form.username.help_text }}</small>
+      {% endif %}
+    </p>
+    <p>
+      <label for="{{ form.password.id_for_label }}">{{ form.password.label }}</label>
+      {{ form.password }}
+      {% if form.password.errors %}
+        <span class="error">{{ form.password.errors.as_text }}</span>
+      {% endif %}
+      {% if form.password.help_text %}
+        <small>{{ form.password.help_text }}</small>
+      {% endif %}
+    </p>
+  {% elif form_type == 'password_change' %}
+    <p>
+      <label for="{{ form.old_password.id_for_label }}">{{ form.old_password.label }}</label>
+      {{ form.old_password }}
+      {% if form.old_password.errors %}
+        <span class="error">{{ form.old_password.errors.as_text }}</span>
+      {% endif %}
+      {% if form.old_password.help_text %}
+        <small>{{ form.old_password.help_text }}</small>
+      {% endif %}
+    </p>
+    <p>
+      <label for="{{ form.new_password1.id_for_label }}">{{ form.new_password1.label }}</label>
+      {{ form.new_password1 }}
+      {% if form.new_password1.errors %}
+        <span class="error">{{ form.new_password1.errors.as_text }}</span>
+      {% endif %}
+      {% if form.new_password1.help_text %}
+        <small>{{ form.new_password1.help_text }}</small>
+      {% endif %}
+    </p>
+    <p>
+      <label for="{{ form.new_password2.id_for_label }}">{{ form.new_password2.label }}</label>
+      {{ form.new_password2 }}
+      {% if form.new_password2.errors %}
+        <span class="error">{{ form.new_password2.errors.as_text }}</span>
+      {% endif %}
+      {% if form.new_password2.help_text %}
+        <small>{{ form.new_password2.help_text }}</small>
+      {% endif %}
+    </p>
+  {% elif form_type == 'password_reset' %}
+    <p>
+      <label for="{{ form.email.id_for_label }}">{{ form.email.label }}</label>
+      {{ form.email }}
+      {% if form.email.errors %}
+        <span class="error">{{ form.email.errors.as_text }}</span>
+      {% endif %}
+      {% if form.email.help_text %}
+        <small>{{ form.email.help_text }}</small>
+      {% endif %}
+    </p>
+  {% endif %}
+  <input type="submit" value="{{ submit_label }}" />
+</form>
