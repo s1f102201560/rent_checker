@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  {% block head %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RENT CHECKER</title>
+  {% endblock %}
+</head>
+<body>
+  {% block nav %}
+  <nav>
+    <a href={% url "index" %}>RENT CHECKER</a>
+    <div>
+      <form action="{% url 'logout' %}" method="POST">
+        {% csrf_token %}
+        <button type="submit">ログアウト</button>
+      </form>
+      <a href={% url "password_change" %}>パスワード変更</a>
+    </div>
+  </nav>
+  {% endblock nav %}
+  <div>
+    {% block main %}
+      <p>※コンテンツがありません。</p>
+    {% endblock main %}
+  </div>
+</body>
+</html>
