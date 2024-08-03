@@ -10,7 +10,7 @@
 <body>
   {% block nav %}
   <nav>
-    <a href={% url "index" %}>RENT CHECKER/a>
+    <a href={% url "index" %}>RENT CHECKER</a>
     <div>
       <form action="{% url 'logout' %}" method="POST">
         {% csrf_token %}
