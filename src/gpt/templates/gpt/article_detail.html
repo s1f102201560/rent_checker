@@ -1,0 +1,23 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+
+<div>
+    <p>タイトル：{{ article.title }}</p>
+    <p>投稿内容：<br>{{ article.content }}</p>
+    <p>{{ article.author }}</p>
+    <p>{{ article.created_at|date:"Y-m-j H:i:s" }}<br>
+    {{ article.updated_at|date:"Y-m-j H:i:s" }}</p>
+</div>
+<div class='mt-4'>
+    {% if request.user.id == object.author_id %}
+    <a href='{% url "gpt:update" article.pk %}'  class='btn btn-outline-primary mr-2'>編集</a>
+    {% endif %}
+
+    <a href='{% url "gpt:index" %}' class='btn btn-outline-primary'>一覧に戻る</a>
+
+    {% if request.user.id == object.author_id %}
+    <a href='{% url "gpt:delete" article.pk %}'  class='btn btn-danger ml-5'>削除</a>
+    {% endif %}
+</div>
+{% endblock %}

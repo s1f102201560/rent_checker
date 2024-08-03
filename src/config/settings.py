@@ -24,6 +24,7 @@ CSRF_TRUSTED_ORIGINS = ['http://localhost:8080']
 INSTALLED_APPS = [
     'app',
     'registration',
+    'gpt',
     'django.contrib.admin',
     'django.contrib.sites',
     'django.contrib.auth',
