@@ -1,48 +1,59 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponse
-from .models import Article
 from django.views import generic
-
 from django.urls import reverse_lazy
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.exceptions import PermissionDenied
+from .models import Article, Board
 
-class CreateView(LoginRequiredMixin, generic.edit.CreateView):
+class BoardListView(LoginRequiredMixin, generic.ListView):
+    model = Board
+    template_name = 'gpt/board_list.html'
+
+    def get_queryset(self):
+        return Board.objects.filter(user=self.request.user)
+
+class ArticleListView(LoginRequiredMixin, generic.ListView):
     model = Article
-    fields = ['content', 'title', ]
+    template_name = 'gpt/article_list.html'
+
+    def get_queryset(self):
+        board = get_object_or_404(Board, id=self.kwargs['board_id'], user=self.request.user)
+        return Article.objects.filter(board=board)
+
+class ArticleCreateView(LoginRequiredMixin, generic.edit.CreateView):
+    model = Article
+    fields = ['title', 'content']
+    template_name = 'gpt/article_form.html'
 
     def form_valid(self, form):
         form.instance.author = self.request.user
-        return super(CreateView, self).form_valid(form)
+        form.instance.board = get_object_or_404(Board, id=self.kwargs['board_id'], user=self.request.user)
+        return super().form_valid(form)
 
-def index(request):
-    return HttpResponse('Hello Django')
-
-def detail(request, id):
-    return HttpResponse('detail ' + str(id))
-
-def create(request):
-    return HttpResponse('create')
-
-class UpdateView(LoginRequiredMixin, generic.edit.UpdateView):
+class ArticleUpdateView(LoginRequiredMixin, generic.edit.UpdateView):
     model = Article
-    fields = ['content', 'title', ]
- 
+    fields = ['title', 'content']
+    template_name = 'gpt/article_form.html'
+
     def dispatch(self, request, *args, **kwargs):
         obj = self.get_object()
- 
         if obj.author != self.request.user:
             raise PermissionDenied('You do not have permission to edit.')
- 
-        return super(UpdateView, self).dispatch(request, *args, **kwargs)
+        return super().dispatch(request, *args, **kwargs)
 
-class DeleteView(LoginRequiredMixin, generic.edit.DeleteView):
-    model = Article
-    success_url = reverse_lazy('gpt:index')
-
-
-class IndexView(generic.ListView):
+class ArticleDeleteView(LoginRequiredMixin, generic.edit.DeleteView):
     model = Article
 
-class DetailView(generic.DetailView):
+    def get_success_url(self):
+        return reverse_lazy('gpt:article_list', kwargs={'board_id': self.object.board.id})
+
+    def dispatch(self, request, *args, **kwargs):
+        obj = self.get_object()
+        if obj.author != self.request.user:
+            raise PermissionDenied('You do not have permission to delete.')
+        return super().dispatch(request, *args, **kwargs)
+
+class ArticleDetailView(LoginRequiredMixin, generic.DetailView):
     model = Article
+    template_name = 'gpt/article_detail.html'

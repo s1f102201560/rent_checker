@@ -112,9 +112,11 @@ USE_TZ = True
 ###################
 # 静的ファイル周り #
 ###################
-STATIC_URL = 'static/'
-STATIC_ROOT = os.path.join(BASE_DIR, 'collected_static/')
-
+STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'collected_static')
+STATICFILES_DIRS = [
+    BASE_DIR / "static",
+]
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 ###########
