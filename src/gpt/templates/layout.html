@@ -1,32 +1,46 @@
-{% load static %}
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>{% block title %}My Site{% endblock %}</title>
-    <link rel="stylesheet" type="text/css" href="{% static 'css/styles.css' %}">
-</head>
-<body>
-    <header>
-        <h1>My Site</h1>
-        <nav>
-            <ul>
-                <li><a href="{% url 'gpt:board_list' %}">Home</a></li>
+<html>
+    <head>
+        <meta charset='utf-8'>
+        <meta name='viewport' content='width=device-width, initial-scale=1, shrink-to-fit=no'>
+        <link rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css'>
+        <style>
+            body {padding-top: 80px;}
+            h1 {font-size: 150%;}
+            h2 {font-size: 130%;}
+            h3 {font-size: 110%;}
+            h4 {font-size: 100%;}
+            h5 {font-size: 100%;}
+            h6 {font-size: 100%;}
+        </style>
+        <title>鳩でもわかるはじめてのDjango</title>
+    </head>
+    <body>
+        <nav class='navbar navbar-expand-sm navbar-dark bg-dark fixed-top'>
+            <a class='navbar-brand' href='{% url "gpt:index" %}'>掲示板 TOP</a>
+            <ul class='navbar-nav'>
                 {% if user.is_authenticated %}
-                    <li><span>{{ user.username }}</span></li>
-                    <li><a href="{% url 'logout' %}">Logout</a></li>
+                    <!-- ログインしているとき -->
+                    <li class='nav-time'>
+                        <span class='navbar-text'>{{ user }} - </span>
+                    </li>
+                    <li class='nav-item'>
+                        <a href='{% url "logout" %}' class='logout nav-link'>ログアウト</a>
+                    </li>
                 {% else %}
-                    <li><a href="{% url 'login' %}">Login</a></li>
+                    <!-- ログインしていないとき -->
+                    <li class="nav-item">
+                        <a href='{% url "login" %}' class='login nav-link'>ログイン</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href='#' class='signup nav-link'>ユーザー登録</a>
+                    </li>
                 {% endif %}
             </ul>
         </nav>
-    </header>
-    <main>
-        {% block content %}
-        {% endblock %}
-    </main>
-    <footer>
-        <p>&copy; 2024 My Site</p>
-    </footer>
-</body>
+        <div class='container'>
+            {% block content %}
+            {% endblock %}
+        </div>
+    </body>
 </html>

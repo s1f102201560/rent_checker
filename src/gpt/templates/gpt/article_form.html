@@ -1,10 +1,18 @@
-{% extends "layout.html" %}
+{% extends 'layout.html' %}
 
 {% block content %}
-<h2>{% if form.instance.pk %}Edit{% else %}Create{% endif %} Article</h2>
-<form method="post">
+
+<h1 class="mt-3 mb-4">{{ object|yesno:'投稿内容の更新,新規投稿の作成'}}</h1>
+
+<form action='' method='post'>
     {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Save</button>
+    <p>タイトル：{{ form.title }}</p>
+    <p>本文：<br>
+    {{ form.content }}</p>
+    <button type='submit' class='submit btn btn-outline-primary'>{{ object|yesno:'更新,作成'}}</button>
 </form>
+<div class="mt-3">
+    <a href='JavaScript:history.back()' class='btn btn-outline-primary'> 戻る</a>
+</div>
+
 {% endblock %}
