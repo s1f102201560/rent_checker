@@ -4,7 +4,13 @@
 
 <div>
     <p>タイトル：{{ memo.title }}</p>
-    <p>投稿内容：<br>{{ memo.content }}</p>
+    <p>投稿内容：<br>
+        {% if is_image %}
+            <img src="{{ memo.file.url }}" alt="{{ memo.title }}">
+        {% else %}
+            <a href="{{ memo.file.url }}">{{ memo.file.name }}</a>
+        {% endif %}
+    </p>
     <p>{{ memo.author }}</p>
     <p>{{ memo.created_at|date:"Y-m-j H:i:s" }}<br>
     {{ memo.updated_at|date:"Y-m-j H:i:s" }}</p>
