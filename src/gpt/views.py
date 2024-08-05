@@ -20,6 +20,7 @@ class MemoUpdateView(LoginRequiredMixin, generic.edit.UpdateView):
     fields = ['content', 'title', ]
     template_name = 'gpt/article_form.html'
 
+    # ほかのユーザから編集されないようにしてる
     def dispatch(self, request, *args, **kwargs):
         obj = self.get_object()
 
