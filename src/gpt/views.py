@@ -1,14 +1,13 @@
-from django.shortcuts import render, get_object_or_404, redirect
+from django.shortcuts import get_object_or_404
 from django.urls import reverse_lazy
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.exceptions import PermissionDenied
 from django.views import generic
+from django.conf import settings
+from django.http import HttpResponse, HttpResponseForbidden
 from .models import Memo
 from .forms import MemoForm
 import os
-from django.http import HttpResponseForbidden
-from django.conf import settings
-from django.http import HttpResponse, Http404
 import openai
 import base64
 
@@ -20,12 +19,8 @@ api_key = os.getenv('OPENAI_API_KEY')
 def protected_media(request, path):
     file_path = os.path.join(settings.MEDIA_ROOT, 'uploads', path)
     memo = get_object_or_404(Memo, file='uploads/' + path)
-    
-    # OpenAI API用で一時的にオフにしてる
-    #'''
     if memo.author != request.user:
         return HttpResponseForbidden("You do not have permission to access this file.")
-    #'''
     with open(file_path, 'rb') as f:
         response = HttpResponse(f.read(), content_type="application/octet-stream")
         response['Content-Disposition'] = f'attachment; filename={os.path.basename(file_path)}'
@@ -75,6 +70,8 @@ class MemoListView(LoginRequiredMixin, generic.ListView):
     def get_queryset(self):
         return Memo.objects.filter(author=self.request.user)
 
+
+# この下のMemoDetailViewが生成系AIを使用して解説をしてるもの
 class MemoDetailView(LoginRequiredMixin, generic.DetailView):
     model = Memo
     template_name = 'gpt/article_detail.html'
@@ -111,7 +108,7 @@ class MemoDetailView(LoginRequiredMixin, generic.DetailView):
             obj.save()
 
         return super().dispatch(request, *args, **kwargs)
-
+    
     # 写真の形式を識別
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -120,41 +117,34 @@ class MemoDetailView(LoginRequiredMixin, generic.DetailView):
         context['is_image'] = file_extension in ['png', 'jpg', 'jpeg']
         return context
 
+
+# このMemoDetailViewが生成系AIが解説していないもの
+# トークンを減らさないように、こちらも残してある
+'''
+class MemoDetailView(LoginRequiredMixin, generic.DetailView):
+    model = Memo
+    template_name = 'gpt/article_detail.html'
+    context_object_name = 'memo'
+
+    def dispatch(self, request, *args, **kwargs):
+        obj = self.get_object()
+
+        if obj.author != self.request.user:
+            raise PermissionDenied('You do not have permission to view this.')
+
+        return super().dispatch(request, *args, **kwargs)
+
+    # アップロードされたファイルを識別
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        memo = self.get_object()
+        file_extension = memo.file.name.split('.')[-1].lower()
+        context['is_image'] = file_extension in ['png', 'jpg', 'jpeg']
+        return context
+'''
+
+
 # 写真のエンコード
 def encode_image(image_path):
     with open(image_path, "rb") as image_file:
         return base64.b64encode(image_file.read()).decode("utf-8")
-
-## chatGPT関係
-'''
-def gpt_photo(request):
-    photo = 
-    client = openai.OpenAI(api_key=api_key, base_url=base_url)
-    response = client.chat.completions.create(
-        # miniは写真に対応していない為4oを使用
-        model = "gpt-4o",
-        messages = [
-            {
-                "role" : "system",
-                "content" : "次の写真を解説してください。" + str(photo),
-            },
-        ],
-    )
-    return response.choices[0].message.content
-'''
-
-'''
-def gpt_comment(request):
-    comment = 
-    client = openai.OpenAI(api_key=api_key, base_url=base_url)
-    response = client.chat.completions.create(
-        model = "gpt-4o-mini",
-        messages = [
-            {
-                "role" : "system",
-                "content" : str(comment),
-            },
-        ],
-    )
-    return response.choices[0].message.content
-'''
