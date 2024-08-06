@@ -17,3 +17,6 @@ class Memo(models.Model):
 
     def get_absolute_url(self):
         return reverse('gpt:detail', kwargs={'pk': self.pk})
+
+    # 生成系AIの解説を保存
+    explanation = models.TextField(blank=True, null=True)

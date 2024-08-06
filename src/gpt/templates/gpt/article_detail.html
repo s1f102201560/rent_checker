@@ -13,6 +13,9 @@
             <a href="{{ memo.file.url }}">{{ memo.file.name }}</a>
         {% endif %}
     </p>
+    {% if memo.explanation %}
+    <p>生成系AIの解説:<br>{{ memo.explanation }}</p>
+    {% endif %}
     <p>{{ memo.author }}</p>
     <p>{{ memo.created_at|date:"Y-m-j H:i:s" }}<br>
     {{ memo.updated_at|date:"Y-m-j H:i:s" }}</p>
