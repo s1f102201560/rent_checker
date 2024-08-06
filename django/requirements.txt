@@ -3,3 +3,11 @@ psycopg2-binary
 uvicorn
 python-dotenv
 django-environ
+openai==0.28
+# langchain
+# langchain-community
+# langchain-core
+# langchainhub
+# langchain-openai
+# langchain_chroma
+# bs4

@@ -1,0 +1,42 @@
+{% extends "app/base.html" %}
+{% load static %}
+
+{% block head %}
+  <link rel="stylesheet" type="text/css" href="{% static 'app/css/sandbox.css' %}">
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  {{ block.super }}
+{% endblock %}
+
+{% block main %}
+  <h1>Chat with LangChain</h1>
+  <form id="chat-form">
+      <input type="text" id="question" name="question" required>
+      <button type="submit">Send</button>
+  </form>
+  <div id="response"></div>
+
+  <script>
+    $(document).ready(function() {
+        $('#chat-form').on('submit', function(event) {
+            event.preventDefault();
+            const question = $('#question').val();
+            console.log(`Sending question: ${question}`);  // デバッグ用
+            $.ajax({
+                type: 'POST',
+                url: "{% url 'sandbox' %}",
+                data: {
+                    'question': question,
+                    'csrfmiddlewaretoken': '{{ csrf_token }}'
+                },
+                success: function(data) {
+                    console.log(data);  // デバッグ用に出力
+                    $('#response').text(data.response);
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                    console.log(`Error: ${textStatus} ${errorThrown}`);  // エラー時のデバッグ用
+                }
+            });
+        });
+    });
+  </script>
+{% endblock main %}
