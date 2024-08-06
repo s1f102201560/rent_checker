@@ -6,6 +6,7 @@ class MemoForm(forms.ModelForm):
         model = Memo
         fields = ['title', 'file']
 
+    # ファイルサイズが20MB以下の場合に投稿できるようにしてる
     def clean_file(self):
         file = self.cleaned_data.get('file')
         if file:

@@ -84,6 +84,7 @@ class MemoDetailView(LoginRequiredMixin, generic.DetailView):
 
         return super().dispatch(request, *args, **kwargs)
 
+    # アップロードされたファイルを識別
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         memo = self.get_object()
