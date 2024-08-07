@@ -24,6 +24,7 @@ CSRF_TRUSTED_ORIGINS = ['http://localhost:8080']
 INSTALLED_APPS = [
     'app',
     'registration',
+    'gpt',
     'django.contrib.admin',
     'django.contrib.sites',
     'django.contrib.auth',
@@ -116,6 +117,11 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'collected_static')
 STATICFILES_DIRS = [
     BASE_DIR / "static",
 ]
+
+# 写真
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 ###########
@@ -142,4 +148,3 @@ DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 ###########
 OPENAI_API_KEY = env('OPENAI_API_KEY')
 OPENAI_API_BASE = env('OPENAI_API_BASE')
-

@@ -9,6 +9,7 @@ services:
       - .:/code
     env_file:
       - ./src/.env
+    working_dir: /code/src  # 追加
     depends_on:
       - db
 

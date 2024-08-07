@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Chat Results</title>
+</head>
+<body>
+    <h1>Chat Results</h1>
+    <div>
+        {% for message in chat_results %}
+            <p><strong>{{ message.role }}:</strong> {{ message.content }}</p>
+        {% endfor %}
+    </div>
+    <form method="post" action="{% url 'gpt' %}">
+        {% csrf_token %}
+        <textarea name="message" rows="4" cols="50"></textarea><br>
+        <input type="submit" value="Send">
+    </form>
+    <form method="post" action="{% url 'clear_session' %}">
+        {% csrf_token %}
+        <input type="submit" value="Clear Chat">
+    </form>
+</body>
+</html>
