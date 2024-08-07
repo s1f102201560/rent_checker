@@ -24,6 +24,7 @@ CSRF_TRUSTED_ORIGINS = ['http://localhost:8080']
 INSTALLED_APPS = [
     'app',
     'registration',
+    'gpt',
     'django.contrib.admin',
     'django.contrib.sites',
     'django.contrib.auth',
@@ -136,3 +137,7 @@ EMAIL_USE_TLS = True
 EMAIL_HOST_USER = env('EMAIL_HOST_USER')
 EMAIL_HOST_PASSWORD = env('EMAIL_HOST_PASSWORD')
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+
+# 写真
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')

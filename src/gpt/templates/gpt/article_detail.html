@@ -1,0 +1,31 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+
+<div>
+    <p>タイトル：{{ memo.title }}</p>
+    <p>投稿内容：<br>
+        <!--viewのget_context_dataでpng, jpeg, jpgを判別し、それらなら写真を表示し、
+        それ以外ならurlで投稿した写真を見れるようにしてる-->
+        {% if is_image %}
+            <img src="{{ memo.file.url }}" alt="{{ memo.title }}">
+        {% else %}
+            <a href="{{ memo.file.url }}">{{ memo.file.name }}</a>
+        {% endif %}
+    </p>
+    <p>{{ memo.author }}</p>
+    <p>{{ memo.created_at|date:"Y-m-j H:i:s" }}<br>
+    {{ memo.updated_at|date:"Y-m-j H:i:s" }}</p>
+</div>
+<div class='mt-4'>
+    {% if request.user.id == memo.author_id %}
+    <a href='{% url "gpt:update" memo.pk %}'  class='btn btn-outline-primary mr-2'>編集</a>
+    {% endif %}
+
+    <a href='{% url "gpt:index" %}' class='btn btn-outline-primary'>一覧に戻る</a>
+
+    {% if request.user.id == memo.author_id %}
+    <a href='{% url "gpt:delete" memo.pk %}'  class='btn btn-danger ml-5'>削除</a>
+    {% endif %}
+</div>
+{% endblock %}
