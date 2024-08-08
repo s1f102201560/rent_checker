@@ -35,4 +35,5 @@ EXPOSE 8000
 ENTRYPOINT ["/code/django/entrypoint.sh"]
 
 # サーバーの起動
-CMD ["uvicorn", "config.asgi:application", "--host", "0.0.0.0", "--port", "8000"]
+# CMD ["uvicorn", "config.asgi:application", "--host", "0.0.0.0", "--port", "8000"]
+CMD ["daphne", "-b", "0.0.0.0", "-p", "8000", "config.asgi:application"]

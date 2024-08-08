@@ -53,3 +53,6 @@ def sandbox(request):
             return JsonResponse({'error': str(e)}, status=500)
     print("Rendering sandbox.html")  # デバッグ用
     return render(request, 'app/sandbox.html')
+
+def sandbox_room(request, room_name):
+    return render(request, "app/sandbox_room.html", {"room_name": room_name})

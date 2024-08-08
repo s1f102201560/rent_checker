@@ -4,6 +4,12 @@ uvicorn
 python-dotenv
 django-environ
 openai==0.28
+channels
+redis 
+daphne            
+channels
+channels-redis
+
 # langchain
 # langchain-community
 # langchain-core

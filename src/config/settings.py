@@ -25,6 +25,7 @@ INSTALLED_APPS = [
     'app',
     'registration',
     'gpt',
+    'channels',
     'django.contrib.admin',
     'django.contrib.sites',
     'django.contrib.auth',
@@ -71,7 +72,7 @@ TEMPLATES = [
 # Webサーバー周り #
 ##################
 WSGI_APPLICATION = 'config.wsgi.application'
-# ASGI_APPLICATION = "config.asgi.application" # websocket利用時
+ASGI_APPLICATION = "config.asgi.application" # websocket利用時
 
 ##########
 # DB周り #
