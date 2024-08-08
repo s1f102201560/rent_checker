@@ -13,3 +13,6 @@ class MemoForm(forms.ModelForm):
             if file.size > 20 * 1024 * 1024:  # 20 MB
                 raise forms.ValidationError('ファイルサイズは20MB以下にしてください。')
         return file
+
+class ChatForm(forms.Form):
+    message = forms.CharField(widget=forms.Textarea, label='あなたのメッセージ')

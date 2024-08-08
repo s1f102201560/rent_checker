@@ -1,12 +1,12 @@
-from django.shortcuts import get_object_or_404
+from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse_lazy
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.exceptions import PermissionDenied
 from django.views import generic
 from django.conf import settings
 from django.http import HttpResponse, HttpResponseForbidden
-from .models import Memo
-from .forms import MemoForm
+from .models import Memo, ChatMessage
+from .forms import MemoForm, ChatForm
 import os
 import openai
 import base64
@@ -108,6 +108,7 @@ class MemoDetailView(LoginRequiredMixin, generic.DetailView):
             # マークダウン形式に対応するために記載
             explanation_markdown = response.choices[0].message.content
             obj.explanation = explanation_markdown
+            ChatMessage.objects.create(memo=obj, role="assistant", content=explanation_markdown)
             obj.save()
 
         return super().dispatch(request, *args, **kwargs)
@@ -120,8 +121,30 @@ class MemoDetailView(LoginRequiredMixin, generic.DetailView):
         context['is_image'] = file_extension in ['png', 'jpg', 'jpeg']
         if memo.explanation:
             context['explanation_html'] = markdown(memo.explanation)
+        context['chat_form'] = ChatForm()
+        context['chat_history'] = memo.chat_history.all()
         return context
-
+    
+    def post(self, request, *args, **kwargs):
+        obj = self.get_object()
+        if obj.author != self.request.user:
+            raise PermissionDenied('You do not have permission to view this.')
+        
+        chat_form = ChatForm(request.POST)
+        if chat_form.is_valid():
+            message = chat_form.cleaned_data['message']
+            chat_history = [{"role": msg.role, "content": msg.content} for msg in obj.chat_history.all()]
+            chat_history.append({"role": "user", "content": message})
+            client = openai.OpenAI(api_key=api_key, base_url=base_url)
+            response = client.chat.completions.create(
+                model="gpt-4o",
+                messages=chat_history,
+            )
+            chat_response = response.choices[0].message.content
+            ChatMessage.objects.create(memo=obj, role="user", content=message)
+            ChatMessage.objects.create(memo=obj, role="assistant", content=chat_response)
+            obj.save()
+        return redirect('gpt:detail', pk=obj.pk)
 
 # このMemoDetailViewが生成系AIが解説していないもの
 # トークンを減らさないように、こちらも残してある

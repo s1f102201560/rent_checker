@@ -19,6 +19,23 @@
         <p>生成系AIの解説:<br>{{ explanation_html | safe }}</p>
     </div>
     {% endif %}
+
+<h2>生成系AIと対話</h2>
+<form method="post">
+  {% csrf_token %}
+  {{ chat_form.as_p }}
+  <button type="submit">送信</button>
+</form>
+
+<h2>対話履歴</h2>
+<ul>
+  {% for message in chat_history %}
+    <li><strong>{{ message.role }}:</strong> {{ message.content }}</li>
+  {% endfor %}
+</ul>
+
+<a href="{% url 'gpt:index' %}">Back to list</a>
+
     <p>{{ memo.author }}</p>
     <p>{{ memo.created_at|date:"Y-m-j H:i:s" }}<br>
     {{ memo.updated_at|date:"Y-m-j H:i:s" }}</p>
