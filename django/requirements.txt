@@ -4,3 +4,4 @@ uvicorn
 python-dotenv
 django-environ
 openai
+markdown

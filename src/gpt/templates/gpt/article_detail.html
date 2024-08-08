@@ -14,7 +14,10 @@
         {% endif %}
     </p>
     {% if memo.explanation %}
-    <p>生成系AIの解説:<br>{{ memo.explanation }}</p>
+    <!--markdownで表示させている-->
+    <div class="markdown-content">
+        <p>生成系AIの解説:<br>{{ explanation_html | safe }}</p>
+    </div>
     {% endif %}
     <p>{{ memo.author }}</p>
     <p>{{ memo.created_at|date:"Y-m-j H:i:s" }}<br>

@@ -10,6 +10,7 @@ from .forms import MemoForm
 import os
 import openai
 import base64
+from markdown import markdown
 
 base_url = "https://api.openai.iniad.org/api/v1"
 api_key = os.getenv('OPENAI_API_KEY')
@@ -93,7 +94,7 @@ class MemoDetailView(LoginRequiredMixin, generic.DetailView):
                     {
                         "role": "user",
                         "content": [
-                            {"type": "text", "text": "提供された画像を解説してください"},
+                            {"type": "text", "text": "次の画像は賃貸契約の見積書です。余計なコストがかかっているところやアドバイスをしてください"},
                             {
                                 "type": "image_url",
                                 "image_url": {
@@ -104,7 +105,9 @@ class MemoDetailView(LoginRequiredMixin, generic.DetailView):
                     }
                 ],
             )
-            obj.explanation = response.choices[0].message.content
+            # マークダウン形式に対応するために記載
+            explanation_markdown = response.choices[0].message.content
+            obj.explanation = explanation_markdown
             obj.save()
 
         return super().dispatch(request, *args, **kwargs)
@@ -115,6 +118,8 @@ class MemoDetailView(LoginRequiredMixin, generic.DetailView):
         memo = self.get_object()
         file_extension = memo.file.name.split('.')[-1].lower()
         context['is_image'] = file_extension in ['png', 'jpg', 'jpeg']
+        if memo.explanation:
+            context['explanation_html'] = markdown(memo.explanation)
         return context
 
 
