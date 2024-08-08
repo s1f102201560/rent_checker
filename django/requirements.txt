@@ -3,7 +3,7 @@ psycopg2-binary
 uvicorn
 python-dotenv
 django-environ
-openai==0.28
+openai
 channels
 redis 
 daphne            

@@ -1,6 +1,8 @@
 from django.shortcuts import render
 from django.http import JsonResponse
 from django.conf import settings
+from django.views.decorators.csrf import csrf_exempt
+import os
 # from langchain import hub
 # from langchain_chroma import Chroma
 # from langchain_community.document_loaders import WebBaseLoader
@@ -56,3 +58,18 @@ def sandbox(request):
 
 def sandbox_room(request, room_name):
     return render(request, "app/sandbox_room.html", {"room_name": room_name})
+
+@csrf_exempt
+def upload_image(request):
+    if request.method == 'POST':
+        file = request.FILES['file']
+        file_name = file.name
+        file_path = os.path.join(settings.MEDIA_ROOT, file_name)
+        with open(file_path, 'wb+') as destination:
+            for chunk in file.chunks():
+                destination.write(chunk)
+        
+        # 画像のURLを返す
+        image_url = request.build_absolute_uri(settings.MEDIA_URL + file_name)
+        return JsonResponse({'image_url': image_url})
+    return JsonResponse({'error': 'Invalid request'}, status=400)

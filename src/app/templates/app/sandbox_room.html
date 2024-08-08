@@ -3,21 +3,20 @@
 <head>
     <meta charset="utf-8"/>
     <title>Chat Room</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body>
-    <textarea id="chat-log" cols="100" rows="20"></textarea><br>
+    <textarea id="chat-log" cols="100" rows="20" readonly></textarea><br>
     <input id="chat-message-input" type="text" size="100"><br>
-    <input id="chat-message-submit" type="button" value="Send">
+    <input id="chat-message-submit" type="button" value="Send"><br>
+    <input type="file" id="file-input"><br>
+    <input id="file-upload-submit" type="button" value="Upload File">
     {{ room_name|json_script:"room-name" }}
     <script>
         const roomName = JSON.parse(document.getElementById('room-name').textContent);
 
         const chatSocket = new WebSocket(
-            'ws://'
-            + window.location.host
-            + '/ws/index/'
-            + roomName
-            + '/'
+            'ws://' + window.location.host + '/ws/index/' + roomName + '/'
         );
 
         chatSocket.onmessage = function(e) {
@@ -43,6 +42,34 @@
                 'message': message
             }));
             messageInputDom.value = '';
+        };
+
+        document.querySelector('#file-upload-submit').onclick = function(e) {
+            const fileInputDom = document.querySelector('#file-input');
+            const file = fileInputDom.files[0];
+
+            if (file) {
+                const formData = new FormData();
+                formData.append('file', file);
+
+                fetch('/upload_image/', {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.image_url) {
+                        chatSocket.send(JSON.stringify({
+                            'image_url': data.image_url,
+                        }));
+                    } else {
+                        console.error('Failed to upload image');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+            }
         };
     </script>
 </body>
