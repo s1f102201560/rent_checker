@@ -3,14 +3,7 @@ from django.http import JsonResponse
 from django.conf import settings
 from django.views.decorators.csrf import csrf_exempt
 import os
-# from langchain import hub
-# from langchain_chroma import Chroma
-# from langchain_community.document_loaders import WebBaseLoader
-# from langchain_core.output_parsers import StrOutputParser
-# from langchain_core.runnables import RunnablePassthrough
-# from langchain_openai import OpenAIEmbeddings, ChatOpenAI
-# from langchain_text_splitters import RecursiveCharacterTextSplitter
-# import bs4
+
 import openai
 
 def top(request):
@@ -38,26 +31,16 @@ def send_direct_openai_request(question):
         return None
 
 def sandbox(request):
-    print("Received request")  # デバッグ用
-    if request.method == 'POST':
-        print("POST request received")  # デバッグ用
-        question = request.POST.get('question')
-        print(f"Question received: {question}")  # デバッグ用
-        try:
-            response = send_direct_openai_request(question)
-            if response:
-                print(f"Question: {question}, Response: {response}")  # デバッグ用
-                return JsonResponse({'response': response['choices'][0]['message']['content']})
-            else:
-                return JsonResponse({'error': 'OpenAI API request failed'}, status=500)
-        except Exception as e:
-            print(f"Error: {e}")  # デバッグ用
-            return JsonResponse({'error': str(e)}, status=500)
-    print("Rendering sandbox.html")  # デバッグ用
     return render(request, 'app/sandbox.html')
 
-def sandbox_room(request, room_name):
-    return render(request, "app/sandbox_room.html", {"room_name": room_name})
+def sandbox_chat(request, room_name):
+    if room_name is None:
+        # ルーム名が指定されていない場合、部屋選択画面を表示
+        return render(request, 'app/sandbox.html')
+    else:
+        # ルーム名が指定されている場合、そのルームに接続する
+        context = {'room_name': room_name}
+        return render(request, 'app/sandbox_chat.html', context)
 
 @csrf_exempt
 def upload_image(request):
