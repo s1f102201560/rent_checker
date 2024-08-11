@@ -4,10 +4,10 @@ FROM python:3.12
 # 環境変数の設定
 ENV PYTHONUNBUFFERED=1
 ENV DJANGO_SETTINGS_MODULE=config.settings
-ENV PYTHONPATH=/code/src
+  ENV PYTHONPATH=/code/src
 
-# 作業ディレクトリの設定
-WORKDIR /code
+  # 作業ディレクトリの設定
+  WORKDIR /code
 
 # 必要なパッケージのインストール
 RUN apt-get update 

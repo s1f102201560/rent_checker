@@ -9,11 +9,12 @@ redis
 daphne            
 channels
 channels-redis
-
-# langchain
-# langchain-community
-# langchain-core
-# langchainhub
-# langchain-openai
-# langchain_chroma
+langchain
+pymupdf
+pgvector
+langchain-community
+langchain-core
+langchainhub
+tiktoken
+faiss-cpu
 # bs4

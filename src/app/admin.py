@@ -5,3 +5,4 @@ from app.models import Resource
 class ResourceAdmin(admin.ModelAdmin):
   list_display = ('name', 'created_at')
   list_filter = ('name', 'created_at')
+  exclude = ('embedding',)
