@@ -16,16 +16,28 @@
 
         <!-- メインチャットコンテンツ -->
         <div class="flex-1 flex flex-col bg-white overflow-hidden shadow-md" hx-ext="ws" ws-connect="/ws/sandbox_chat/{{ room_name }}/">
+            <!-- チャット履歴の表示 -->
             <div id="message-list" class="p-6 flex-1 overflow-y-scroll">
-                <div class="mb-4">
-                    <div class="mt-1 bg-gray-200 rounded-lg px-4 py-2 text-gray-800">
-                        Hello, what can I help you with today?
+                {% for log in chat_logs %}
+                    <div class="mb-4">
+                        <!-- 質問のスタイル -->
+                        <div class="mt-1 bg-blue-200 rounded-lg px-4 py-2 text-gray-800 text-right">
+                            <strong>{{ log.created_at|date:"Y-m-d H:i" }}</strong><br>
+                            <span class="text-blue-900">{{ log.prompt }}</span>
+                        </div>
+                        <!-- 返信のスタイル -->
+                        <div class="mt-1 bg-green-200 rounded-lg px-4 py-2 text-gray-800 text-left">
+                            <em class="text-green-900">{{ log.response }}</em>
+                        </div>
                     </div>
-                </div>
+                {% endfor %}
             </div>
+
+
+            <!-- チャット入力フォーム -->
             <form class="border-t-2 border-gray-200 px-4 py-4 mb-2 sm:mb-0" hx-ext="ws" ws-send>
                 <div class="relative flex">
-                    <input type="text" placeholder="Write something..." name="message"
+                    <input type="text" id="message-input" placeholder="Write something..." name="message"
                         class="pl-4 pr-10 py-3 rounded-xl border-2 border-gray-200 w-full focus:outline-none focus:border-indigo-300" required>
                     <button type="submit" class="ml-2 bg-blue-600 text-white rounded-xl px-4 py-2 hover:bg-blue-700">Send</button>
                 </div>
@@ -34,8 +46,5 @@
     </div>
 
     <script>
-        function clearInput() {
-            document.getElementById('message-input').value = '';
-        }
     </script>
 {% endblock main %}

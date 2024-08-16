@@ -2,8 +2,8 @@ from django.shortcuts import render
 from django.http import JsonResponse
 from django.conf import settings
 from django.views.decorators.csrf import csrf_exempt
+from .models import ChatLog
 import os
-
 import openai
 
 def top(request):
@@ -12,42 +12,15 @@ def top(request):
 def index(request):
     return render(request, 'app/index.html')
 
-openai.api_key = settings.OPENAI_API_KEY
-openai.api_base = settings.OPENAI_API_BASE
-
-def send_direct_openai_request(question):
-    try:
-        response = openai.ChatCompletion.create(
-            model="gpt-3.5-turbo",
-            messages=[
-                {"role": "system", "content": "You are a helpful assistant."},
-                {"role": "user", "content": question}
-            ],
-            max_tokens=150
-        )
-        return response
-    except Exception as e:
-        print(f"Direct OpenAI API error: {e}")
-        return None
-
 def sandbox(request):
     return render(request, 'app/sandbox.html')
 
 def sandbox_chat(request, room_name):
-    if room_name is None:
-        # ルーム名が指定されていない場合、部屋選択画面を表示
-        return render(request, 'app/sandbox.html')
-    else:
-        # ルーム名が指定されている場合、そのルームに接続する
-        context = {'room_name': room_name}
-        return render(request, 'app/sandbox_chat.html', context)
-
-from django.shortcuts import render, get_object_or_404
-from .models import ChatLog
-
-def sandbox_chat_log_detail(request, log_id):
-    log = get_object_or_404(ChatLog, id=log_id, user=request.user)
-    return render(request, 'app/sandbox_chat_log_detail.html', {'log': log})
+    logs = ChatLog.objects.filter(room_name=room_name, user=request.user)
+    return render(request, 'app/sandbox_chat.html', {
+        'room_name': room_name,
+        'chat_logs': logs
+    })
 
 @csrf_exempt
 def upload_image(request):

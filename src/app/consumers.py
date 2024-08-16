@@ -5,20 +5,52 @@ from django.conf import settings
 from django.template.loader import render_to_string
 
 import fitz
+from asgiref.sync import sync_to_async
 from langchain_community.embeddings import OpenAIEmbeddings
 from langchain_community.vectorstores import FAISS
 from langchain.chains import RetrievalQA
 from langchain.chains.question_answering import load_qa_chain
 from langchain.prompts import PromptTemplate
 from langchain_community.llms import OpenAI
-from asgiref.sync import sync_to_async
 from .models import Resource, ChatLog
 
 class ChatConsumer(AsyncWebsocketConsumer):
     async def connect(self):
-        self.user = self.scope["user"]  # ログインユーザーを取得
+        self.user = self.scope["user"]
+        self.room_name = self.scope['url_route']['kwargs']['room_name']
+        self.room_group_name = f'chat_{self.room_name}'
         self.messages = []
-        await super().connect()
+
+        # チャットグループに参加
+        await self.channel_layer.group_add(
+            self.room_group_name,
+            self.channel_name
+        )
+
+        await self.accept()
+
+        # 部屋が既に存在するか確認し、存在しない場合のみ保存
+        existing_log = await sync_to_async(ChatLog.objects.filter)(
+            user=self.user, room_name=self.room_name
+        )
+        if not await sync_to_async(existing_log.exists)():
+            # 部屋名を保存
+            await sync_to_async(ChatLog.objects.create)(
+                user=self.user,
+                room_name=self.room_name,  # 部屋名のみ保存
+                prompt="",  # 空のプロンプトと応答を入れる
+                response=""
+            )
+            # サイドバー用の新しいログリンクを生成して送信
+            sidebar_link_html = render_to_string(
+                "app/_sidebar_link.html",
+                {"log": {"room_name": self.room_name}},
+            )
+            await self.send(text_data=json.dumps({
+                "type": "update_sidebar",
+                "content": sidebar_link_html,
+            }))
+
 
         # 非同期でデータベースクエリを実行
         resources = await sync_to_async(list)(Resource.objects.all())
@@ -30,13 +62,13 @@ class ChatConsumer(AsyncWebsocketConsumer):
         for resource in resources:
             pdf_path = resource.document.path
             text = ""
-            with fitz.open(pdf_path) as pdf_doc:
+            with fitz.open(pdf_path) as pdf_doc:  # PDFを開く処理
                 for page in pdf_doc:
                     text += page.get_text()
             documents.append(text)
             
             # テキストをベクトル化して保存
-            embedding_vector = embeddings.embed_query(text)  # 修正されたメソッド名
+            embedding_vector = embeddings.embed_query(text)
             await sync_to_async(resource.update_embedding)(embedding_vector)
 
         # ベクトルを使ってFAISSのベクトルストアを作成
@@ -61,6 +93,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
         text_data_json = json.loads(text_data)
         message_text = text_data_json["message"]
 
+        # ユーザーメッセージをHTMLに変換して送信
         user_message_html = render_to_string(
             "app/sandbox_chat_message.html",
             {"message_text": message_text, "is_system": False},
@@ -68,6 +101,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
         await self.send(text_data=user_message_html)
         self.messages.append({"role": "user", "content": message_text})
 
+        # 空のシステムメッセージを表示
         message_id = f"message-{uuid.uuid4().hex}"
         system_message_html = render_to_string(
             "app/sandbox_chat_message.html",
@@ -75,15 +109,19 @@ class ChatConsumer(AsyncWebsocketConsumer):
         )
         await self.send(text_data=system_message_html)
 
-        response = self.qa_chain.run(message_text)
+        # OpenAIを使って応答を生成
+        response = await sync_to_async(self.qa_chain.run)(message_text)
         formatted_response = response.replace("\n", "<br>")
+
+        # 応答をWebSocketで送信
         await self.send(text_data=f'<div id="{message_id}" hx-swap-oob="beforeend">{formatted_response}</div>')
 
         self.messages.append({"role": "system", "content": response})
 
-        # 対話ログを保存
+        # 対話ログを保存（部屋名も一緒に保存）
         await sync_to_async(ChatLog.objects.create)(
             user=self.user,
+            room_name=self.room_name,
             prompt=message_text,
             response=response
         )

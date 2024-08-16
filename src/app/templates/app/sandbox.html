@@ -2,15 +2,12 @@
 {% load static %}
 
 {% block main %}
-  <h1>Choose your room</h1>
-  What chat room would you like to enter?<br>
-  <input id="room-name-input" type="text" size="100"><br>
-  <input id="room-name-submit" type="button" value="Enter">
+  <h1>Welcome to the Sandbox Chat</h1>
 
   <script>
-      document.querySelector('#room-name-submit').onclick = function(e) {
-          var roomName = document.querySelector('#room-name-input').value;
-          window.location.href = '/sandbox_chat/' + roomName + '/';
-      };
+      // 乱数値で部屋を生成
+      var roomName = Math.random().toString(36).substring(2, 15);
+      // 生成された部屋にリダイレクト
+      window.location.href = '/sandbox_chat/' + roomName + '/';
   </script>
 {% endblock main %}

@@ -1,14 +1,10 @@
-{% block sidebar %}
-<div class="sidebar">
-    <h2>Chat Logs</h2>
+<div id="sidebar">
+    <h2>Chat Rooms</h2>
     <ul>
-        {% for log in user.chat_logs.all %}
-        <li>
-            <a href="{% url 'sandbox_chat_log_detail' log.id %}">
-                {{ log.created_at|date:"Y-m-d H:i" }}
-            </a>
-        </li>
+        {% for log in chat_logs %}
+            <li>
+                <a href="{% url 'sandbox_chat' log.room_name %}">{{ log.room_name }}</a>
+            </li>
         {% endfor %}
     </ul>
 </div>
-{% endblock %}

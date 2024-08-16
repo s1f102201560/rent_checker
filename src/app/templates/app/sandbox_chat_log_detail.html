@@ -1,9 +1,0 @@
-{% extends "app/base.html" %}
-
-{% block main %}
-  <h1>Chat Log</h1>
-  <p><strong>Date:</strong> {{ log.created_at|date:"Y-m-d H:i" }}</p>
-  <p><strong>Prompt:</strong> {{ log.prompt }}</p>
-  <p><strong>Response:</strong> {{ log.response|linebreaks }}</p>
-  <a href="{% url 'sandbox_chat' %}">Back to Chat</a>
-{% endblock %}
