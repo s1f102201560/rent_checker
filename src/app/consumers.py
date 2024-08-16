@@ -29,15 +29,17 @@ class ChatConsumer(AsyncWebsocketConsumer):
 
         await self.accept()
 
-        # 部屋が既に存在するか確認し、存在しない場合のみ保存
+
+        # 部屋名単位で存在確認し、存在しない場合のみ保存
         existing_log = await sync_to_async(ChatLog.objects.filter)(
             user=self.user, room_name=self.room_name
         )
+
         if not await sync_to_async(existing_log.exists)():
             # 部屋名を保存
             await sync_to_async(ChatLog.objects.create)(
                 user=self.user,
-                room_name=self.room_name,  # 部屋名のみ保存
+                room_name=self.room_name,
                 prompt="",  # 空のプロンプトと応答を入れる
                 response=""
             )
@@ -119,9 +121,11 @@ class ChatConsumer(AsyncWebsocketConsumer):
         self.messages.append({"role": "system", "content": response})
 
         # 対話ログを保存（部屋名も一緒に保存）
-        await sync_to_async(ChatLog.objects.create)(
+        await sync_to_async(ChatLog.objects.update_or_create)(
             user=self.user,
             room_name=self.room_name,
-            prompt=message_text,
-            response=response
+            defaults={
+                'prompt': message_text,
+                'response': response,
+            }
         )
