@@ -42,6 +42,13 @@ def sandbox_chat(request, room_name):
         context = {'room_name': room_name}
         return render(request, 'app/sandbox_chat.html', context)
 
+from django.shortcuts import render, get_object_or_404
+from .models import ChatLog
+
+def sandbox_chat_log_detail(request, log_id):
+    log = get_object_or_404(ChatLog, id=log_id, user=request.user)
+    return render(request, 'app/sandbox_chat_log_detail.html', {'log': log})
+
 @csrf_exempt
 def upload_image(request):
     if request.method == 'POST':

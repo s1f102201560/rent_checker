@@ -12,10 +12,11 @@ from langchain.chains.question_answering import load_qa_chain
 from langchain.prompts import PromptTemplate
 from langchain_community.llms import OpenAI
 from asgiref.sync import sync_to_async
-from .models import Resource
+from .models import Resource, ChatLog
 
 class ChatConsumer(AsyncWebsocketConsumer):
     async def connect(self):
+        self.user = self.scope["user"]  # ログインユーザーを取得
         self.messages = []
         await super().connect()
 
@@ -79,3 +80,10 @@ class ChatConsumer(AsyncWebsocketConsumer):
         await self.send(text_data=f'<div id="{message_id}" hx-swap-oob="beforeend">{formatted_response}</div>')
 
         self.messages.append({"role": "system", "content": response})
+
+        # 対話ログを保存
+        await sync_to_async(ChatLog.objects.create)(
+            user=self.user,
+            prompt=message_text,
+            response=response
+        )
