@@ -1,13 +1,12 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
+from app.models import Resource
 
 class User(AbstractUser):
     name = models.CharField('氏名', max_length=100)
     email = models.EmailField('メールアドレス', unique=True)
     phone_number = models.CharField('電話番号', max_length=15)
     address = models.CharField('住所', max_length=255)
-    contract_info = models.TextField('契約情報', blank=True, null=True)
-    document_upload = models.FileField('書類', upload_to='documents/', blank=True, null=True)
     created = models.DateTimeField('登録日時', auto_now_add=True)
     updated_at = models.DateTimeField('更新日時', auto_now=True)
 
