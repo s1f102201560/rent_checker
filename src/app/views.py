@@ -2,7 +2,8 @@ from django.shortcuts import render
 from django.http import JsonResponse
 from django.conf import settings
 from django.views.decorators.csrf import csrf_exempt
-from .models import ChatLog
+from django.core.exceptions import ObjectDoesNotExist
+from .models import ChatLog, ChatRoom
 import os
 import openai
 
@@ -16,10 +17,13 @@ def sandbox(request):
     return render(request, 'app/sandbox.html')
 
 def sandbox_chat(request, room_name):
-    logs = ChatLog.objects.filter(room_name=room_name, user=request.user)
+    room, created = ChatRoom.objects.get_or_create(name=room_name)
+    chat_logs = ChatLog.objects.filter(room=room, user=request.user)
+    room_logs = ChatLog.objects.filter(user=request.user)
     return render(request, 'app/sandbox_chat.html', {
         'room_name': room_name,
-        'chat_logs': logs
+        'chat_logs': chat_logs,
+        'room_logs': room_logs,
     })
 
 @csrf_exempt

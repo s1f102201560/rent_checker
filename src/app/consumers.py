@@ -6,41 +6,34 @@ from django.template.loader import render_to_string
 
 import fitz
 from asgiref.sync import sync_to_async
+from channels.db import database_sync_to_async
 from langchain_community.embeddings import OpenAIEmbeddings
 from langchain_community.vectorstores import FAISS
 from langchain.chains import RetrievalQA
 from langchain.chains.question_answering import load_qa_chain
 from langchain.prompts import PromptTemplate
 from langchain_community.llms import OpenAI
-from .models import Resource, ChatLog
+from .models import Resource, ChatLog, ChatRoom
 
 class ChatConsumer(AsyncWebsocketConsumer):
     async def connect(self):
         self.user = self.scope["user"]
         self.room_name = self.scope['url_route']['kwargs']['room_name']
-        self.room_group_name = f'chat_{self.room_name}'
+        self.room = await database_sync_to_async(ChatRoom.objects.get)(name=self.room_name)
         self.messages = []
-
-        # チャットグループに参加
-        await self.channel_layer.group_add(
-            self.room_group_name,
-            self.channel_name
-        )
 
         await self.accept()
 
-
         # 部屋名単位で存在確認し、存在しない場合のみ保存
         existing_log = await sync_to_async(ChatLog.objects.filter)(
-            user=self.user, room_name=self.room_name
+            user=self.user, room=self.room
         )
 
         if not await sync_to_async(existing_log.exists)():
-            # 部屋名を保存
             await sync_to_async(ChatLog.objects.create)(
                 user=self.user,
-                room_name=self.room_name,
-                prompt="",  # 空のプロンプトと応答を入れる
+                room=self.room,
+                prompt="",
                 response=""
             )
             # サイドバー用の新しいログリンクを生成して送信
@@ -107,7 +100,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
         message_id = f"message-{uuid.uuid4().hex}"
         system_message_html = render_to_string(
             "app/sandbox_chat_message.html",
-            {"message_text": "", "is_system": True, "message_id": message_id},
+            {"message_text": "返信中..", "is_system": True, "message_id": message_id},
         )
         await self.send(text_data=system_message_html)
 
@@ -123,7 +116,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
         # 対話ログを保存（部屋名も一緒に保存）
         await sync_to_async(ChatLog.objects.update_or_create)(
             user=self.user,
-            room_name=self.room_name,
+            room=self.room,
             defaults={
                 'prompt': message_text,
                 'response': response,

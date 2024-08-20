@@ -46,5 +46,10 @@
     </div>
 
     <script>
+        // WebSocket メッセージを受信したときに、メッセージリストに追加する例
+        ws.onmessage = function(event) {
+            var messageList = document.getElementById('message-list');
+            messageList.innerHTML += event.data;
+        }
     </script>
 {% endblock main %}
