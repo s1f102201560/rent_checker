@@ -90,7 +90,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
 
         # ユーザーメッセージをHTMLに変換して送信
         user_message_html = render_to_string(
-            "app/sandbox_chat_message.html",
+            "app/chat_message.html",
             {"message_text": message_text, "is_system": False},
         )
         await self.send(text_data=user_message_html)
@@ -99,7 +99,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
         # 空のシステムメッセージを表示
         message_id = f"message-{uuid.uuid4().hex}"
         system_message_html = render_to_string(
-            "app/sandbox_chat_message.html",
+            "app/chat_message.html",
             {"message_text": "返信中..", "is_system": True, "message_id": message_id},
         )
         await self.send(text_data=system_message_html)

@@ -15,7 +15,7 @@
         </div>
 
         <!-- メインチャットコンテンツ -->
-        <div class="flex-1 flex flex-col bg-white overflow-hidden shadow-md" hx-ext="ws" ws-connect="/ws/sandbox_chat/{{ room_name }}/">
+        <div class="flex-1 flex flex-col bg-white overflow-hidden shadow-md" hx-ext="ws" ws-connect="/ws/chat/{{ room_name }}/">
             <!-- チャット履歴の表示 -->
             <div id="message-list" class="p-6 flex-1 overflow-y-scroll">
                 {% for log in chat_logs %}

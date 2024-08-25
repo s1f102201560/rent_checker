@@ -12,14 +12,11 @@ def top(request):
 def index(request):
     return render(request, 'app/index.html')
 
-def sandbox(request):
-    return render(request, 'app/sandbox.html')
-
-def sandbox_chat(request, room_name):
+def chat(request, room_name):
     room, created = ChatRoom.objects.get_or_create(name=room_name)
     chat_logs = ChatLog.objects.filter(room=room, user=request.user)
     room_logs = ChatLog.objects.filter(user=request.user)
-    return render(request, 'app/sandbox_chat.html', {
+    return render(request, 'app/chat.html', {
         'room_name': room_name,
         'chat_logs': chat_logs,
         'room_logs': room_logs,
@@ -38,4 +35,4 @@ def upload_image(request):
             return JsonResponse({'status': 'error', 'message': form.errors.as_json()})
     else:
         form = ImageForm()
-    return render(request, 'app/sandbox_chat.html', {'form': form})
+    return render(request, 'app/chat.html', {'form': form})

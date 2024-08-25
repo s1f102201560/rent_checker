@@ -1,3 +1,3 @@
 <li>
-  <a href="{% url 'sandbox_chat' log.room_name %}">{{ log.room_name }} - {{ log.created_at|date:"Y-m-d H:i" }}</a>
+  <a href="{% url 'chat' log.room_name %}">{{ log.room_name }} - {{ log.created_at|date:"Y-m-d H:i" }}</a>
 </li>
