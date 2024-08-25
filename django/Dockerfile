@@ -4,10 +4,10 @@ FROM python:3.12
 # 環境変数の設定
 ENV PYTHONUNBUFFERED=1
 ENV DJANGO_SETTINGS_MODULE=config.settings
-ENV PYTHONPATH=/code/src
+  ENV PYTHONPATH=/code/src
 
-# 作業ディレクトリの設定
-WORKDIR /code
+  # 作業ディレクトリの設定
+  WORKDIR /code
 
 # 必要なパッケージのインストール
 RUN apt-get update 
@@ -35,4 +35,5 @@ EXPOSE 8000
 ENTRYPOINT ["/code/django/entrypoint.sh"]
 
 # サーバーの起動
-CMD ["uvicorn", "config.asgi:application", "--host", "0.0.0.0", "--port", "8000"]
+# CMD ["uvicorn", "config.asgi:application", "--host", "0.0.0.0", "--port", "8000"]
+CMD ["daphne", "-b", "0.0.0.0", "-p", "8000", "config.asgi:application"]

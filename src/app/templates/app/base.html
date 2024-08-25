@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="ja">
 <head>
@@ -5,9 +6,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>RENT CHECKER</title>
+    <!-- <link rel="stylesheet" type="text/css" href="{% static 'css/style.min.css' %" /> -->
+    <script src="https://cdn.tailwindcss.com"></script>
   {% endblock %}
 </head>
-<body>
+<body class="bg-gray-200">
   {% block nav %}
   <nav>
     <a href="{% url 'index' %}">RENT CHECKER</a>

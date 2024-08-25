@@ -1,0 +1,10 @@
+<div id="sidebar">
+    <h2>Chat Rooms</h2>
+    <ul>
+        {% for log in room_logs %}
+            <li>
+                <a href="{% url 'chat' log.room.name %}">{{ log.room.name }}</a>
+            </li>
+        {% endfor %}
+    </ul>
+</div>
