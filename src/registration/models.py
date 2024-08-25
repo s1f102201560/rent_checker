@@ -1,6 +1,5 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
-from app.models import Resource
 
 class User(AbstractUser):
     name = models.CharField('氏名', max_length=100)

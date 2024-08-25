@@ -33,15 +33,28 @@
                 {% endfor %}
             </div>
 
+            <!-- チャット入力フォームと画像アップロードフォーム -->
+            <div class="border-t-2 border-gray-200 px-4 py-4 mb-2 sm:mb-0">
+                <form class="relative flex items-center" hx-ext="ws" ws-send>
+                    <!-- 画像アップロードボタン -->
+                    <input type="file" name="file" id="image-upload" class="hidden">
+                    <label for="image-upload" class="ml-2 bg-green-600 text-white rounded-xl px-4 py-2 hover:bg-green-700 cursor-pointer">
+                        Upload Image
+                    </label>
 
-            <!-- チャット入力フォーム -->
-            <form class="border-t-2 border-gray-200 px-4 py-4 mb-2 sm:mb-0" hx-ext="ws" ws-send>
-                <div class="relative flex">
+                    <!-- チャット入力フィールド -->
                     <input type="text" id="message-input" placeholder="Write something..." name="message"
-                        class="pl-4 pr-10 py-3 rounded-xl border-2 border-gray-200 w-full focus:outline-none focus:border-indigo-300" required>
+                        class="flex-1 pl-4 pr-10 py-3 rounded-xl border-2 border-gray-200 focus:outline-none focus:border-indigo-300" required>
+
+                    <!-- 送信ボタン -->
                     <button type="submit" class="ml-2 bg-blue-600 text-white rounded-xl px-4 py-2 hover:bg-blue-700">Send</button>
-                </div>
-            </form>
+                </form>
+            </div>
+
+            <!-- 画像表示コンテナ -->
+            <div id="uploaded-images-container" class="p-6 flex flex-wrap">
+                <!-- ここにアップロードされた画像が表示されます -->
+            </div>
         </div>
     </div>
 
@@ -50,6 +63,35 @@
         ws.onmessage = function(event) {
             var messageList = document.getElementById('message-list');
             messageList.innerHTML += event.data;
+        }
+
+        // 画像アップロードの非同期処理
+        document.getElementById('image-upload-form').onsubmit = async function(event) {
+            event.preventDefault();  // フォームの通常の送信を防止
+
+            let formData = new FormData(this);  // フォームデータを収集
+
+            const response = await fetch(this.action, {
+                method: 'POST',
+                body: formData,  // フォームデータをリクエストの本文に含める
+            });
+
+            const result = await response.json();  // レスポンスをJSON形式で受け取る
+
+            if (result.status === 'success') {
+                alert('画像がアップロードされました。');
+
+                // 画像を表示する要素を作成してページに追加
+                const imageElement = document.createElement('img');
+                imageElement.src = result.image_url;  // サーバーから返された画像のURLを設定
+                imageElement.alt = "Uploaded Image";
+                imageElement.classList.add('uploaded-image');  // 必要に応じてスタイルを適用
+
+                // 画像を表示するコンテナに追加
+                document.getElementById('uploaded-images-container').appendChild(imageElement);
+            } else {
+                alert('エラーが発生しました: ' + result.message);
+            }
         }
     </script>
 {% endblock main %}

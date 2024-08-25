@@ -3,9 +3,8 @@ from django.http import JsonResponse
 from django.conf import settings
 from django.views.decorators.csrf import csrf_exempt
 from django.core.exceptions import ObjectDoesNotExist
-from .models import ChatLog, ChatRoom
-import os
-import openai
+from app.models import ChatLog, ChatRoom
+from app.forms import ImageForm
 
 def top(request):
     return render(request, "app/top.html")
@@ -26,17 +25,17 @@ def sandbox_chat(request, room_name):
         'room_logs': room_logs,
     })
 
+# 画像アップロード処理
 @csrf_exempt
 def upload_image(request):
     if request.method == 'POST':
-        file = request.FILES['file']
-        file_name = file.name
-        file_path = os.path.join(settings.MEDIA_ROOT, file_name)
-        with open(file_path, 'wb+') as destination:
-            for chunk in file.chunks():
-                destination.write(chunk)
-        
-        # 画像のURLを返す
-        image_url = request.build_absolute_uri(settings.MEDIA_URL + file_name)
-        return JsonResponse({'image_url': image_url})
-    return JsonResponse({'error': 'Invalid request'}, status=400)
+        form = ImageForm(request.POST, request.FILES)
+        if form.is_valid():
+            image = form.save()  # 画像を保存
+            image_url = image.file.url  # 画像のURLを取得
+            return JsonResponse({'status': 'success', 'image_url': image_url})
+        else:
+            return JsonResponse({'status': 'error', 'message': form.errors.as_json()})
+    else:
+        form = ImageForm()
+    return render(request, 'app/sandbox_chat.html', {'form': form})
