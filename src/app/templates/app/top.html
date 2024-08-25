@@ -1,25 +1,35 @@
 {% extends "app/base.html" %}
 {% load static %}
 
-{% block head %}
-  <link rel="stylesheet" type="text/css" href="{% static 'app/css/top.css' %}">
-  {{ block.super }}
+{% block nav %}
 {% endblock %}
 
-{% block nav %}
-  <nav>
-    <a href="{% url 'top' %}">RENT CHECKER</a>
-  </nav>
-{% endblock nav %}
-
 {% block main %}
-  <div>
-    <!-- 左半分 -->
-    <div>
-      <div>
-        <h1>RENT CHECKER</h1> 
+  <div class="flex flex-col min-h-screen w-1/3 mx-auto overflow-hidden">
+    <header class="flex-2 text-center">
+      <h1 class="text-3xl font-bold">RENT CHECKER</h1>
+      <div class="text-lg mt-2">Lorem ipsum dolor sit amet consectetur adipisicing elit.</div>
+    </header>
+    <main class="flex-7 flex flex-col">
+      <div class="flex-1">
+        <img src="{% static 'app/img/賃貸イメージ.jpeg' %}" alt="賃貸イメージ" class="w-full h-full object-cover">
       </div>
-    </div>
+      <div class="flex-1 flex items-center justify-center">
+        <ul class="text-lg list-disc list-inside">
+          <li>Lorem ipsum, dolor sit amet consectetur adipisicing elit. </li>
+          <li>Lorem ipsum, dolor sit amet consectetur adipisicing elit. </li>
+          <li>Lorem ipsum, dolor sit amet consectetur adipisicing elit. </li>
+        </ul>
+      </div>
+    </main>
+    <footer class="flex-1 text-center">
+      <p class="text-sm">&copy; 2024 iniad.group10.team4</p>
+    </footer>
+  </div>
+{% endblock %}
+
+
+<!-- <div>
     <!-- 右半分 -->
     <div>
       <h2>Get started</h2>
@@ -38,11 +48,4 @@
         </a>
       </div> 
     </div>
-  </div>
-
-
-  <div>タイトル+いい感じのフォントで</div>
-  <div>キャッチコピー</div>
-  <div>画像</div>
-  <div>PRポイントや機能3つくらい</div>
-{% endblock %}
+  </div> -->
