@@ -25,6 +25,7 @@ INSTALLED_APPS = [
     'app',
     'registration',
     'gpt',
+    'channels',
     'django.contrib.admin',
     'django.contrib.sites',
     'django.contrib.auth',
@@ -71,7 +72,16 @@ TEMPLATES = [
 # Webサーバー周り #
 ##################
 WSGI_APPLICATION = 'config.wsgi.application'
-# ASGI_APPLICATION = "config.asgi.application" # websocket利用時
+ASGI_APPLICATION = "config.asgi.application" # websocket利用時
+
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'channels_redis.core.RedisChannelLayer',
+        'CONFIG': {
+            "hosts": [('redis', 6379)],
+        },
+    },
+}
 
 ##########
 # DB周り #
@@ -117,6 +127,11 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'collected_static')
 STATICFILES_DIRS = [
     BASE_DIR / "static",
 ]
+
+# 写真
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 ###########
@@ -138,6 +153,10 @@ EMAIL_HOST_USER = env('EMAIL_HOST_USER')
 EMAIL_HOST_PASSWORD = env('EMAIL_HOST_PASSWORD')
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 
-# 写真
-MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+###########
+# API周り #
+###########
+OPENAI_API_KEY = env('OPENAI_API_KEY')
+OPENAI_API_BASE = env('OPENAI_API_BASE')
+OPENAI_MODEL = 'gpt-4o'
+

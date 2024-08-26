@@ -3,5 +3,19 @@ psycopg2-binary
 uvicorn
 python-dotenv
 django-environ
-openai
 markdown
+openai
+channels
+redis 
+daphne            
+channels
+channels-redis
+langchain
+pymupdf
+pgvector
+langchain-community
+langchain-core
+langchainhub
+tiktoken
+faiss-cpu
+# bs4
