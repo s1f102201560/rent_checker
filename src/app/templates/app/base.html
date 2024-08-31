@@ -20,16 +20,6 @@
 </head>
 <body class="leading-normal tracking-normal text-black bg-yellow-200">
   {% block nav %}
-    <nav>
-      <a href="{% url 'index' %}">RENT CHECKER</a>
-      <div>
-        <form action="{% url 'logout' %}" method="POST">
-          {% csrf_token %}
-          <button type="submit">ログアウト</button>
-        </form>
-        <a href="{% url 'password_change' %}">パスワード変更</a>
-      </div>
-    </nav>
   {% endblock nav %}
   {% block main %}
     <p>※コンテンツがありません。</p>
