@@ -9,30 +9,30 @@
 
     <!-- tailwindcss -->
     <!-- <link rel="stylesheet" type="text/css" href="{% static 'css/style.min.css' %" /> -->
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.0.3/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/tailwindcss@2.2.19/dist/tailwind.min.css"/>
     <!-- モリサワフォント -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=BIZ+UDGothic:wght@400;700&display=swap" rel="stylesheet">
+    <!-- FontAwesome -->
+    <link href="https://use.fontawesome.com/releases/v6.2.0/css/all.css" rel="stylesheet">
   {% endblock %}
 </head>
-<body class="">
+<body class="leading-normal tracking-normal text-black bg-yellow-200">
   {% block nav %}
-  <nav>
-    <a href="{% url 'index' %}">RENT CHECKER</a>
-    <div>
-      <form action="{% url 'logout' %}" method="POST">
-        {% csrf_token %}
-        <button type="submit">ログアウト</button>
-      </form>
-      <a href="{% url 'password_change' %}">パスワード変更</a>
-    </div>
-  </nav>
+    <nav>
+      <a href="{% url 'index' %}">RENT CHECKER</a>
+      <div>
+        <form action="{% url 'logout' %}" method="POST">
+          {% csrf_token %}
+          <button type="submit">ログアウト</button>
+        </form>
+        <a href="{% url 'password_change' %}">パスワード変更</a>
+      </div>
+    </nav>
   {% endblock nav %}
-  <div>
-    {% block main %}
-      <p>※コンテンツがありません。</p>
-    {% endblock main %}
-  </div>
+  {% block main %}
+    <p>※コンテンツがありません。</p>
+  {% endblock main %}
 </body>
 </html>
