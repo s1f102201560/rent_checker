@@ -1,5 +1,5 @@
 {% load widget_tweaks %}
-<form method="post" class="w-1/4 mx-auto mt-16 text-center">
+<form method="post" class="w-full max-w-sm mx-auto mt-16 text-center md:max-w-md lg:max-w-lg">
   {% csrf_token %}
   {% if form_type == 'signup' %}
     <div class="mb-4">

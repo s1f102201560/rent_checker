@@ -7,31 +7,24 @@
 {% block main %}
   <!-- ナビゲーションバー -->
   <nav class="fixed w-full z-30 top-0 text-white bg-yellow-200">
-    <!-- 左のアイコンとタイトル -->
     <div class="w-full container mx-auto flex flex-wrap items-center justify-between mt-0 py-4">
-      <div class="pl-4 flex items-center">
-        <a class="text-white no-underline hover:no-underline font-bold text-2xl lg:text-4xl" href="#">
-          <i class="fa-solid fa-check h-8 inline"></i>
-          RENTCHECKER
-        </a>
-      </div>
-      <!-- ハンバーガーメニュー -->
-      <div class="block lg:hidden pr-4">
-        <button id="nav-toggle" class="flex items-center p-1 text-white-800">
-          <i class="fa-solid fa-bars h-8 w-8"></i>
-        </button>
-      </div>
-      <!-- 右のリンク -->
-      <div class="w-full flex-grow lg:flex lg:items-center lg:w-auto hidden mt-2 lg:mt-0 bg-white lg:bg-transparent text-black p-4 lg:p-0 z-20" id="nav-content">
-        <ul class="list-reset lg:flex justify-end flex-1 items-center">
-          <li class="mr-3">
-            <a class="inline-block text-black no-underline py-2 px-4" href="{% url 'login' %}">ログイン</a>
-          </li>
-          <li class="mr-3">
-            <a class="inline-block text-black no-underline py-2 px-4" href="{% url 'signup' %}">新規登録</a>
-          </li>
-        </ul>
-      </div>
+        <div class="pl-4 flex items-center">
+            <a class="text-white no-underline hover:no-underline font-bold text-2xl lg:text-4xl" href="#">
+                <i class="fa-solid fa-check h-8 inline"></i>
+                RENTCHECKER
+            </a>
+        </div>
+        <div class="block lg:hidden pr-4">
+            <button id="nav-toggle" class="flex items-center p-1 text-gray-500">
+                <i class="fa-solid fa-bars h-8 w-8"></i>
+            </button>
+        </div>
+        <div class="hidden lg:flex lg:items-center lg:w-auto w-full" id="nav-content">
+            <ul class="lg:flex items-center justify-between text-base text-gray-500 pt-4 lg:pt-0">
+                <li><a class="lg:p-4 py-3 px-0 block border-b-2 border-transparent hover:border-yellow-100" href="{% url 'signup' %}">新規登録</a></li>
+                <li><a class="lg:p-4 py-3 px-0 block border-b-2 border-transparent hover:border-yellow-100" href="{% url 'login' %}">ログイン</a></li>
+            </ul>
+        </div>
     </div>
     <hr class="border-b border-gray-100 opacity-25 my-0 py-0" />
   </nav>
@@ -47,7 +40,7 @@
           賃貸契約時の疑問点、金銭的な不安のあれこれを相談できます！
         </p>
         <button class="mx-auto lg:mx-0 hover:underline bg-white text-gray-800 font-bold rounded-full my-6 py-4 px-8 shadow-lg focus:outline-none focus:shadow-outline transform transition hover:scale-105 duration-300 ease-in-out">
-          <a class="inline-block text-black no-underline py-2 px-4" href="{% url 'signup' %}">使ってみる</a>
+          <a class="inline-block text-gray-500 no-underline py-2 px-4" href="{% url 'signup' %}">使ってみる</a>
         </button>
       </div>
       <!-- 右側 -->
@@ -575,15 +568,15 @@
       賃貸契約で損をしないために、今こそ必要な知識を手に入れる時です！
     </h3>
     <button class="mx-auto lg:mx-0 hover:underline bg-white text-gray-800 font-bold rounded-full my-6 py-4 px-8 shadow-lg focus:outline-none focus:shadow-outline transform transition hover:scale-105 duration-300 ease-in-out">
-      <a class="inline-block text-black no-underline py-2 px-4" href="{% url 'signup' %}">使ってみる</a>
+      <a class="inline-block text-gray-500 no-underline py-2 px-4" href="{% url 'signup' %}">使ってみる</a>
     </button>
   </section>
   <!--Footer-->
   <footer class="bg-white">
     <div class="container mx-auto px-8">
       <div class="w-full flex flex-col md:flex-row py-6">
-        <div class="flex-1 mb-6 text-black">
-          <a class="text-pink-600 no-underline hover:no-underline font-bold text-1xl lg:text-3xl" href="#">
+        <div class="flex-1 mb-6 text-gray-500">
+          <a class="text-yellow-200 no-underline hover:no-underline font-bold text-1xl lg:text-3xl" href="#">
             <i class="fa-solid fa-check h-8 inline"></i>
             RENTCHECKER
           </a>
@@ -625,7 +618,15 @@
           </ul>
         </div>
       </div>
+      <p class="text-sm">&copy; 2024 iniad.group10.team4</p>
     </div>
-    <p class="text-sm">&copy; 2024 iniad.group10.team4</p>
   </footer>
+
+  <!-- JavaScript -->
+  <script>
+    document.getElementById('nav-toggle').onclick = function() {
+        var navContent = document.getElementById('nav-content');
+        navContent.classList.toggle('hidden');
+    };
+  </script>
 {% endblock main %}
