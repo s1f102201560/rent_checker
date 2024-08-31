@@ -1,8 +1,8 @@
-<form method="post">
+{% load widget_tweaks %}
+<form method="post" class="w-1/4 mx-auto mt-16 text-center">
   {% csrf_token %}
   {% if form_type == 'signup' %}
     <p>
-      <label for="{{ form.username.id_for_label }}">{{ form.username.label }}</label>
       {{ form.username }}
       {% if form.username.errors %}
         <span class="error">{{ form.username.errors.as_text }}</span>
@@ -42,26 +42,32 @@
       {% endif %}
     </p>
   {% elif form_type == 'login' %}
-    <p>
-      <label for="{{ form.username.id_for_label }}">{{ form.username.label }}</label>
-      {{ form.username }}
+    <div class="mb-4">
+      {{ form.username|add_class:"appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"|attr:"placeholder:ユーザ名" }}
       {% if form.username.errors %}
-        <span class="error">{{ form.username.errors.as_text }}</span>
+        <span class="text-red-500 text-xs italic">{{ form.username.errors.as_text }}</span>
       {% endif %}
       {% if form.username.help_text %}
-        <small>{{ form.username.help_text }}</small>
+        <small class="text-gray-600">{{ form.username.help_text }}</small>
       {% endif %}
-    </p>
-    <p>
-      <label for="{{ form.password.id_for_label }}">{{ form.password.label }}</label>
-      {{ form.password }}
+    </div>
+    <div class="mb-4">
+      <div class="relative">
+        {{ form.password|add_class:"appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline pr-10"|attr:"placeholder:パスワード" }}
+        <span class="absolute inset-y-0 right-0 pr-3 flex items-center cursor-pointer" onclick="togglePasswordVisibility()">
+          <i id="eye-icon" class="far fa-eye-slash text-gray-500"></i>
+        </span>
+      </div>
+      <p class="mt-4 text-right">
+          <a href="{% url 'password_reset' %}" class="text-xs text-gray-600 hover:text-gray-800 underline">パスワードを忘れた場合</a>
+      </p>      
       {% if form.password.errors %}
-        <span class="error">{{ form.password.errors.as_text }}</span>
+          <span class="text-red-500 text-xs italic">{{ form.password.errors.as_text }}</span>
       {% endif %}
       {% if form.password.help_text %}
-        <small>{{ form.password.help_text }}</small>
+          <small class="text-gray-600">{{ form.password.help_text }}</small>
       {% endif %}
-    </p>
+    </div>     
   {% elif form_type == 'password_change' %}
     <p>
       <label for="{{ form.old_password.id_for_label }}">{{ form.old_password.label }}</label>
@@ -105,5 +111,25 @@
       {% endif %}
     </p>
   {% endif %}
-  <input type="submit" value="{{ submit_label }}" />
+  <input type="submit" value="{{ submit_label }}" class="w-full bg-gray-500 text-white font-bold py-2 px-4 rounded" />
+  <p class="mt-4 text-right">
+    <a href="{% url 'signup' %}" class="text-xs text-gray-600 hover:text-gray-800 underline">新規登録はこちら</a>
+  </p>  
 </form>
+
+<script>
+  function togglePasswordVisibility() {
+    const passwordField = document.querySelector('input[name="password"]');
+    const eyeIcon = document.getElementById('eye-icon');
+
+    if (passwordField.type === 'password') {
+        passwordField.type = 'text';
+        eyeIcon.classList.remove('fa-eye-slash');
+        eyeIcon.classList.add('fa-eye');
+    } else {
+        passwordField.type = 'password';
+        eyeIcon.classList.remove('fa-eye');
+        eyeIcon.classList.add('fa-eye-slash');
+    }
+  }
+</script>
