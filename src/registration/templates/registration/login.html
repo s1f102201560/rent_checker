@@ -11,4 +11,7 @@
     <h1 class="text-2xl">ログイン</h1>
   </div>
   {% include "registration/_form.html" with submit_label="ログイン" form_type="login" %}
+  <p class="w-1/4 mx-auto text-right">
+    <a href="{% url 'signup' %}" class="text-xs text-gray-600 hover:text-gray-800 underline">新規登録はこちら</a>
+  </p>
 {% endblock %}
