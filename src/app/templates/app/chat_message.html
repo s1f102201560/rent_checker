@@ -1,8 +1,8 @@
 <div id="message-list" hx-swap-oob="beforeend">
   <div class="mb-4">
-    <div class="mt-1 rounded-lg px-4 py-2 {% if is_system %}bg-gray-200 text-gray-500{% else %}bg-gray-200 text-gray-500 text-right{% endif %}"
+    <div class="mt-1 rounded-lg px-4 py-2 {% if is_system %}bg-gray-100 text-gray-500{% else %}bg-gray-100 text-gray-500 text-right{% endif %}"
       {% if message_id %}id="{{ message_id }}"{% endif %}
-      style="{% if is_system %}border-right: 5px solid #FEE2B3; {% else %} border-left: 5px solid #FEE2B3;{% endif %}">
+      style="{% if is_system %}border-left: 5px solid #FEE2B3; {% else %} border-right: 5px solid #FEE2B3;{% endif %}">
       {{ message_text|safe }}
     </div>
   </div>
