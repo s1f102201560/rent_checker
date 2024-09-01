@@ -100,7 +100,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
         message_id = f"message-{uuid.uuid4().hex}"
         system_message_html = render_to_string(
             "app/chat_message.html",
-            {"message_text": "返信中..", "is_system": True, "message_id": message_id},
+            {"message_text": "<i class='fas fa-spinner fa-spin'></i> ", "is_system": True, "message_id": message_id},
         )
         await self.send(text_data=system_message_html)
 
@@ -108,8 +108,8 @@ class ChatConsumer(AsyncWebsocketConsumer):
         response = await sync_to_async(self.qa_chain.run)(message_text)
         formatted_response = response.replace("\n", "<br>")
 
-        # 応答をWebSocketで送信
-        await self.send(text_data=f'<div id="{message_id}" hx-swap-oob="beforeend">{formatted_response}</div>')
+        # 応答をWebSocketで送信して、スピナーを応答で置き換える
+        await self.send(text_data=f'<div id="{message_id}" hx-swap-oob="innerHTML">{formatted_response}</div>')
 
         self.messages.append({"role": "system", "content": response})
 
