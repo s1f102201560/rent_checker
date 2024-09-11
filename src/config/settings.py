@@ -141,11 +141,12 @@ LOGIN_URL = "/registration/login/"
 LOGIN_REDIRECT_URL = "/gpt/"
 LOGOUT_REDIRECT_URL = "/"
 
-AUTH_USER_MODEL = 'registration.User'
+AUTH_USER_MODEL = 'registration.CustomUser'
 
 # Email
 # FIXME SMTPがちゃんと機能するようにする
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+#EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
