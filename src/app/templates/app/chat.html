@@ -8,7 +8,7 @@
 {% endblock %}
 
 {% block main %}
-    <div class="flex h-screen">
+    <div class="flex h-screen overflow-hidden">
         <!-- サイドバー -->
         {% include "app/_sidebar.html" %}
 
@@ -36,7 +36,7 @@
 
             <!-- チャット入力フォームと画像アップロードフォーム -->
             <div class="border-t-2 border-gray-200 px-4 py-4 mx-2">
-                <form class="relative flex items-center" hx-ext="ws" ws-send>
+                <form id='chat-form' class="relative flex items-center" hx-ext="ws" ws-send>
                     <!-- チャット入力フィールド -->
                     <div class="relative flex-1">
                         <!-- 画像アップロードアイコン -->
@@ -60,39 +60,51 @@
     </div>
 
     <script>
-        // WebSocket メッセージを受信したときに、メッセージリストに追加する例
+        const ws = new WebSocket('ws://' + window.location.host + '/ws/chat/{{ room_name }}/');
+
+        // WebSocket メッセージを受信したときに、メッセージリストに追加する
         ws.onmessage = function(event) {
             var messageList = document.getElementById('message-list');
             messageList.innerHTML += event.data;
         }
 
+        // 入力フォームのクリア
+        document.getElementById('chat-form').addEventListener('submit', function(event) {
+            setTimeout(function() {
+                // 送信後、1秒後にフィールドをクリア
+                document.getElementById('message-input').value = '';
+            }, 1000);  // 1000ms = 1秒の遅延
+        });
+
+
+
         // 画像アップロードの非同期処理
-        document.getElementById('image-upload-form').onsubmit = async function(event) {
-            event.preventDefault();  // フォームの通常の送信を防止
+        // document.getElementById('image-upload-form').onsubmit = async function(event) {
+        //     event.preventDefault();  // フォームの通常の送信を防止
 
-            let formData = new FormData(this);  // フォームデータを収集
+        //     let formData = new FormData(this);  // フォームデータを収集
 
-            const response = await fetch(this.action, {
-                method: 'POST',
-                body: formData,  // フォームデータをリクエストの本文に含める
-            });
+        //     const response = await fetch(this.action, {
+        //         method: 'POST',
+        //         body: formData,  // フォームデータをリクエストの本文に含める
+        //     });
 
-            const result = await response.json();  // レスポンスをJSON形式で受け取る
+        //     const result = await response.json();  // レスポンスをJSON形式で受け取る
 
-            if (result.status === 'success') {
-                alert('画像がアップロードされました。');
+        //     if (result.status === 'success') {
+        //         alert('画像がアップロードされました。');
 
-                // 画像を表示する要素を作成してページに追加
-                const imageElement = document.createElement('img');
-                imageElement.src = result.image_url;  // サーバーから返された画像のURLを設定
-                imageElement.alt = "Uploaded Image";
-                imageElement.classList.add('uploaded-image');  // 必要に応じてスタイルを適用
+        //         // 画像を表示する要素を作成してページに追加
+        //         const imageElement = document.createElement('img');
+        //         imageElement.src = result.image_url;  // サーバーから返された画像のURLを設定
+        //         imageElement.alt = "Uploaded Image";
+        //         imageElement.classList.add('uploaded-image');  // 必要に応じてスタイルを適用
 
-                // 画像を表示するコンテナに追加
-                document.getElementById('uploaded-images-container').appendChild(imageElement);
-            } else {
-                alert('エラーが発生しました: ' + result.message);
-            }
-        }
+        //         // 画像を表示するコンテナに追加
+        //         document.getElementById('uploaded-images-container').appendChild(imageElement);
+        //     } else {
+        //         alert('エラーが発生しました: ' + result.message);
+        //     }
+        // }
     </script>
 {% endblock main %}

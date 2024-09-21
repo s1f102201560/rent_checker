@@ -24,29 +24,6 @@ class ChatConsumer(AsyncWebsocketConsumer):
 
         await self.accept()
 
-        # 部屋名単位で存在確認し、存在しない場合のみ保存
-        existing_log = await sync_to_async(ChatLog.objects.filter)(
-            user=self.user, room=self.room
-        )
-
-        if not await sync_to_async(existing_log.exists)():
-            await sync_to_async(ChatLog.objects.create)(
-                user=self.user,
-                room=self.room,
-                prompt="",
-                response=""
-            )
-            # サイドバー用の新しいログリンクを生成して送信
-            sidebar_link_html = render_to_string(
-                "app/_sidebar_link.html",
-                {"log": {"room_name": self.room_name}},
-            )
-            await self.send(text_data=json.dumps({
-                "type": "update_sidebar",
-                "content": sidebar_link_html,
-            }))
-
-
         # 非同期でデータベースクエリを実行
         resources = await sync_to_async(list)(Resource.objects.all())
         documents = []
