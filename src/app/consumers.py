@@ -114,11 +114,9 @@ class ChatConsumer(AsyncWebsocketConsumer):
         self.messages.append({"role": "system", "content": response})
 
         # 対話ログを保存（部屋名も一緒に保存）
-        await sync_to_async(ChatLog.objects.update_or_create)(
+        await sync_to_async(ChatLog.objects.create)(
             user=self.user,
             room=self.room,
-            defaults={
-                'prompt': message_text,
-                'response': response,
-            }
+            prompt=message_text,
+            response=response
         )
