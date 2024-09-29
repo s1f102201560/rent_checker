@@ -62,49 +62,66 @@
     <script>
         const ws = new WebSocket('ws://' + window.location.host + '/ws/chat/{{ room_name }}/');
 
-        // WebSocket メッセージを受信したときに、メッセージリストに追加する
+        // // WebSocket メッセージを受信したときに、メッセージリストに追加する
+        // ws.onmessage = function(event) {
+        //     let messageList = document.getElementById('message-list');
+            
+        //     // 新しいdiv要素を作成して安全にメッセージを追加
+        //     let newMessageDiv = document.createElement('div');
+        //     newMessageDiv.innerHTML = event.data;
+
+        //     // メッセージリストに追加
+        //     messageList.appendChild(newMessageDiv);
+        // }
         ws.onmessage = function(event) {
-            var messageList = document.getElementById('message-list');
-            messageList.innerHTML += event.data;
+            let messageData = JSON.parse(event.data);
+            let messageId = messageData.message_id; // サーバーから送信されたmessage_idを取得
+            let messageText = messageData.message_text; // サーバーからのメッセージ内容を取得
+
+            // message_idに対応する要素を取得
+            let messageElement = document.getElementById(messageId);
+
+            if (messageElement) {
+                // 既存のスピナー要素をメッセージで置き換え
+                messageElement.innerHTML = messageText;
+            } else {
+                // メッセージがない場合は新しく作成して追加
+                let newMessageDiv = document.createElement('div');
+                newMessageDiv.id = messageId;
+                newMessageDiv.innerHTML = messageText;
+
+                let messageList = document.getElementById('message-list');
+                messageList.appendChild(newMessageDiv);
+            }
         }
 
-        // 入力フォームのクリア
+        // 入力フォームの送信ロジック
         document.getElementById('chat-form').addEventListener('submit', function(event) {
-            setTimeout(function() {
-                // 送信後、1秒後にフィールドをクリア
-                document.getElementById('message-input').value = '';
-            }, 1000);  // 1000ms = 1秒の遅延
+            event.preventDefault();  // フォーム送信のリダイレクトを防ぐ
+
+            formData = new FormData(document.getElementById('chat-form'));
+            let message = formData.get('message');
+            let file = formData.get('file');  // 画像ファイルの取得
+
+            if (file && file.size > 0) {
+                let reader = new FileReader();
+                reader.onload = function(e) {
+                    let base64Data = e.target.result;  // Base64エンコードされた画像データ
+
+                    // WebSocketを通じて画像データを送信
+                    ws.send(JSON.stringify({
+                        message: message,
+                        image: base64Data
+                    }));
+                };
+                reader.readAsDataURL(file);
+            } else {
+                // メッセージのみを送信
+                ws.send(JSON.stringify({ message: message }));
+            }
+            
+            // メッセージフィールドを送信後すぐにクリア
+            document.getElementById('message-input').value = '';
         });
-
-
-
-        // 画像アップロードの非同期処理
-        // document.getElementById('image-upload-form').onsubmit = async function(event) {
-        //     event.preventDefault();  // フォームの通常の送信を防止
-
-        //     let formData = new FormData(this);  // フォームデータを収集
-
-        //     const response = await fetch(this.action, {
-        //         method: 'POST',
-        //         body: formData,  // フォームデータをリクエストの本文に含める
-        //     });
-
-        //     const result = await response.json();  // レスポンスをJSON形式で受け取る
-
-        //     if (result.status === 'success') {
-        //         alert('画像がアップロードされました。');
-
-        //         // 画像を表示する要素を作成してページに追加
-        //         const imageElement = document.createElement('img');
-        //         imageElement.src = result.image_url;  // サーバーから返された画像のURLを設定
-        //         imageElement.alt = "Uploaded Image";
-        //         imageElement.classList.add('uploaded-image');  // 必要に応じてスタイルを適用
-
-        //         // 画像を表示するコンテナに追加
-        //         document.getElementById('uploaded-images-container').appendChild(imageElement);
-        //     } else {
-        //         alert('エラーが発生しました: ' + result.message);
-        //     }
-        // }
     </script>
 {% endblock main %}

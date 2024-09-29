@@ -18,4 +18,5 @@ langchain-core
 langchainhub
 tiktoken
 faiss-cpu
-# bs4
+pytesseract
+Pillow
