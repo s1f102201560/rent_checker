@@ -1,109 +1,145 @@
-<form method="post">
+{% load widget_tweaks %}
+<form method="post" class="w-full max-w-sm mx-auto mt-16 text-center md:max-w-md lg:max-w-lg">
   {% csrf_token %}
   {% if form_type == 'signup' %}
-    <p>
-      <label for="{{ form.username.id_for_label }}">{{ form.username.label }}</label>
-      {{ form.username }}
+    <div class="mb-4">
+      {{ form.username|add_class:"appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"|attr:"placeholder:ユーザ名" }}
       {% if form.username.errors %}
-        <span class="error">{{ form.username.errors.as_text }}</span>
+        <span class="text-red-500 text-xs italic">{{ form.username.errors.as_text }}</span>
       {% endif %}
       {% if form.username.help_text %}
-        <small>{{ form.username.help_text }}</small>
+        <small class="text-gray-600">{{ form.username.help_text }}</small>
       {% endif %}
-    </p>
-    <p>
-      <label for="{{ form.email.id_for_label }}">{{ form.email.label }}</label>
-      {{ form.email }}
+    </div>
+    <div class="mb-4">
+      {{ form.email|add_class:"appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"|attr:"placeholder:メールアドレス" }}
       {% if form.email.errors %}
-        <span class="error">{{ form.email.errors.as_text }}</span>
+        <span class="text-red-500 text-xs italic">{{ form.email.errors.as_text }}</span>
       {% endif %}
       {% if form.email.help_text %}
-        <small>{{ form.email.help_text }}</small>
+        <small class="text-gray-600">{{ form.email.help_text }}</small>
       {% endif %}
-    </p>
-    <p>
-      <label for="{{ form.password1.id_for_label }}">{{ form.password1.label }}</label>
-      {{ form.password1 }}
+    </div>
+    <div class="mb-4">
+      <div class="relative">
+        {{ form.password1|add_class:"appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline pr-10"|attr:"placeholder:パスワード" }}
+        <span class="absolute inset-y-0 right-0 pr-3 flex items-center cursor-pointer" onclick="togglePasswordVisibility('password1', 'eye-icon-p1')">
+          <i id="eye-icon-p1" class="far fa-eye-slash text-gray-500"></i>
+        </span>
+      </div>
       {% if form.password1.errors %}
-        <span class="error">{{ form.password1.errors.as_text }}</span>
+        <span class="text-red-500 text-xs italic">{{ form.password1.errors.as_text }}</span>
       {% endif %}
       {% if form.password1.help_text %}
-        <small>{{ form.password1.help_text }}</small>
+        <small class="text-gray-600">{{ form.password1.help_text }}</small>
       {% endif %}
-    </p>
-    <p>
-      <label for="{{ form.password2.id_for_label }}">{{ form.password2.label }}</label>
-      {{ form.password2 }}
+    </div>
+    <div class="mb-4">
+      <div class="relative">
+        {{ form.password2|add_class:"appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline pr-10"|attr:"placeholder:パスワード確認用" }}
+        <span class="absolute inset-y-0 right-0 pr-3 flex items-center cursor-pointer" onclick="togglePasswordVisibility('password2', 'eye-icon-p2')">
+          <i id="eye-icon-p2" class="far fa-eye-slash text-gray-500"></i>
+        </span>
+      </div>
       {% if form.password2.errors %}
-        <span class="error">{{ form.password2.errors.as_text }}</span>
+        <span class="text-red-500 text-xs italic">{{ form.password2.errors.as_text }}</span>
       {% endif %}
       {% if form.password2.help_text %}
-        <small>{{ form.password2.help_text }}</small>
+        <small class="text-gray-600">{{ form.password2.help_text }}</small>
       {% endif %}
-    </p>
+    </div>
   {% elif form_type == 'login' %}
-    <p>
-      <label for="{{ form.username.id_for_label }}">{{ form.username.label }}</label>
-      {{ form.username }}
+    <div class="mb-4">
+      {{ form.username|add_class:"appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"|attr:"placeholder:ユーザ名" }}
       {% if form.username.errors %}
-        <span class="error">{{ form.username.errors.as_text }}</span>
+        <span class="text-red-500 text-xs italic">{{ form.username.errors.as_text }}</span>
       {% endif %}
       {% if form.username.help_text %}
-        <small>{{ form.username.help_text }}</small>
+        <small class="text-gray-600">{{ form.username.help_text }}</small>
       {% endif %}
-    </p>
-    <p>
-      <label for="{{ form.password.id_for_label }}">{{ form.password.label }}</label>
-      {{ form.password }}
+    </div>
+    <div class="mb-4">
+      <div class="relative">
+        {{ form.password|add_class:"appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline pr-10"|attr:"placeholder:パスワード" }}
+        <span class="absolute inset-y-0 right-0 pr-3 flex items-center cursor-pointer" onclick="togglePasswordVisibility('password', 'eye-icon')">
+          <i id="eye-icon" class="far fa-eye-slash text-gray-500"></i>
+        </span>
+      </div>
+      <p class="mt-4 text-right">
+          <a href="{% url 'password_reset' %}" class="text-xs text-gray-600 hover:text-gray-800 underline">パスワードを忘れた場合</a>
+      </p>      
       {% if form.password.errors %}
-        <span class="error">{{ form.password.errors.as_text }}</span>
+          <span class="text-red-500 text-xs italic">{{ form.password.errors.as_text }}</span>
       {% endif %}
       {% if form.password.help_text %}
-        <small>{{ form.password.help_text }}</small>
+          <small class="text-gray-600">{{ form.password.help_text }}</small>
       {% endif %}
-    </p>
+    </div>    
   {% elif form_type == 'password_change' %}
-    <p>
-      <label for="{{ form.old_password.id_for_label }}">{{ form.old_password.label }}</label>
-      {{ form.old_password }}
+    <div class="mb-4">
+      {{ form.old_password|add_class:"appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"|attr:"placeholder:現在のパスワード" }}
       {% if form.old_password.errors %}
-        <span class="error">{{ form.old_password.errors.as_text }}</span>
+        <span class="text-red-500 text-xs italic">{{ form.old_password.errors.as_text }}</span>
       {% endif %}
       {% if form.old_password.help_text %}
-        <small>{{ form.old_password.help_text }}</small>
+        <small class="text-gray-600">{{ form.old_password.help_text }}</small>
       {% endif %}
-    </p>
-    <p>
-      <label for="{{ form.new_password1.id_for_label }}">{{ form.new_password1.label }}</label>
-      {{ form.new_password1 }}
+    </div>
+    <div class="mb-4">
+      <div class="relative">
+        {{ form.new_password1|add_class:"appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline pr-10"|attr:"placeholder:新しいパスワード" }}
+        <span class="absolute inset-y-0 right-0 pr-3 flex items-center cursor-pointer" onclick="togglePasswordVisibility('new_password1', 'eye-icon-new-p1')">
+          <i id="eye-icon-new-p1" class="far fa-eye-slash text-gray-500"></i>
+        </span>
+      </div>
       {% if form.new_password1.errors %}
-        <span class="error">{{ form.new_password1.errors.as_text }}</span>
+        <span class="text-red-500 text-xs italic">{{ form.new_password1.errors.as_text }}</span>
       {% endif %}
       {% if form.new_password1.help_text %}
-        <small>{{ form.new_password1.help_text }}</small>
+        <small class="text-gray-600">{{ form.new_password1.help_text }}</small>
       {% endif %}
-    </p>
-    <p>
-      <label for="{{ form.new_password2.id_for_label }}">{{ form.new_password2.label }}</label>
-      {{ form.new_password2 }}
+    </div>
+    <div class="mb-4">
+      <div class="relative">
+        {{ form.new_password2|add_class:"appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline pr-10"|attr:"placeholder:新しいパスワード確認" }}
+        <span class="absolute inset-y-0 right-0 pr-3 flex items-center cursor-pointer" onclick="togglePasswordVisibility('new_password2', 'eye-icon-new-p2')">
+          <i id="eye-icon-new-p2" class="far fa-eye-slash text-gray-500"></i>
+        </span>
+      </div>
       {% if form.new_password2.errors %}
-        <span class="error">{{ form.new_password2.errors.as_text }}</span>
+        <span class="text-red-500 text-xs italic">{{ form.new_password2.errors.as_text }}</span>
       {% endif %}
       {% if form.new_password2.help_text %}
-        <small>{{ form.new_password2.help_text }}</small>
+        <small class="text-gray-600">{{ form.new_password2.help_text }}</small>
       {% endif %}
-    </p>
+    </div>
   {% elif form_type == 'password_reset' %}
-    <p>
-      <label for="{{ form.email.id_for_label }}">{{ form.email.label }}</label>
-      {{ form.email }}
+    <div class="mb-4">
+      {{ form.email|add_class:"appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"|attr:"placeholder:メールアドレス" }}
       {% if form.email.errors %}
-        <span class="error">{{ form.email.errors.as_text }}</span>
+        <span class="text-red-500 text-xs italic">{{ form.email.errors.as_text }}</span>
       {% endif %}
       {% if form.email.help_text %}
-        <small>{{ form.email.help_text }}</small>
+        <small class="text-gray-600">{{ form.email.help_text }}</small>
       {% endif %}
-    </p>
+    </div>
   {% endif %}
-  <input type="submit" value="{{ submit_label }}" />
+  <input type="submit" value="{{ submit_label }}" class="w-full bg-gray-500 text-white font-bold py-2 px-4 rounded" />
 </form>
+
+<script>
+  function togglePasswordVisibility(fieldName, iconId) {
+    const passwordField = document.querySelector(`input[name="${fieldName}"]`);
+    const eyeIcon = document.getElementById(iconId);
+
+    if (passwordField.type === 'password') {
+        passwordField.type = 'text';
+        eyeIcon.classList.remove('fa-eye-slash');
+        eyeIcon.classList.add('fa-eye');
+    } else {
+        passwordField.type = 'password';
+        eyeIcon.classList.remove('fa-eye');
+        eyeIcon.classList.add('fa-eye-slash');
+    }
+  }
+</script>
