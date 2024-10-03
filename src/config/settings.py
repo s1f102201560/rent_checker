@@ -139,7 +139,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # 認証周り #
 ###########
 LOGIN_URL = "/registration/login/"
-LOGIN_REDIRECT_URL = "/gpt/"
+LOGIN_REDIRECT_URL = "/index/"
 LOGOUT_REDIRECT_URL = "/"
 
 AUTH_USER_MODEL = 'registration.CustomUser'
