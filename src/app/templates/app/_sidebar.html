@@ -1,10 +1,24 @@
-<div id="sidebar">
-    <h2>Chat Rooms</h2>
-    <ul>
-        {% for log in room_logs %}
-            <li>
-                <a href="{% url 'chat' log.room.name %}">{{ log.room.name }}</a>
+<div class="w-1/4 border-r border-gray-200 overflow-y-auto"> 
+    <div class="container flex justify-center text-gray-500 bg-gray-100 py-4 pl-8">
+        <h1 class="mr-4">履歴</h1>
+        <i id="generate-room" class="fa-solid fa-plus h-2 ml-4 pt-1"></i>
+    </div>
+    <ul class="bg-gray-100 text-gray-500">
+        {% for room in room_logs %}
+            <li class="text-center">
+                <a href="{% url 'chat' room.name %}" class="block">{{ room.name }}</a>
             </li>
         {% endfor %}
     </ul>
 </div>
+
+<script>
+    // 乱数値で部屋を生成し、リダイレクトする関数
+    function generateRoom() {
+        var roomName = Math.random().toString(36).substring(2, 15);
+        window.location.href = '/chat/' + roomName + '/';
+    }
+
+    // i要素にクリックイベントリスナーを追加
+    document.getElementById('generate-room').addEventListener('click', generateRoom);
+</script>

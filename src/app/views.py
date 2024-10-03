@@ -14,8 +14,8 @@ def index(request):
 
 def chat(request, room_name):
     room, created = ChatRoom.objects.get_or_create(name=room_name)
-    chat_logs = ChatLog.objects.filter(room=room, user=request.user)
-    room_logs = ChatLog.objects.filter(user=request.user)
+    chat_logs = ChatLog.objects.filter(room=room, user=request.user).order_by('created_at')
+    room_logs = ChatRoom.objects.filter(chat_logs__user=request.user).distinct().order_by('-created_at')
     return render(request, 'app/chat.html', {
         'room_name': room_name,
         'chat_logs': chat_logs,

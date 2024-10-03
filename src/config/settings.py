@@ -26,6 +26,7 @@ INSTALLED_APPS = [
     'registration',
     'gpt',
     'channels',
+    'widget_tweaks',
     'django.contrib.admin',
     'django.contrib.sites',
     'django.contrib.auth',

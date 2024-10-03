@@ -1,5 +1,9 @@
 import json
 import uuid
+import pytesseract
+from PIL import Image
+import base64
+import io
 from channels.generic.websocket import AsyncWebsocketConsumer
 from django.conf import settings
 from django.template.loader import render_to_string
@@ -23,29 +27,6 @@ class ChatConsumer(AsyncWebsocketConsumer):
         self.messages = []
 
         await self.accept()
-
-        # 部屋名単位で存在確認し、存在しない場合のみ保存
-        existing_log = await sync_to_async(ChatLog.objects.filter)(
-            user=self.user, room=self.room
-        )
-
-        if not await sync_to_async(existing_log.exists)():
-            await sync_to_async(ChatLog.objects.create)(
-                user=self.user,
-                room=self.room,
-                prompt="",
-                response=""
-            )
-            # サイドバー用の新しいログリンクを生成して送信
-            sidebar_link_html = render_to_string(
-                "app/_sidebar_link.html",
-                {"log": {"room_name": self.room_name}},
-            )
-            await self.send(text_data=json.dumps({
-                "type": "update_sidebar",
-                "content": sidebar_link_html,
-            }))
-
 
         # 非同期でデータベースクエリを実行
         resources = await sync_to_async(list)(Resource.objects.all())
@@ -86,39 +67,76 @@ class ChatConsumer(AsyncWebsocketConsumer):
 
     async def receive(self, text_data):
         text_data_json = json.loads(text_data)
-        message_text = text_data_json["message"]
+        message_text = text_data_json.get("message", "")
+        image_data = text_data_json.get("image", "")
 
         # ユーザーメッセージをHTMLに変換して送信
         user_message_html = render_to_string(
             "app/chat_message.html",
             {"message_text": message_text, "is_system": False},
         )
-        await self.send(text_data=user_message_html)
+        await self.send(text_data=json.dumps({
+            "message_text": user_message_html
+        }))
+
         self.messages.append({"role": "user", "content": message_text})
 
         # 空のシステムメッセージを表示
         message_id = f"message-{uuid.uuid4().hex}"
         system_message_html = render_to_string(
             "app/chat_message.html",
-            {"message_text": "返信中..", "is_system": True, "message_id": message_id},
-        )
-        await self.send(text_data=system_message_html)
-
-        # OpenAIを使って応答を生成
-        response = await sync_to_async(self.qa_chain.run)(message_text)
-        formatted_response = response.replace("\n", "<br>")
-
-        # 応答をWebSocketで送信
-        await self.send(text_data=f'<div id="{message_id}" hx-swap-oob="beforeend">{formatted_response}</div>')
-
-        self.messages.append({"role": "system", "content": response})
-
-        # 対話ログを保存（部屋名も一緒に保存）
-        await sync_to_async(ChatLog.objects.update_or_create)(
-            user=self.user,
-            room=self.room,
-            defaults={
-                'prompt': message_text,
-                'response': response,
+            {
+                "message_text": "<i class='fas fa-spinner fa-spin'></i>",
+                "is_system": True,
+                "message_id": message_id
             }
         )
+        await self.send(text_data=json.dumps({
+            "message_id": message_id,
+            "message_text": system_message_html
+        }))
+
+        # 画像が送信された場合、OCRで画像からテキストを抽出
+        if image_data:            
+            try:
+                base64_data = image_data.split(",")[1]
+                image = Image.open(io.BytesIO(base64.b64decode(image_data)))
+                image.verify()
+                # OCRでテキストを抽出
+                ocr_text = pytesseract.image_to_string(image)
+                # GPTに投げるメッセージとして、抽出したテキストを含める
+                message_text += f"\n[画像から抽出されたテキスト]\n{ocr_text}"
+            except Exception as e:
+                print(f"Error loading image; {e}")
+                return
+        try:
+            # OpenAIを使って応答を生成
+            response = await sync_to_async(self.qa_chain.run)(message_text)
+
+            # 応答メッセージを同じmessage_idで送信
+            response_html = render_to_string(
+                "app/chat_message.html",
+                {
+                    "message_text": response,
+                    "is_system": True,
+                    "message_id": message_id,  # スピナーと同じmessage_idを使用
+                }
+            )
+
+            # WebSocketでスピナーを応答に置き換える
+            await self.send(text_data=json.dumps({
+                "message_id": message_id,
+                "message_text": response_html
+            }))
+
+            self.messages.append({"role": "system", "content": response})
+
+            # 対話ログを保存（部屋名も一緒に保存）
+            await sync_to_async(ChatLog.objects.create)(
+                user=self.user,
+                room=self.room,
+                prompt=message_text,
+                response=response
+            )
+        except Exception as e:
+            print(f"Error processing GPT query: {e}")
