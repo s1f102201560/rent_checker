@@ -46,7 +46,7 @@ def upload_image(request):
 class ContactFormView(FormView):
     template_name = 'app/contact_form.html'
     form_class = ContactForm
-    success_url = reverse_lazy('app:contact_result')
+    success_url = reverse_lazy('contact_result')
 
     def form_valid(self, form):
         form.send_email(self.request.user)

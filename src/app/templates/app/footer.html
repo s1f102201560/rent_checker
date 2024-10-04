@@ -1,0 +1,60 @@
+{% load static%}
+
+<footer class="bg-white">
+  <div class="container mx-auto px-8">
+    <div class="w-full flex flex-col md:flex-row py-6">
+      <div class="flex-1 mb-6 text-gray-500">
+        <a class="text-yellow-200 no-underline hover:no-underline font-bold text-1xl lg:text-3xl" href="#">
+          <i class="fa-solid fa-check h-8 inline"></i>
+          RENT CHECKER
+        </a>
+      </div>
+      <div class="flex-1">
+        <p class="uppercase text-gray-500 md:mb-6">Links</p>
+        <ul class="list-reset mb-6">
+          <li class="mt-2 inline-block mr-2 md:block md:mr-0">
+            <a href="#" class="no-underline hover:underline text-gray-800 hover:text-yellow-200">FAQ</a>
+          </li>
+          <li class="mt-2 inline-block mr-2 md:block md:mr-0">
+            <a href="#" class="no-underline hover:underline text-gray-800 hover:text-yellow-200">Help</a>
+          </li>
+          <li class="mt-2 inline-block mr-2 md:block md:mr-0">
+            <a href="#" class="no-underline hover:underline text-gray-800 hover:text-yellow-200">Support</a>
+          </li>
+        </ul>
+      </div>
+      <div class="flex-1">
+        <p class="uppercase text-gray-500 md:mb-6">Legal</p>
+        <ul class="list-reset mb-6">
+          <li class="mt-2 inline-block mr-2 md:block md:mr-0">
+            <a href="#" class="no-underline hover:underline text-gray-800 hover:text-yellow-200">Terms</a>
+          </li>
+          <li class="mt-2 inline-block mr-2 md:block md:mr-0">
+            <a href="#" class="no-underline hover:underline text-gray-800 hover:text-yellow-200">Privacy</a>
+          </li>
+        </ul>
+      </div>
+      <div class="flex-1">
+        <p class="uppercase text-gray-500 md:mb-6">Team</p>
+        <ul class="list-reset mb-6">
+          <li class="mt-2 inline-block mr-2 md:block md:mr-0">
+            <a href="#" class="no-underline hover:underline text-gray-800 hover:text-yellow-200">About Us</a>
+          </li>
+          <li class="mt-2 inline-block mr-2 md:block md:mr-0">
+            <a href="{% url 'contact_form' %}"
+              class="no-underline hover:underline text-gray-800 hover:text-yellow-200">Contact</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <p class="text-sm">&copy; 2024 iniad.group10.team4</p>
+  </div>
+</footer>
+
+<!-- JavaScript -->
+<script>
+  document.getElementById('nav-toggle').onclick = function () {
+    var navContent = document.getElementById('nav-content');
+    navContent.classList.toggle('hidden');
+  };
+</script>

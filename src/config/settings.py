@@ -146,7 +146,8 @@ AUTH_USER_MODEL = 'registration.User'
 
 # Email
 # FIXME SMTPがちゃんと機能するようにする
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend' #実際にメールを送信
+#EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend' #コンソールでメールを送信
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True

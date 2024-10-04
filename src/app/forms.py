@@ -28,21 +28,21 @@ class ContactForm(forms.Form):
         label='',
         max_length=100,
         widget=forms.TextInput(attrs={
-            'class': 'form-control',
+            'class': 'border border-gray-300 rounded-lg w-full py-2 px-4',
             'placeholder': "お名前",
         }),
     )
     email = forms.EmailField(
         label='',
         widget=forms.EmailInput(attrs={
-            'class': 'form-control',
+            'class': 'border border-gray-300 rounded-lg w-full py-2 px-4',
             'placeholder': "メールアドレス",
         }),
     )
     message = forms.CharField(
         label='',
         widget=forms.Textarea(attrs={
-            'class': 'form-control',
+            'class': 'border border-gray-300 rounded-lg w-full py-2 px-4 h-52',
             'placeholder': "お問い合わせ内容",
         }),
     )
@@ -55,14 +55,14 @@ class ContactForm(forms.Form):
             username = "Anonymous"
         
         # 送信者へのメッセージ内容
-        user_message = "以下の内容でお問い合わせを受け付けました。\n\nお名前: {name} 様\nメールアドレス: {email}\nお問い合わせ内容:\n{message}\n\nこのメールは自動返信メールとなっておりますのでこのメールアドレスに直接連絡いただいても返信できません。ご了承ください。なお、返信は1~2日程を目安に返信いたします。".format(
+        user_message = "以下の内容でお問い合わせを受け付けました。\n\nお名前 : {name} 様\nメールアドレス : {email}\nお問い合わせ内容 : \n{message}\n\nこのメールは自動返信メールとなっておりますのでこのメールアドレスに直接連絡いただいても返信できません。ご了承ください。なお、返信は1~2日程を目安に返信いたします。".format(
             name=self.cleaned_data['name'],
             email=self.cleaned_data['email'],
             message=self.cleaned_data['message']
         )
 
         # 管理者へのメッセージ内容
-        admin_message = "送信者名: {name} 様\nメールアドレス: {email}\nお問い合わせ内容:\n{message}\n\nログインユーザー: {username}\n".format(
+        admin_message = "送信者名 : {name} 様\nメールアドレス : {email}\nお問い合わせ内容 : \n{message}\n\nログインユーザー : {username}\n".format(
             name=self.cleaned_data['name'],
             email=self.cleaned_data['email'],
             message=self.cleaned_data['message'],
