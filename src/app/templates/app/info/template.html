@@ -1,0 +1,109 @@
+{% extends "app/base.html" %}
+{% load static %}
+
+{% block nav %}
+{% endblock nav %}
+
+{% block main %}
+<!-- ナビゲーションバー -->
+{% include "app/navi.html" %}
+
+<!-- フォーム -->
+{% block content %}
+
+<div class="pt-24">
+  <div class="container px-3 mx-auto flex-wrap flex-col md:flex-row items-center">
+
+    <h2 class="w-full my-2 text-5xl font-bold leading-tight text-gray-800">
+      タイトル
+    </h2>
+
+    <h3
+      class="w-full text-3xl text-gray-800 font-bold leading-none mb-3 bg-yellow-100 border-yellow-200 border-l-8 p-2">
+      ミニタイトル
+    </h3>
+
+    <p class="text-gray-600 mb-5 px-6">
+      本文
+    </p>
+
+    <div class="border-t">
+      <p class="text-gray-600 mb-5 px-6">
+        ↑区切り線を作成(divの部分)
+      </p>
+    </div>
+
+    改行<br>改行<p>pタグでも改行される。pタグ内での改行などで使用する</p>
+
+    ↓写真の挿入(例です。内容に合わせてcssは各々変更してください)
+    可能かはわかりませんが、写真の背景を透過させたいなどは連絡ください。<br>自分用メモ : <a href="https://qiita.com/kazuma_f/items/aab25be9969b685be839" target="_blank"
+    class="text-blue-700 font-bold">これ</a>
+    <div class="w-full sm:w-1/2 p-6 mt-6">
+      <img class="w-full md:w-4/5 z-50 object-cover" src="{% static 'app/img/間取り.jpeg' %}" alt="間取り" />
+      <img class="w-full md:w-4/5 z-50 object-cover" src="{% static 'app/img/間取り_透過.png' %}" alt="間取り透過ver" />
+    </div>
+    <div class="border-t"></div><br><br>
+    <h3
+      class="w-full text-3xl text-gray-800 font-bold leading-none mb-3 bg-yellow-100 border-yellow-200 border-l-8 p-2">
+      作成したhtmlを確認する方法
+    </h3>
+    views.pyには
+    <pre>
+      <code>
+      def template(request):
+        return render(request, "app/info/template.html")
+      </code>
+    </pre>
+    このように書く。<br>
+    urls.pyには
+    <pre>
+      <code>
+        <!--import部分 以下のimport文でviews.pyの名前(Templateなど)を入れる-->
+        from app.views import top, chat, upload_image, ContactFormView, ContactResultView, template
+
+        urlpatterns = [
+            <!--ほかのurl-->
+            path('template', template, name='template'),
+        ]
+
+      </code>
+    </pre>
+    このように書く。<br>
+    それぞれの「template」部分はそれぞれの適切な名前に変更<br><br>
+
+    <h3
+      class="w-full text-3xl text-gray-800 font-bold leading-none mb-3 bg-yellow-100 border-yellow-200 border-l-8 p-2">
+      htmlを作成するときには
+    </h3>
+    <p class="text-gray-600 mb-5 px-6">
+      htmlファイルを作成したらtemplate_notouch.htmlをコピペし、新しいhtmlファイルを作成する。<br>
+      pタグやタイトル用のhタグなどはこのtemplate.htmlからコピペし、使用する。
+    </p>
+
+    <h3
+      class="w-full text-3xl text-gray-800 font-bold leading-none mb-3 bg-yellow-100 border-yellow-200 border-l-8 p-2">
+      cssをいじりたい場合は
+    </h3>
+    <p class="text-gray-600 mb-5 px-6">
+      Tailwind cssを使用している為、この<a href="https://nerdcave.com/tailwind-cheat-sheet" target="_blank"
+        class="text-blue-700 font-bold">チートシート</a>を参考に変更する。
+    </p>
+
+    <h3
+      class="w-full text-3xl text-gray-800 font-bold leading-none mb-3 bg-yellow-100 border-yellow-200 border-l-8 p-2">
+      例 : 敷金礼金とは？
+    </h3>
+    <p class="text-gray-600 mb-5 px-6">
+      簡単に作成してみました。<a href="{% url 'security_deposit' %}"
+        class="text-blue-700 font-bold">ここから</a>閲覧可能です。(chatGPTに投げた内容を丸々入れた形になります。内容は後々変更します。)<br>参考文献がある場合は、その旨を一番下に記載してください。
+    </p>
+
+  </div>
+</div>
+
+
+
+{% endblock %}
+<!--Footer-->
+{% include "app/footer.html" %}
+{% endblock main %}

@@ -52,7 +52,8 @@ class ChatConsumer(AsyncWebsocketConsumer):
 
         # QAのプロンプトテンプレートを作成
         prompt_template = PromptTemplate(
-            template="Use the following context to answer the question: {context}\nQuestion: {question}\nAnswer:",
+            #template="Use the following context to answer the question: {context}\nQuestion: {question}\nAnswer:",
+            template="あなたは賃貸物件を探している人の手助けになるAIです。次のcontextを使用して適切な内容をユーザーに提供してください。: {context}\nQuestion: {question}\nAnswer:",
             input_variables=["context", "question"]
         )
 
