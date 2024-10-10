@@ -9,17 +9,19 @@
 {% include "app/navi.html" %}
 
 <!-- フォーム -->
-{% block content %}
-
-<div class="pt-24">
-  <div class="container px-3 mx-auto flex-wrap flex-col md:flex-row items-center">
-    
-    <!--ここを埋める-->
-
+<div class="min-h-screen flex flex-col">
+  <div class="flex-grow">
+    {% block content %}
+    <div class="pt-24">
+      <div class="container px-3 mx-auto flex-wrap flex-col md:flex-row items-center">
+        
+        <!--ここを埋める-->
+      
+      </div>
+    </div>
+    {% endblock %}
   </div>
+  <!--Footer-->
+  {% include "app/footer.html" %}
 </div>
-
-{% endblock %}
-<!--Footer-->
-{% include "app/footer.html" %}
 {% endblock main %}

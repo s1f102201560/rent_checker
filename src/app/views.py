@@ -66,5 +66,7 @@ class ContactResultView(TemplateView):
 def template(request):
     return render(request, "app/info/template.html")
 
+# 敷金礼金
 def security_deposit(request):
     return render(request, "app/info/security_deposit.html")
+
