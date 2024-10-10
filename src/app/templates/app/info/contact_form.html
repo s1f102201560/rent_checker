@@ -6,7 +6,11 @@
 
 {% block main %}
 <!-- ナビゲーションバー -->
-{% include "app/navi.html" %}
+{% if user.is_authenticated %}
+  {% include "app/navi_log.html" %}
+{% else %}
+  {% include "app/navi.html" %}
+{% endif %}
 
 <div class="min-h-screen flex flex-col">
   <div class="flex-grow">
