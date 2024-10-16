@@ -1,0 +1,209 @@
+{% extends "app/base.html" %}
+{% load static %}
+
+{% block nav %}
+{% endblock nav %}
+
+{% block main %}
+<!-- ナビゲーションバー -->
+{% if user.is_authenticated %}
+{% include "app/navi_log.html" %}
+{% else %}
+{% include "app/navi.html" %}
+{% endif %}
+
+<!-- フォーム -->
+<div class="min-h-screen flex flex-col">
+  <div class="flex-grow">
+    {% block content %}
+    <div class="pt-24">
+      <div class="container px-3 mx-auto flex-wrap flex-col md:flex-row items-center">
+        <h2 class="w-full my-2 text-5xl font-bold leading-tight text-gray-800">
+          原状回復とは?
+        </h2>
+
+        <h3
+          class="w-full text-3xl text-gray-800 font-bold leading-none mb-3 bg-yellow-100 border-yellow-200 border-l-8 p-2">
+          原状回復とは
+        </h3>
+        <p class="text-gray-600 mb-5 px-6">
+          原状回復とは、アパートなど賃貸住宅の賃貸借契約が終了して借主（賃借人）が退去する際に、借りた部屋を「本来あるべき状態」、つまり入居時の状態に戻して貸主（賃貸人）に返す義務のことです。
+          また入居時に支払う敷金や保証金がありますが、これらは入居者が汚したり損傷させた部屋を原状回復するための費用として充てるために、大家さんが事前に預かるお金です。大家さんとしては敷金や保証金を預かっておくことで家賃の滞納リスクを担保できます。
+        </p>
+
+        <h3
+          class="w-full text-3xl text-gray-800 font-bold leading-none mb-3 bg-yellow-100 border-yellow-200 border-l-8 p-2">
+          入居者と大家の負担区分
+        </h3>
+        <style>
+          table {
+            width: 100%;
+            border-collapse: collapse;
+          }
+
+          th,
+          td {
+            border: 1px solid black;
+            padding: 8px;
+            text-align: left;
+          }
+
+          th {
+            background-color: #cbcbcb;
+          }
+        </style>
+        <table>
+          <tr>
+            <th>部屋の部位や設備</th>
+            <th>入居者の負担</th>
+            <th>大家の負担</th>
+          </tr>
+          <tr>
+            <td>鍵</td>
+            <td>不注意で鍵を破損した、鍵を紛失した</td>
+            <td>次の入居者に向けて鍵を取り替える（破損、紛失のない場合）</td>
+          </tr>
+          <tr>
+            <td>給湯器</td>
+            <td>間違った使い方をして給湯器を壊した</td>
+            <td>耐用年数を過ぎた給湯器を交換</td>
+          </tr>
+          <tr>
+            <td>壁のクロス</td>
+            <td>・禁煙と決められているのに、たばこのヤニをつけた<br>
+              ・結露を放置したことでカビやシミが拡大した
+            </td>
+            <td>冷蔵庫やテレビの背面の壁に黒ずみができた</td>
+          </tr>
+          <tr>
+            <td>床</td>
+            <td>・キャスター付きの椅子で床に傷や凹みができた<br>
+              ・引っ越し作業中にひっかき傷ができた
+            </td>
+            <td>家具の設置によって床に設置跡ができた</td>
+          </tr>
+          <tr>
+            <td>健具や窓</td>
+            <td>飼っているペットが柱に傷やニオイを付けた</td>
+            <td>地震でガラスが破損した</td>
+          </tr>
+        </table>
+
+        <br>
+
+        <h3
+          class="w-full text-3xl text-gray-800 font-bold leading-none mb-3 bg-yellow-100 border-yellow-200 border-l-8 p-2">
+          原状回復費用の負担割合
+        </h3>
+        <p class="text-gray-600 mb-5 px-6">
+          入居者が原状回復費用を負担しなければならないケースもありますが、その際には必ず「経過年数」が考慮されます。経過年数も考慮されることで、オーナーと入居者との負担割合が変わってきます。<br>
+          管理会社やオーナーと原状回復費用について話す際は、必ず経過年数が考慮されているかどうかを確認するようにしましょう。
+        </p>
+        <p>賃借人の負担単位と経過年数等の考慮の表</p>
+        <p>【床（毀損部分の補修）】</p>
+
+        <table>
+          <tr>
+            <th></th>
+            <th>賃借人の負担単位</th>
+            <th>経過年数等の考慮</th>
+          </tr>
+          <tr>
+            <td>畳</td>
+            <td>原則一枚単位<br>毀損部分が複数枚の場合はその枚数分</td>
+            <td>【畳表】<br>経過年数は考慮しない</td>
+          </tr>
+          <tr>
+            <td>カーペット<br>クッションフロア</td>
+            <td>毀損等が複数箇所の場合は、居室全体</td>
+            <td>【畳床・カーペット・クッションフロア】<br>6年で残存価値1円となるような負担割合を算定する</td>
+          </tr>
+          <tr>
+            <td>フローリング</td>
+            <td>原則㎡単位<br>毀損等が複数箇所の場合は、居室全体</td>
+            <td>【フローリング】<br>補修は経過年数を考慮しない<br>(フローリング全体にわたる毀損等があり、張り替える場合は、当該建物の耐用年数で残存価 値1円となるような負担割合を算定する)</td>
+          </tr>
+        </table>
+
+        <br>
+        <p>【壁・天井（毀損部分の補修）】</p>
+        <table>
+          <tr>
+            <th></th>
+            <th>賃借人の負担単位</th>
+            <th>経過年数等の考慮</th>
+          </tr>
+          <tr>
+            <td>壁（クロス）</td>
+            <td>㎡単位が望ましいが、 賃借人が毀損した 箇所を含む一面分までは張替え費用を 賃借人負担としてもやむをえないとする</td>
+            <td rowspan="2">【壁(クロス)】<br>6年で残存価値1円となるような負担割合を算定する</td>
+          </tr>
+          <tr>
+            <td>タバコ等のヤニ、臭い</td>
+            <td>喫煙等により当該居室全体においてクロス等がヤニで変色したり臭いが付着した場合のみ、居室全体のクリーニングまたは張替費用を賃借人負担とすることが妥当と考えられる</td>
+          </tr>
+        </table>
+
+        <br>
+        <p>【建具・柱（毀損部分の補修）】</p>
+        <table>
+          <tr>
+            <th></th>
+            <th>賃借人の負担単位</th>
+            <th>経過年数等の考慮</th>
+          </tr>
+          <tr>
+            <td>襖</td>
+            <td>１枚単位</td>
+            <td>【襖紙、障子紙】<br>経過年数は考慮しない</td>
+          </tr>
+          <tr>
+            <td>柱</td>
+            <td>１本単位</td>
+            <td>【襖、障子等の建具部分、柱】<br>経過年数は考慮しない</td>
+          </tr>
+        </table>
+
+        <br>
+        <p>【設備・その他（設備の補修/鍵の返却/通常の清掃※）】</p>
+        <table>
+          <tr>
+            <th></th>
+            <th>賃借人の負担単位</th>
+            <th>経過年数等の考慮</th>
+          </tr>
+          <tr>
+            <td>設備機器</td>
+            <td>補修部分、交換相当費用 </td>
+            <td>【設備機器】<br>耐用年数経過時点で残存価値1円となるような直線(または曲線)を想定し、負担割合を算定する</td>
+          </tr>
+          <tr>
+            <td>鍵</td>
+            <td>紛失の場合は、シリンダーの交換も含む</td>
+            <td>鍵の紛失の場合は、経過年数は考慮しない。交換費用相当分を借主負担とする</td>
+          </tr>
+          <tr>
+            <td>クリーニング<br>※通常の清掃や退去時の清掃を怠った場合のみ</td>
+            <td>部位ごと、または住戸全体</td>
+            <td>経過年数は考慮しない。借主負担となるのは、通常の清掃を実施していない場合で、部位もしくは、住戸全体の清掃費用相当分を借主負担とする</td>
+          </tr>
+        </table>
+
+        <br>
+
+        <div class="border-t">
+          <p class="text-gray-600 mb-5 px-6">
+            参考文献<br>
+            ・<a href="https://suumo.jp/article/oyakudachi/oyaku/chintai/fr_other/chintai_genjokaihuku/"
+              class="text-blue-500 underline">SUUMO（原状回復義務とは？）</a>
+          </p>
+        </div>
+
+      </div>
+    </div>
+    {% endblock %}
+  </div>
+  <!--Footer-->
+  {% include "app/footer.html" %}
+</div>
+{% endblock main %}

@@ -70,3 +70,15 @@ def template(request):
 def security_deposit(request):
     return render(request, "app/info/security_deposit.html")
 
+def before_move(request):
+    return render(request, "app/info/before_move.html")
+
+def brokerage_fee(request):
+    return render(request, "app/info/brokerage_fee.html")
+
+def restoration(request):
+    return render(request, "app/info/restoration.html")
+
+def penalty_fee(request):
+    return render(request, "app/info/penalty_fee.html")
+

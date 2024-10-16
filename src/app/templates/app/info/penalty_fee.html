@@ -1,0 +1,161 @@
+{% extends "app/base.html" %}
+{% load static %}
+
+{% block nav %}
+{% endblock nav %}
+
+{% block main %}
+<!-- ナビゲーションバー -->
+{% if user.is_authenticated %}
+{% include "app/navi_log.html" %}
+{% else %}
+{% include "app/navi.html" %}
+{% endif %}
+
+<!-- フォーム -->
+<div class="min-h-screen flex flex-col">
+  <div class="flex-grow">
+    {% block content %}
+    <div class="pt-24">
+      <div class="container px-3 mx-auto flex-wrap flex-col md:flex-row items-center">
+        <h2 class="w-full my-2 text-5xl font-bold leading-tight text-gray-800">
+          違約金とは?
+        </h2>
+        <h3
+          class="w-full text-3xl text-gray-800 font-bold leading-none mb-3 bg-yellow-100 border-yellow-200 border-l-8 p-2">
+          違約金
+        </h3>
+        <p class="text-gray-600 mb-5 px-6">
+          「<b>違約金</b>」とは<u>契約内容に違反した当事者が、事前の合意に従って相手方に支払う金銭</u>です。
+        </p>
+        <h3
+          class="w-full text-3xl text-gray-800 font-bold leading-none mb-3 bg-yellow-100 border-yellow-200 border-l-8 p-2">
+          違約金の目的
+        </h3>
+        </h3>
+        <p class="text-gray-600 mb-5 px-6">
+          違約金の目的は、契約当事者にその義務を適切に履行させることです。
+          <b>契約違反のペナルティ</b>を明確化することで、当事者には<u>ペナルティを避けようとする心理</u>が働き、結果的に契約違反が発生するリスクを抑えられます。
+        </p>
+        <h3
+          class="w-full text-3xl text-gray-800 font-bold leading-none mb-3 bg-yellow-100 border-yellow-200 border-l-8 p-2">
+          2種類の違約金 : 損害賠償額の予定と違約罰
+        </h3>
+        <p class="text-gray-600 mb-5 px-6">
+          違約金の法的性質は、<b>「損害賠償額の予定」</b>であるケースと、<b>「違約罰」</b>であるケースの2通りがあります。
+          <br><b><u>①損害賠償額の予定</u></b>
+          <br>契約上の債務不履行が発生した場合に、違反者が相手方に対して支払う損害賠償の額をあらかじめ定めたものです。
+          <br><b><u>②違約罰</u></b>
+          <br>債務不履行を犯した者が、相手方に対して損害賠償に加えて支払うペナルティです。
+          違約金が違約罰である場合、違約金とは別に損害賠償を請求することができます。
+        </p>
+        <h3
+          class="w-full text-3xl text-gray-800 font-bold leading-none mb-3 bg-yellow-100 border-yellow-200 border-l-8 p-2">
+          違約金と損害賠償の違い
+        </h3>
+        <u>違約金が<b>損害賠償額の予定</b>である場合、違約金と損害賠償は同じもの</u>です。この場合、違反当事者に対して、違約金とは別に損害賠償を請求することはできません。
+        <br>
+        <br>これに対して、<u>違約金が<b>違約罰</b>である場合は、違約金と損害賠償は異なるもの</u>です。この場合、違反当事者に対して、違約金と損害賠償を両方請求することができます。
+        <h3
+          class="w-full text-3xl text-gray-800 font-bold leading-none mb-3 bg-yellow-100 border-yellow-200 border-l-8 p-2">
+          違約金を請求できないケース
+        </h3>
+        <p class="text-gray-600 mb-5 px-6">
+          契約の解除に関して違約金が定められていたとしても、<u>以下のいずれかに該当する場合には、解除された側は相手方に対して違約金を請求できません。</u>
+          <br><b>①消費者がクーリングオフをした場合</b>
+          <br><b>②手付解除が行われた場合</b>
+        </p>
+        <h3
+          class="w-full text-3xl text-gray-800 font-bold leading-none mb-3 bg-yellow-100 border-yellow-200 border-l-8 p-2">
+          消費者がクーリングオフをした場合
+        </h3>
+        <p class="text-gray-600 mb-5 px-6">
+          <b>クーリングオフ</b>とは、<u>契約締結後一定期間に限り、消費者の側から契約を自由に解除できる制度</u>です。消費者が事業者に搾取されやすい類型の契約について、消費者に再考の機会を与えるためにクーリングオフ制度が設けられています。
+          <style>
+            table {
+              width: 100%;
+              border-collapse: collapse;
+            }
+
+            th,
+            td {
+              border: 1px solid #cccccc;
+              padding: 10px;
+              text-align: left;
+            }
+
+            th {
+              background-color: #b4b9c3;
+            }
+          </style>
+          <title>クーリングオフ期間表</title>
+
+          <table>
+            <tr>
+              <th>取引の種類</th>
+              <th>クーリングオフ期間</th>
+            </tr>
+            <tr>
+              <td>訪問販売（キャッチセールスを含む）</td>
+              <td>契約締結書面の受領日を含めて8日間</td>
+            </tr>
+            <tr>
+              <td>電話勧誘販売</td>
+              <td>契約締結書面の受領日を含めて8日間</td>
+            </tr>
+            <tr>
+              <td>特定継続的役務提供<br>
+                ※エステ、語学教育、学習塾等、家庭教師等、パソコン教室等、結婚相談所のサービス提供契約
+              </td>
+              <td>契約締結書面の受領日を含めて8日間</td>
+            </tr>
+            <tr>
+              <td>個別信用購入あっせん</td>
+              <td>契約締結書面の受領日を含めて8日間</td>
+            </tr>
+            <tr>
+              <td>宅地建物取引業者が自ら売主となる宅地・建物の売買契約</td>
+              <td>クーリングオフができる旨の告知を受けた日を含めて8日間<br>
+                ※引渡しと代金の支払いが済んでいる場合は、クーリングオフ不可
+              </td>
+            </tr>
+            <tr>
+              <td>契約金額が50万円以上のゴルフ会員権契約</td>
+              <td>契約締結書面の受領日を含めて8日間</td>
+            </tr>
+            <tr>
+              <td>保険契約</td>
+              <td>クーリングオフに関する事項が記載された書面の受領日と、契約申込日のいずれか遅い日を含めて8日間</td>
+            </tr>
+          </table>
+
+          <hr>
+          <br>
+        </p>
+        <h3
+          class="w-full text-3xl text-gray-800 font-bold leading-none mb-3 bg-yellow-100 border-yellow-200 border-l-8 p-2">
+          手付解除が行われた場合
+        </h3>
+        <p class="text-gray-600 mb-5 px-6">
+          売買契約その他の有償契約では、買い手側が売り手側に対して<b>手付金</b>（てつけきん）を交付することがあります。
+          <br>
+          <br>この場合、買い手側は手付金を放棄し、売り手側は手付金の倍額を現実に提供すれば、契約を解除することができます（民法557条1項・559条。ただし、相手方が契約の履行に着手した後は、手付解除はできません）。
+          <br>
+          <br>手付解除が行われた場合は、解除された側は相手方に対して損害賠償や違約金などを請求できません（民法557条2項・545条4項）。
+        </p>
+
+        <div class="border-t">
+          <p class="text-gray-600 mb-5 px-6">
+            参考文献<br>
+            ・<a href="https://keiyaku-watch.jp/media/hourei/iyakukin/" class="text-blue-500 underline"
+              target="_blank">アルファフォーム(違約金｜不動産用語集)</a><br>
+          </p>
+        </div>
+      </div>
+    </div>
+    {% endblock %}
+  </div>
+  <!--Footer-->
+  {% include "app/footer.html" %}
+</div>
+{% endblock main %}
