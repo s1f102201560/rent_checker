@@ -13,10 +13,10 @@
 {% endif %}
 
 <!-- フォーム -->
-{% block content %}
+<div class="min-h-screen flex flex-col lg:flex-row">
+  {% block content %}
 
-<div class="pt-24">
-  <div class="container px-3 mx-auto flex-wrap flex-col md:flex-row items-center">
+  <div class="lg:w-3/5 w-full px-3 pt-24">
     <h2 class="w-full my-2 text-5xl font-bold leading-tight text-gray-800">
       敷金礼金とは?
     </h2>
@@ -81,17 +81,19 @@
       <p class="text-gray-600 mb-5 px-6">
         参考文献<br>
         ・<a href="https://chatgpt.com/" class="text-blue-500 underline" target="_blank">ChatGPT</a><br>
-        ・<a href="https://www.ekimae-r-e.co.jp/oshiete/40" class="text-blue-500 underline" target="_blank">㍿駅前不動産賃貸 (敷金・礼金って何? わかりやすく教えて!)</a><br>
-        ・<a href="https://suumo.jp/journal/2012/06/19/21443/" class="text-blue-500 underline" target="_blank">SUUMO (知らないと損する!泣き寝入りしない「敷金トラブル」)</a><br>
-        ・<a href="https://www.mlit.go.jp/common/001016469.pdf" class="text-blue-500 underline" target="_blank">国土交通省住宅局 (原状回復をめぐるトラブルとガイドライン)</a><br>
+        ・<a href="https://www.ekimae-r-e.co.jp/oshiete/40" class="text-blue-500 underline" target="_blank">㍿駅前不動産賃貸
+          (敷金・礼金って何? わかりやすく教えて!)</a><br>
+        ・<a href="https://suumo.jp/journal/2012/06/19/21443/" class="text-blue-500 underline" target="_blank">SUUMO
+          (知らないと損する!泣き寝入りしない「敷金トラブル」)</a><br>
+        ・<a href="https://www.mlit.go.jp/common/001016469.pdf" class="text-blue-500 underline" target="_blank">国土交通省住宅局
+          (原状回復をめぐるトラブルとガイドライン)</a><br>
       </p>
     </div>
   </div>
+  {% include "app/ai.html" %}
 </div>
+{% endblock content %}
 
-
-
-{% endblock %}
 <!--Footer-->
 {% include "app/footer.html" %}
 {% endblock main %}
