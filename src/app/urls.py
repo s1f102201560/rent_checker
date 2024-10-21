@@ -1,7 +1,7 @@
 from django.urls import path
 from django.contrib.auth.decorators import login_required
 from django.views.generic import TemplateView
-from app.views import top, chat, upload_image, ContactFormView, ContactResultView, template, security_deposit, before_move, brokerage_fee, penalty_fee, restoration
+from app.views import top, chat, upload_image, ContactFormView, ContactResultView, template, security_deposit, before_move, brokerage_fee, penalty_fee, restoration, insurance
 
 index_view = TemplateView.as_view(template_name="app/index.html")
 
@@ -18,4 +18,5 @@ urlpatterns = [
     path('brokerage_fee', brokerage_fee, name='brokerage_fee'),
     path('penalty_fee', penalty_fee, name='penalty_fee'),
     path('restoration', restoration, name='restoration'),
+    path('insurance', insurance, name='insurance'),
 ]

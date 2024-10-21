@@ -7,9 +7,9 @@
 {% block main %}
 <!-- ナビゲーションバー -->
 {% if user.is_authenticated %}
-{% include "app/navi_log.html" %}
+  {% include "app/navi_log.html" %}
 {% else %}
-{% include "app/navi.html" %}
+  {% include "app/navi.html" %}
 {% endif %}
 
 <!-- フォーム -->
@@ -90,7 +90,13 @@
       </p>
     </div>
   </div>
-  {% include "app/ai.html" %}
+
+  <!--生成系AIの部分-->
+  {% if user.is_authenticated %}
+    {% include "app/ai.html_log" %}
+  {% else %}
+    {% include "app/ai.html" %}
+  {% endif %}
 </div>
 {% endblock content %}
 

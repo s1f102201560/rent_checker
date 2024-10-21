@@ -61,7 +61,8 @@ class ContactResultView(TemplateView):
         context = super().get_context_data(**kwargs)
         context['success'] = "お問い合わせは正常に送信されました。ご入力いただいたメールアドレスに入力内容を自動返信しております。返信があるまでしばらくお待ちください。なお、自動返信メールが届かない場合や返信がない場合はメールアドレスが間違っている可能性がありますので、その際はお手数ですがもう一度ご入力お願いいたします。"
         return context
-    
+
+
 # これはテンプレートの確認用 本番では消す
 def template(request):
     return render(request, "app/info/template.html")
@@ -82,3 +83,5 @@ def restoration(request):
 def penalty_fee(request):
     return render(request, "app/info/penalty_fee.html")
 
+def insurance(request):
+    return render(request, "app/info/insurance.html")
