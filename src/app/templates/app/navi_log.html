@@ -1,0 +1,80 @@
+<nav class="fixed w-full z-30 top-0 text-white bg-yellow-200">
+  <div class="w-full container mx-auto flex flex-wrap items-center justify-between mt-0 py-4">
+    <div class="pl-4 flex items-center">
+      <a class="text-white no-underline hover:no-underline font-bold text-2xl lg:text-4xl" href="/">
+        <i class="fa-solid fa-check h-8 inline"></i>
+        RENT CHECKER
+      </a>
+    </div>
+    <div class="block lg:hidden pr-4">
+      <button id="nav-toggle" class="flex items-center p-1 text-gray-500">
+        <i class="fa-solid fa-bars h-8 w-8"></i>
+      </button>
+    </div>
+    <div class="hidden lg:flex lg:items-center lg:w-auto w-full" id="nav-content">
+      <ul class="lg:flex items-center justify-between text-base text-gray-500 pt-4 lg:pt-0">
+        <li>
+          <form method="POST" action="{% url 'logout' %}">
+            {% csrf_token %}
+            <button type="submit"
+              class="lg:p-4 py-3 px-0 w-full text-left lg:w-auto block border-b-2 border-transparent hover:border-yellow-100">
+              ログアウト
+            </button>
+          </form>
+        <li><a class="lg:p-4 py-3 px-0 block border-b-2 border-transparent hover:border-yellow-100"
+            href="{% url 'password_change' %}">パスワード変更</a></li>
+        <li>
+          <div class="relative inline-block text-left">
+            <div>
+              <button type="button"
+                class="inline-flex w-full justify-center gap-x-1.5 rounded-md px-3 py-2 hover:bg-yellow-100 bg-yellow-200"
+                id="menu-button" aria-expanded="true" aria-haspopup="true" onclick="toggleMenu()">
+                知識を付ける
+                <svg id="menu-icon" class="-mr-1 h-5 w-5 text-gray-400 transition-transform duration-200"
+                  viewBox="0 0 20 20" fill="currentColor" aria-hidden="true" data-slot="icon">
+                  <path fill-rule="evenodd"
+                    d="M5.22 8.22a.75.75 0 0 1 1.06 0L10 11.94l3.72-3.72a.75.75 0 1 1 1.06 1.06l-4.25 4.25a.75.75 0 0 1-1.06 0L5.22 9.28a.75.75 0 0 1 0-1.06Z"
+                    clip-rule="evenodd" />
+                </svg>
+              </button>
+            </div>
+            <div id="dropdown-menu"
+              class="absolute left-0 z-10 mt-2 w-56 origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none hidden"
+              role="menu" aria-orientation="vertical" aria-labelledby="menu-button" tabindex="-1">
+              <div class="py-1" role="none">
+                <a href="{% url 'security_deposit' %}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-yellow-100"
+                  role="menuitem" tabindex="-1" id="menu-item-0">敷金礼金とは</a>
+                <a href="{% url 'brokerage_fee' %}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-yellow-100"
+                  role="menuitem" tabindex="-1" id="menu-item-1">仲介手数料について</a>
+                <a href="{% url 'before_move' %}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-yellow-100"
+                  role="menuitem" tabindex="-1" id="menu-item-2">入居前に必要なこと</a>
+                <a href="{% url 'restoration' %}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-yellow-100"
+                  role="menuitem" tabindex="-1" id="menu-item-3">原状回復とは</a>
+                <a href="{% url 'penalty_fee' %}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-yellow-100"
+                  role="menuitem" tabindex="-1" id="menu-item-4">違約金について</a>
+                <a href="{% url 'insurance' %}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-yellow-100"
+                  role="menuitem" tabindex="-1" id="menu-item-5">保険料について</a>
+              </div>
+            </div>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </div>
+  <hr class="border-b border-gray-100 opacity-25 my-0 py-0" />
+</nav>
+
+<script>
+  function toggleMenu() {
+    const menu = document.getElementById('dropdown-menu');
+    const icon = document.getElementById('menu-icon');
+    menu.classList.toggle('hidden');
+    icon.classList.toggle('rotate-180'); // アイコンを回転させるクラスをトグル
+  }
+</script>
+
+<style>
+  .rotate-180 {
+    transform: rotate(180deg);
+  }
+</style>

@@ -6,7 +6,11 @@
 
 {% block main %}
   <!-- ナビゲーションバー -->
-  {% include "app/navi.html" %}
+  {% if user.is_authenticated %}
+    {% include "app/navi_log.html" %}
+  {% else %}
+    {% include "app/navi.html" %}
+  {% endif %}
   <!-- メインイメージ -->
   <div class="pt-24">
     <div class="container px-3 mx-auto flex flex-wrap flex-col md:flex-row items-center">

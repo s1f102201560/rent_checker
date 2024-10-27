@@ -141,3 +141,4 @@ class ChatConsumer(AsyncWebsocketConsumer):
             )
         except Exception as e:
             print(f"Error processing GPT query: {e}")
+

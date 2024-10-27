@@ -1,0 +1,15 @@
+<!--ログインしていないver-->
+<!--まだ何もしていない-->
+
+<!-- 右側のコンテンツ（スマホ/PC表示切り替え） -->
+<div class="lg:w-2/5 w-full px-3">
+  <!-- スマホ向けコンテンツ（lg未満）-->
+  <div class="block lg:hidden">
+    <p>スマホの画面</p>
+  </div>
+  <!-- パソコン向けコンテンツ（lg以上）-->
+  <div class="hidden lg:block pt-24">
+    {% include "app/chat.html" %}
+    <p>パソコンの画面</p>
+  </div>
+</div>
