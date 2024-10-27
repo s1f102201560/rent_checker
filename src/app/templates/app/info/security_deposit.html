@@ -93,9 +93,9 @@
 
   <!--生成系AIの部分-->
   {% if user.is_authenticated %}
-    {% include "app/ai.html_log" %}
-  {% else %}
     {% include "app/ai.html" %}
+  {% else %}
+    {% include "app/ai_log.html" %}
   {% endif %}
 </div>
 {% endblock content %}
