@@ -7,84 +7,85 @@
 {% block main %}
 <!-- ナビゲーションバー -->
 {% if user.is_authenticated %}
-{% include "app/navi_log.html" %}
+  {% include "app/navi_log.html" %}
 {% else %}
-{% include "app/navi.html" %}
+  {% include "app/navi.html" %}
 {% endif %}
 
 <!-- フォーム -->
-<div class="min-h-screen flex flex-col">
-  <div class="flex-grow">
-    {% block content %}
-    <div class="pt-24">
-      <div class="container px-3 mx-auto flex-wrap flex-col md:flex-row items-center">
-        <h2 class="w-full my-2 text-5xl font-bold leading-tight text-gray-800">
-          仲介手数料とは?
-        </h2>
+<div class="min-h-screen flex flex-col lg:flex-row">
+  {% block content %}
+  <div class="lg:w-3/5 w-full px-7 pt-24">
+    
+    <h2 class="w-full my-2 text-5xl font-bold leading-tight text-gray-800">
+      仲介手数料とは?
+    </h2>
 
-        <h3
-          class="w-full text-3xl text-gray-800 font-bold leading-none mb-3 bg-yellow-100 border-yellow-200 border-l-8 p-2">
-          仲介手数料
-        </h3>
-        <p class="text-gray-600 mb-5 px-6">
-          仲介手数料は、住宅の売買や賃貸借において、不動産仲介業者に支払う手数料です。この手数料は取引が成立した場合の成功報酬であり、契約が成立しなかった場合は支払いは不要です。
-          必要な取引には、住宅や土地の賃貸、中古住宅や新築一戸建ての売買が含まれますが、売主から直接購入する場合は仲介手数料は発生しません。中古住宅の場合、仲介会社を介するのが一般的ですが、買取再販物件や新築マンションの場合は手数料が不要なことがあります。
-        </p>
-        <p class="text-gray-600 mb-5 px-6">
-          仲介手数料の上限は、売買代金に応じて異なり、通常は「売買代金（消費税除く）×3％＋6万円＋消費税」となります。賃貸の場合は、貸主と借主が支払う合計額の上限が「家賃1カ月分（共益費・管理費除く）＋消費税」です。一般的に借主が家賃の0.5～1カ月分を支払います。
-        </p>
-        <div class="text-gray-600 mb-5 px-6">
-          <table class="container border-collapse">
-            <tr>
-              <th rowspan="2" class="border p-2 text-center bg-yellow-100">家賃</th>
-              <th colspan="2" class="border p-2 text-center bg-yellow-100">仲介手数料＋消費税(10%)</th>
-            </tr>
-            <tr>
-              <td class="border p-2 text-center">0.5ヵ月分の場合</td>
-              <td class="border p-2 text-center">1ヵ月分の場合</td>
-            </tr>
-            <tr>
-              <td class="border p-2 text-right">5万円</td>
-              <td class="border p-2 text-right">2万7500円</td>
-              <td class="border p-2 text-right">5万5000円</td>
-            </tr>
-            <tr>
-              <td class="border p-2 text-right">7万円</td>
-              <td class="border p-2 text-right">3万8500円</td>
-              <td class="border p-2 text-right">7万7000円</td>
-            </tr>
-            <tr>
-              <td class="border p-2 text-right">10万円</td>
-              <td class="border p-2 text-right">5万5000円</td>
-              <td class="border p-2 text-right">11万円</td>
-            </tr>
-            <tr>
-              <td class="border p-2 text-right">12万円</td>
-              <td class="border p-2 text-right">6万6000円</td>
-              <td class="border p-2 text-right">13万2000円</td>
-            </tr>
-            <tr>
-              <td class="border p-2 text-right">15万円</td>
-              <td class="border p-2 text-right">8万2500円</td>
-              <td class="border p-2 text-right">16万5000円</td>
-            </tr>
-  
-          </table>
-        </div>
-        <div class="border-t">
-          <p class="text-gray-600 mb-5 px-6">
-            参考文献<br>
-            ・<a
-              href="https://suumo.jp/yougo/t/chuukaitesuuryou/#:~:text=%E4%BB%B2%E4%BB%8B%E6%89%8B%E6%95%B0%E6%96%99%E3%81%A8%E3%81%AF%E3%80%81%E4%BD%8F%E5%AE%85,%E3%81%AF%E6%94%AF%E6%89%95%E3%81%86%E5%BF%85%E8%A6%81%E3%81%AF%E3%81%AA%E3%81%84%E3%80%82" class="text-blue-500 underline" target="_blank">SUUMO（仲介手数料とは｜SUUMO住宅用語辞典）</a><br>
-            ・<a
-              href="https://suumo.jp/article/oyakudachi/oyaku/chintai/fr_money/chukaitesuryou_chintai/" class="text-blue-500 underline" target="_blank">SUUMO（賃貸の仲介手数料とは？）</a>
-          </p>
-        </div>
-      </div>
+    <h3
+      class="w-full text-3xl text-gray-800 font-bold leading-none mb-3 bg-yellow-100 border-yellow-200 border-l-8 p-2">
+      仲介手数料
+    </h3>
+    <p class="text-gray-600 mb-5 px-6">
+      仲介手数料は、住宅の売買や賃貸借において、不動産仲介業者に支払う手数料です。この手数料は取引が成立した場合の成功報酬であり、契約が成立しなかった場合は支払いは不要です。
+      必要な取引には、住宅や土地の賃貸、中古住宅や新築一戸建ての売買が含まれますが、売主から直接購入する場合は仲介手数料は発生しません。中古住宅の場合、仲介会社を介するのが一般的ですが、買取再販物件や新築マンションの場合は手数料が不要なことがあります。
+    </p>
+    <p class="text-gray-600 mb-5 px-6">
+      仲介手数料の上限は、売買代金に応じて異なり、通常は「売買代金（消費税除く）×3％＋6万円＋消費税」となります。賃貸の場合は、貸主と借主が支払う合計額の上限が「家賃1カ月分（共益費・管理費除く）＋消費税」です。一般的に借主が家賃の0.5～1カ月分を支払います。
+    </p>
+    <div class="text-gray-600 mb-5 px-6">
+      <table class="container border-collapse">
+        <tr>
+          <th rowspan="2" class="border p-2 text-center bg-yellow-100">家賃</th>
+          <th colspan="2" class="border p-2 text-center bg-yellow-100">仲介手数料＋消費税(10%)</th>
+        </tr>
+        <tr>
+          <td class="border p-2 text-center">0.5ヵ月分の場合</td>
+          <td class="border p-2 text-center">1ヵ月分の場合</td>
+        </tr>
+        <tr>
+          <td class="border p-2 text-right">5万円</td>
+          <td class="border p-2 text-right">2万7500円</td>
+          <td class="border p-2 text-right">5万5000円</td>
+        </tr>
+        <tr>
+          <td class="border p-2 text-right">7万円</td>
+          <td class="border p-2 text-right">3万8500円</td>
+          <td class="border p-2 text-right">7万7000円</td>
+        </tr>
+        <tr>
+          <td class="border p-2 text-right">10万円</td>
+          <td class="border p-2 text-right">5万5000円</td>
+          <td class="border p-2 text-right">11万円</td>
+        </tr>
+        <tr>
+          <td class="border p-2 text-right">12万円</td>
+          <td class="border p-2 text-right">6万6000円</td>
+          <td class="border p-2 text-right">13万2000円</td>
+        </tr>
+        <tr>
+          <td class="border p-2 text-right">15万円</td>
+          <td class="border p-2 text-right">8万2500円</td>
+          <td class="border p-2 text-right">16万5000円</td>
+        </tr>
+
+      </table>
     </div>
-    {% endblock %}
+    <div class="border-t">
+      <p class="text-gray-600 mb-5 px-6">
+        参考文献<br>
+        ・<a
+          href="https://suumo.jp/yougo/t/chuukaitesuuryou/#:~:text=%E4%BB%B2%E4%BB%8B%E6%89%8B%E6%95%B0%E6%96%99%E3%81%A8%E3%81%AF%E3%80%81%E4%BD%8F%E5%AE%85,%E3%81%AF%E6%94%AF%E6%89%95%E3%81%86%E5%BF%85%E8%A6%81%E3%81%AF%E3%81%AA%E3%81%84%E3%80%82"
+          class="text-blue-500 underline" target="_blank">SUUMO（仲介手数料とは｜SUUMO住宅用語辞典）</a><br>
+        ・<a href="https://suumo.jp/article/oyakudachi/oyaku/chintai/fr_money/chukaitesuryou_chintai/"
+          class="text-blue-500 underline" target="_blank">SUUMO（賃貸の仲介手数料とは？）</a>
+      </p>
+    </div>
   </div>
-  <!--Footer-->
-  {% include "app/footer.html" %}
+  <!--生成系AIの部分-->
+  {% include "app/ai.html" %}
 </div>
+{% endblock content %}
+
+<!--Footer-->
+{% include "app/footer.html" %}
 {% endblock main %}
