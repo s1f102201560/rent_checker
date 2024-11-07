@@ -17,11 +17,11 @@
           <form method="POST" action="{% url 'logout' %}">
             {% csrf_token %}
             <button type="submit"
-              class="lg:p-4 py-3 px-0 w-full text-left lg:w-auto block border-b-2 border-transparent hover:border-yellow-100">
+              class="lg:p-4 p-3 w-full text-left lg:w-auto block border-b-2 border-transparent hover:border-yellow-100">
               ログアウト
             </button>
           </form>
-        <li><a class="lg:p-4 py-3 px-0 block border-b-2 border-transparent hover:border-yellow-100"
+        <li><a class="lg:p-4 p-3 block border-b-2 border-transparent hover:border-yellow-100"
             href="{% url 'password_change' %}">パスワード変更</a></li>
         <li>
           <div class="relative inline-block text-left">
