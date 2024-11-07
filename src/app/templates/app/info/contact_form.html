@@ -17,16 +17,16 @@
     <!-- フォーム -->
     {% block content %}
     <div class="pt-24">
-      <div class="container px-3 mx-auto flex-wrap flex-col md:flex-row items-center">
-        <div class="flex flex-wrap">
+      <div class="container px-3 mx-auto flex-wrap flex-col md:flex-row items-center justify-center">
+        <div class="flex flex-wrap justify-center">
           <div class="w-5/6 sm:w-1/2 p-6">
-            <h1 class="my-4 text-5xl font-bold leading-tight">お問い合わせ</h1>
-            <p>お問い合わせフォームです。下記のフォームにご記入ください。</p>
-            <form method="POST">
+            <h1 class="my-4 text-5xl font-bold leading-tight text-center">お問い合わせ</h1>
+            <p class="text-center">お問い合わせフォームです。下記のフォームにご記入ください。</p>
+            <form method="POST" class="mt-4">
               {% csrf_token %}
               {{ form.as_p }}
               <button type="submit"
-                class="bg-yellow-200 hover:bg-yellow-300 text-white font-bold py-2 px-4 rounded-lg shadow-md">送信</button>
+                class="bg-yellow-200 hover:bg-yellow-300 text-white font-bold py-2 px-4 rounded-lg shadow-md block mx-auto">送信</button>
             </form>
           </div>
         </div>

@@ -92,11 +92,7 @@
   </div>
 
   <!--生成系AIの部分-->
-  {% if user.is_authenticated %}
-    {% include "app/ai.html" %}
-  {% else %}
-    {% include "app/ai_log.html" %}
-  {% endif %}
+  {% include "app/ai.html" %}
 </div>
 {% endblock content %}
 
