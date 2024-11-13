@@ -1,1 +1,92 @@
-<p>現在移植中</p>
+{% extends "app/base.html" %}
+{% load static %}
+
+{% block nav %}
+{% endblock nav %}
+
+{% block main %}
+<!-- ナビゲーションバー -->
+{% include "app/navi.html" %}
+
+<!-- フォーム -->
+<div class="min-h-screen flex flex-col lg:flex-row">
+  {% block content %}
+  <div class="lg:w-3/5 w-full px-7 pt-24">
+
+    <h2 class="w-full my-2 text-5xl font-bold leading-tight text-gray-800">
+      保険の加入って必須なの？
+    </h2>
+    <p class="text-gray-600 mb-5 px-6">
+      賃貸系契約において保険には法的な加入義務はありません！
+      <br>しかし、ほとんどの物件で契約条件に設定されているため準備しておく必要があります
+    </p>
+    <h3
+      class="w-full text-3xl text-gray-800 font-bold leading-none mb-3 bg-yellow-100 border-yellow-200 border-l-8 p-2">
+      一般的に契約する保険
+    </h3>
+    <p class="text-gray-600 mb-5 px-6">
+      賃貸住宅の保険に加入する目的は、原状回復義務を果たすためと家財を守るためです。
+      <br>そのため、賃貸借契約時には火災保険に加入することがほとんどです。
+      <br>一般的に加入する保険としては以下の3つの保険があります。
+    </p>
+
+    <div class="bg-red-100 p-4 text-xl">
+      <ul>
+        <li>火災保険 (家財保険)</li>
+        <li>個人賠償責任保険</li>
+        <li>借家人賠償責任保険</li>
+      </ul>
+    </div>
+    <p class="text-gray-600 mb-5 px-6"><br>それぞれの保険について下記で詳しくみていこう</p>
+
+    <h3
+      class="w-full text-3xl text-gray-800 font-bold leading-none mb-3 bg-yellow-100 border-yellow-200 border-l-8 p-2">
+      火災保険（家財保険）
+    </h3>
+    <h4 class="text-xl">１．自分の家財への補償</h4>
+    <p class="text-gray-600 mb-5 px-6">
+      借主には火災で建物に損害があっても賠償義務はないが、
+      <br>家財が被害を受けた場合の補償は準備することを推奨します。
+      <br>家財保険の補償額は世帯人数や部屋の広さに応じた目安で決まるが、シンプルな補償で済む場合もある
+    </p>
+
+    <h4 class="text-xl">２．火災保険の加入が推奨される理由</h4>
+    <p class="text-gray-600 mb-5 px-6">
+      もらい火でも家財の損害は自己負担となるため、家電や家具などを補償するには火災保険が有効。
+      <br>原状回復義務があり、火災や水漏れで部屋に損害を与えた場合、自己負担で修復する必要がある。火災保険はこの費用をカバーすることができる。
+      <br>他の住人に損害を与えた場合の補償が必要な場合もあり、火災保険がリスク軽減に役立つ。
+    </p>
+
+    <h4 class="text-xl">３．補償の制限</h4>
+    <p class="text-gray-600 mb-5 px-6">
+      1つの家財についての補償は最大100万円。貴金属や美術品などの「明記物件」は、あらかじめ保険会社に申告する必要があります。
+    </p>
+
+    <h3
+      class="w-full text-3xl text-gray-800 font-bold leading-none mb-3 bg-yellow-100 border-yellow-200 border-l-8 p-2">
+      個人賠償責任保険
+    </h3>
+    <p class="text-gray-600 mb-5 px-6">
+      個人賠償責任保険とは、日常生活で他人に損害を与えたり、怪我などをさせてしまった場合の責任を補償するものです。
+    </p>
+
+    <h3
+      class="w-full text-3xl text-gray-800 font-bold leading-none mb-3 bg-yellow-100 border-yellow-200 border-l-8 p-2">
+      借家人賠償責任保険
+    </h3>
+    <p class="text-gray-600 mb-5 px-6">
+      借家人賠償責任保険とは、自分が原因で部屋を焼失させてしまい原状回復義務を果たせない場合や、水漏れによって床材の張り替えの必要性が生じた場合などに補償するものです。
+      <br>通常の火災保険が自分の家財を補償するものであるのに対して、借家人賠償責任保険は大家さんに対する補償です。原状回復義務を果たすための補償と言えるでしょう。
+      <br>借家人賠償責任保険に加入していない場合、原状回復義務のために高額の賠償責任を負うリスクもあるため、必ず加入しておくようにしましょう。
+    </p>
+
+  </div>
+
+  <!--生成系AIの部分-->
+  {% include "app/ai.html" %}
+</div>
+{% endblock content %}
+
+<!--Footer-->
+{% include "app/footer.html" %}
+{% endblock main %}

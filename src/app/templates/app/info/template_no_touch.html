@@ -13,19 +13,18 @@
 {% endif %}
 
 <!-- フォーム -->
-<div class="min-h-screen flex flex-col">
-  <div class="flex-grow">
-    {% block content %}
-    <div class="pt-24">
-      <div class="container px-3 mx-auto flex-wrap flex-col md:flex-row items-center">
-        
-        <!--ここを埋める-->
-      
-      </div>
-    </div>
-    {% endblock %}
+<div class="min-h-screen flex flex-col lg:flex-row">
+  {% block content %}
+  <div class="lg:w-3/5 w-full px-7 pt-24">
+    
+    <!--ここから書く-->
+
   </div>
-  <!--Footer-->
-  {% include "app/footer.html" %}
+  <!--生成系AIの部分-->
+  {% include "app/ai.html" %}
 </div>
+{% endblock content %}
+
+<!--Footer-->
+{% include "app/footer.html" %}
 {% endblock main %}

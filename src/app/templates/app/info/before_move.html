@@ -6,78 +6,72 @@
 
 {% block main %}
 <!-- ナビゲーションバー -->
-{% if user.is_authenticated %}
-{% include "app/navi_log.html" %}
-{% else %}
 {% include "app/navi.html" %}
-{% endif %}
 
 <!-- フォーム -->
-<div class="min-h-screen flex flex-col">
-  <div class="flex-grow">
-    {% block content %}
-    <div class="pt-24">
-      <div class="container px-3 mx-auto flex-wrap flex-col md:flex-row items-center">
-        <h2 class="w-full my-2 text-5xl font-bold leading-tight text-gray-800">
-          入居前に必要なこと
-        </h2>
+<div class="min-h-screen flex flex-col lg:flex-row">
+  {% block content %}
+  <div class="lg:w-3/5 w-full px-7 pt-24">
+    <h2 class="w-full my-2 text-5xl font-bold leading-tight text-gray-800">
+      入居前に必要なこと
+    </h2>
 
-        <h3
-          class="w-full text-3xl text-gray-800 font-bold leading-none mb-3 bg-yellow-100 border-yellow-200 border-l-8 p-2">
-          1, 契約関連の準備
-        </h3>
-        <p class="text-gray-600 mb-5 px-6"><b>賃貸契約書 : </b>入居契約の内容やルールを確認。</p>
-        <p class="text-gray-600 mb-5 px-6"><b>保証人の手配 : </b>賃貸では保証人が必要なことが多い。</p>
-        <p class="text-gray-600 mb-5 px-6"><b>敷金・礼金・仲介手数料 : </b>初期費用の確認と支払い。</p>
-        <p class="text-gray-600 mb-5 px-6"><b>保険加入 : </b>火災保険や賃貸保険の加入手続き。</p>
-        <p class="text-gray-600 mb-5 px-6"><b>住民票の変更 : </b>引っ越し後、役所で住所変更を行う必要がある。</p>
-        <p class="text-gray-600 mb-5 px-6"><b>現状確認 : </b>入居前に傷などがあれば撮影し記録。</p>
+    <h3
+      class="w-full text-3xl text-gray-800 font-bold leading-none mb-3 bg-yellow-100 border-yellow-200 border-l-8 p-2">
+      1, 契約関連の準備
+    </h3>
+    <p class="text-gray-600 mb-5 px-6"><b>賃貸契約書 : </b>入居契約の内容やルールを確認。</p>
+    <p class="text-gray-600 mb-5 px-6"><b>保証人の手配 : </b>賃貸では保証人が必要なことが多い。</p>
+    <p class="text-gray-600 mb-5 px-6"><b>敷金・礼金・仲介手数料 : </b>初期費用の確認と支払い。</p>
+    <p class="text-gray-600 mb-5 px-6"><b>保険加入 : </b>火災保険や賃貸保険の加入手続き。</p>
+    <p class="text-gray-600 mb-5 px-6"><b>住民票の変更 : </b>引っ越し後、役所で住所変更を行う必要がある。</p>
+    <p class="text-gray-600 mb-5 px-6"><b>現状確認 : </b>入居前に傷などがあれば撮影し記録。</p>
 
-        <h3
-          class="w-full text-3xl text-gray-800 font-bold leading-none mb-3 bg-yellow-100 border-yellow-200 border-l-8 p-2">
-          2, 家具・家電
-        </h3>
-        <p class="text-gray-600 mb-5 px-6"><b>ベット・布団 : </b>寝具の準備。</p>
-        <p class="text-gray-600 mb-5 px-6"><b>カーテン : </b>部屋のサイズに合ったものを事前に確認。</p>
-        <p class="text-gray-600 mb-5 px-6"><b>冷蔵庫、洗濯機、電子レンジ、炊飯器 : </b>生活に必要な家電。</p>
-        <p class="text-gray-600 mb-5 px-6"><b>テーブル・椅子 : </b>必要に応じて作業や食事用。</p>
-        <p class="text-gray-600 mb-5 px-6"><b>照明器具 : </b>部屋に備え付けの照明がない場合は用意。</p>
+    <h3
+      class="w-full text-3xl text-gray-800 font-bold leading-none mb-3 bg-yellow-100 border-yellow-200 border-l-8 p-2">
+      2, 家具・家電
+    </h3>
+    <p class="text-gray-600 mb-5 px-6"><b>ベット・布団 : </b>寝具の準備。</p>
+    <p class="text-gray-600 mb-5 px-6"><b>カーテン : </b>部屋のサイズに合ったものを事前に確認。</p>
+    <p class="text-gray-600 mb-5 px-6"><b>冷蔵庫、洗濯機、電子レンジ、炊飯器 : </b>生活に必要な家電。</p>
+    <p class="text-gray-600 mb-5 px-6"><b>テーブル・椅子 : </b>必要に応じて作業や食事用。</p>
+    <p class="text-gray-600 mb-5 px-6"><b>照明器具 : </b>部屋に備え付けの照明がない場合は用意。</p>
 
-        <h3
-          class="w-full text-3xl text-gray-800 font-bold leading-none mb-3 bg-yellow-100 border-yellow-200 border-l-8 p-2">
-          3, 生活用品
-        </h3>
-        <p class="text-gray-600 mb-5 px-6"><b>食器・調理器具 : </b>鍋、フライパン、包丁、カトラリー(スプーン、フォーク)など。</p>
-        <p class="text-gray-600 mb-5 px-6"><b>掃除用具 : </b>掃除機、モップ、ごみ袋など。</p>
-        <p class="text-gray-600 mb-5 px-6"><b>トイレットペーパー・ティッシュ : </b>すぐに使える消耗品。</p>
-        <p class="text-gray-600 mb-5 px-6"><b>洗剤・洗濯用具 : </b>洗濯用洗剤、物干し竿、ハンガーなど。</p>
+    <h3
+      class="w-full text-3xl text-gray-800 font-bold leading-none mb-3 bg-yellow-100 border-yellow-200 border-l-8 p-2">
+      3, 生活用品
+    </h3>
+    <p class="text-gray-600 mb-5 px-6"><b>食器・調理器具 : </b>鍋、フライパン、包丁、カトラリー(スプーン、フォーク)など。</p>
+    <p class="text-gray-600 mb-5 px-6"><b>掃除用具 : </b>掃除機、モップ、ごみ袋など。</p>
+    <p class="text-gray-600 mb-5 px-6"><b>トイレットペーパー・ティッシュ : </b>すぐに使える消耗品。</p>
+    <p class="text-gray-600 mb-5 px-6"><b>洗剤・洗濯用具 : </b>洗濯用洗剤、物干し竿、ハンガーなど。</p>
 
-        <h3
-          class="w-full text-3xl text-gray-800 font-bold leading-none mb-3 bg-yellow-100 border-yellow-200 border-l-8 p-2">
-          4, ライフラインの手続き
-        </h3>
-        <p class="text-gray-600 mb-5 px-6"><b>電気・ガス・水道 : </b>入居日までに契約し、使用できるよう手続き。</p>
-        <p class="text-gray-600 mb-5 px-6"><b>インターネット回線 : </b>契約や工事が必要な場合は事前に手配。</p>
+    <h3
+      class="w-full text-3xl text-gray-800 font-bold leading-none mb-3 bg-yellow-100 border-yellow-200 border-l-8 p-2">
+      4, ライフラインの手続き
+    </h3>
+    <p class="text-gray-600 mb-5 px-6"><b>電気・ガス・水道 : </b>入居日までに契約し、使用できるよう手続き。</p>
+    <p class="text-gray-600 mb-5 px-6"><b>インターネット回線 : </b>契約や工事が必要な場合は事前に手配。</p>
 
-        <h3
-          class="w-full text-3xl text-gray-800 font-bold leading-none mb-3 bg-yellow-100 border-yellow-200 border-l-8 p-2">
-          5, その他
-        </h3>
-        <p class="text-gray-600 mb-5 px-6"><b>引っ越し業者の手配 : </b>引っ越し日程を確定させ、業者を手配。</p>
-        <p class="text-gray-600 mb-5 px-6"><b>防犯アイテム : </b>必要に応じて鍵や防犯カメラの設置。</p>
-        <p class="text-gray-600 mb-5 px-6"><b>非常用品 : </b>地震や災害に備えた防犯グッズの準備。</p>
-        <div class="border-t">
-          <p class="text-gray-600 mb-5 px-6">
-            参考文献<br>
-            ・<a href="https://chatgpt.com/" class="text-blue-500 underline" target="_blank">ChatGPT</a><br>
-          </p>
-        </div>
-      </div>
+    <h3
+      class="w-full text-3xl text-gray-800 font-bold leading-none mb-3 bg-yellow-100 border-yellow-200 border-l-8 p-2">
+      5, その他
+    </h3>
+    <p class="text-gray-600 mb-5 px-6"><b>引っ越し業者の手配 : </b>引っ越し日程を確定させ、業者を手配。</p>
+    <p class="text-gray-600 mb-5 px-6"><b>防犯アイテム : </b>必要に応じて鍵や防犯カメラの設置。</p>
+    <p class="text-gray-600 mb-5 px-6"><b>非常用品 : </b>地震や災害に備えた防犯グッズの準備。</p>
+    <div class="border-t">
+      <p class="text-gray-600 mb-5 px-6">
+        参考文献<br>
+        ・<a href="https://chatgpt.com/" class="text-blue-500 underline" target="_blank">ChatGPT</a><br>
+      </p>
     </div>
-    {% endblock %}
   </div>
-
-  <!--Footer-->
-  {% include "app/footer.html" %}
+  <!--生成系AIの部分-->
+  {% include "app/ai.html" %}
 </div>
+{% endblock content %}
+
+<!--Footer-->
+{% include "app/footer.html" %}
 {% endblock main %}
