@@ -1,12 +1,12 @@
 {% extends "app/base.html" %}
 {% load static %}
 
+<!-- ナビゲーションバー -->
 {% block nav %}
+  {% include "app/navi.html" %}
 {% endblock nav %}
 
 {% block main %}
-<!-- ナビゲーションバー -->
-{% include "app/navi.html" %}
 
 <!-- フォーム -->
 <div class="min-h-screen flex flex-col lg:flex-row">
