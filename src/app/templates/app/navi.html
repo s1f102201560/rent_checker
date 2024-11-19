@@ -43,7 +43,11 @@
             </button>
           </form>
         <li><a class="lg:p-4 p-3 block border-b-2 border-transparent hover:border-yellow-100"
-            href="{% url 'password_change' %}">パスワード変更</a></li>
+            href="{% url 'password_change' %}">パスワード変更</a>
+        </li>
+        <li><a class="lg:p-4 p-3 block border-b-2 border-transparent hover:border-yellow-100"
+          href="{% url 'index' %}">AI機能</a>
+        </li>
         <li>
           <div class="relative inline-block text-left">
             <div>
@@ -86,9 +90,14 @@
     <div class="hidden lg:flex lg:items-center lg:w-auto w-full" id="nav-content">
       <ul class="lg:flex items-center justify-between text-base text-gray-500 pt-4 lg:pt-0">
         <li><a class="lg:p-4 p-3 block border-b-2 border-transparent hover:border-yellow-100"
-            href="{% url 'signup' %}">新規登録</a></li>
+            href="{% url 'signup' %}">新規登録</a>
+        </li>
         <li><a class="lg:p-4 p-3 block border-b-2 border-transparent hover:border-yellow-100"
-            href="{% url 'login' %}?next={{ request.path }}">ログイン</a></li>
+            href="{% url 'login' %}?next={{ request.path }}">ログイン</a>
+        </li>
+        <li><a class="lg:p-4 p-3 block border-b-2 border-transparent hover:border-yellow-100"
+          href="{% url 'index' %}">AI機能</a>
+        </li>
         <li>
           <div class="relative inline-block text-left">
             <div>
