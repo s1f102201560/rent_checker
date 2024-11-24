@@ -100,11 +100,16 @@ class ChatConsumer(AsyncWebsocketConsumer):
         # 画像が送信された場合、OCRで画像からテキストを抽出
         if image_data:            
             try:
-                base64_data = image_data.split(",")[1]
-                image = Image.open(io.BytesIO(base64.b64decode(image_data)))
+                # Base64デコード
+                decoded_image_data = base64.b64decode(image_data)
+                # 画像を開く
+                image = Image.open(io.BytesIO(decoded_image_data))
                 image.verify()
+                image = Image.open(io.BytesIO(decoded_image_data))
                 # OCRでテキストを抽出
                 ocr_text = pytesseract.image_to_string(image)
+
+                print(ocr_text)
                 # GPTに投げるメッセージとして、抽出したテキストを含める
                 message_text += f"\n[画像から抽出されたテキスト]\n{ocr_text}"
             except Exception as e:

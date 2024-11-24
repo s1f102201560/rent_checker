@@ -106,7 +106,7 @@
             if (file && file.size > 0) {
                 let reader = new FileReader();
                 reader.onload = function(e) {
-                    let base64Data = e.target.result;  // Base64エンコードされた画像データ
+                    let base64Data = e.target.result.split(',')[1];  // Base64エンコードされた画像データ
 
                     // WebSocketを通じて画像データを送信
                     ws.send(JSON.stringify({
