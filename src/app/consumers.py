@@ -107,7 +107,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
                 image.verify()
                 image = Image.open(io.BytesIO(decoded_image_data))
                 # OCRでテキストを抽出
-                ocr_text = pytesseract.image_to_string(image)
+                ocr_text = pytesseract.image_to_string(image, lang="jpn")
 
                 print(ocr_text)
                 # GPTに投げるメッセージとして、抽出したテキストを含める
