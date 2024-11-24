@@ -17,7 +17,7 @@
         <!-- ログインボタンを画像の上に配置 -->
         <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white py-2 px-4 rounded border border-gray-300">
           <p>この機能を利用するには、ログインが必要です。以下のボタンからログインをしてください。</p>
-          <a href="{% url 'login' %}" class="text-center bg-yellow-200 hover:bg-yellow-100 text-white font-bold py-2 px-4 rounded-lg shadow-md block mx-auto">ログイン</a>
+          <a href="{% url 'login' %}?next={{ request.path }}" class="text-center bg-yellow-200 hover:bg-yellow-100 text-white font-bold py-2 px-4 rounded-lg shadow-md block mx-auto">ログイン</a>
         </div>
       </div>
     {% endif %}
@@ -49,7 +49,7 @@
         <!-- ログインボタンを画像の上に配置 -->
         <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white py-2 px-4 rounded border border-gray-300">
           <p>この機能を利用するには、ログインが必要です。以下のボタンからログインをしてください。なお、この機能を使用しない場合は右上の✖ボタンを押してください。</p>
-          <a href="{% url 'login' %}" class="text-center bg-yellow-200 hover:bg-yellow-100 text-white font-bold py-2 px-4 rounded-lg shadow-md block mx-auto">ログイン</a></div>
+          <a href="{% url 'login' %}?next={{ request.path }}" class="text-center bg-yellow-200 hover:bg-yellow-100 text-white font-bold py-2 px-4 rounded-lg shadow-md block mx-auto">ログイン</a></div>
       </div>
     </div>
   </div>
