@@ -17,6 +17,8 @@ from langchain.chains import RetrievalQA
 from langchain.chains.question_answering import load_qa_chain
 from langchain.prompts import PromptTemplate
 from langchain_community.llms import OpenAI
+from langchain.chains import ConversationalRetrievalChain
+from langchain.memory import ConversationBufferMemory
 from .models import Resource, ChatLog, ChatRoom
 
 class ChatConsumer(AsyncWebsocketConsumer):
@@ -32,6 +34,8 @@ class ChatConsumer(AsyncWebsocketConsumer):
         resources = await sync_to_async(list)(Resource.objects.all())
         documents = []
 
+        #OpenAIモデルを初期化
+        llm = OpenAI(openai_api_key=settings.OPENAI_API_KEY, base_url=settings.OPENAI_API_BASE)
         # OpenAIの埋め込みモデルを初期化
         embeddings = OpenAIEmbeddings(openai_api_key=settings.OPENAI_API_KEY, base_url=settings.OPENAI_API_BASE)
 
@@ -53,17 +57,32 @@ class ChatConsumer(AsyncWebsocketConsumer):
         # QAのプロンプトテンプレートを作成
         prompt_template = PromptTemplate(
             #template="Use the following context to answer the question: {context}\nQuestion: {question}\nAnswer:",
-            template="あなたは賃貸物件を探している人の手助けになるAIです。次のcontextを使用して適切な内容をユーザーに提供してください。: {context}\nQuestion: {question}\nAnswer:",
-            input_variables=["context", "question"]
+            template = (
+            "あなたは賃貸物件を探している人の手助けになるAIです。"
+            "以下のコンテキストと会話履歴を使用して、適切な内容をユーザーに提供してください。\n"
+            "コンテキスト: {context}\n"
+            "会話履歴: {chat_history}\n"
+            "質問: {question}\n"
+            "回答:"
+            ),
+            input_variables=["context", "chat_history", "question"]
+        )
+
+        self.memory = ConversationBufferMemory(
+            memory_key="chat_history",
+            input_key="question"
         )
 
         # ドキュメントのチェインをロード
-        combine_documents_chain = load_qa_chain(llm=OpenAI(openai_api_key=settings.OPENAI_API_KEY, base_url=settings.OPENAI_API_BASE), prompt=prompt_template)
-
+        combine_documents_chain = load_qa_chain(
+            llm=llm,
+            prompt=prompt_template
+        )
         # RetrievalQAチェインを初期化
-        self.qa_chain = RetrievalQA(
+        self.qa_chain = ConversationalRetrievalChain.from_llm(
+            llm=llm,
             retriever=vectorstore.as_retriever(),
-            combine_documents_chain=combine_documents_chain
+            memory=self.memory
         )
 
     async def receive(self, text_data):
@@ -117,13 +136,15 @@ class ChatConsumer(AsyncWebsocketConsumer):
                 return
         try:
             # OpenAIを使って応答を生成
-            response = await sync_to_async(self.qa_chain.run)(message_text)
+            response = await sync_to_async(self.qa_chain)({"question": message_text})
+
+            answer = response["answer"]
 
             # 応答メッセージを同じmessage_idで送信
             response_html = render_to_string(
                 "app/chat_message.html",
                 {
-                    "message_text": response,
+                    "message_text": answer,
                     "is_system": True,
                     "message_id": message_id,  # スピナーと同じmessage_idを使用
                 }
@@ -135,14 +156,14 @@ class ChatConsumer(AsyncWebsocketConsumer):
                 "message_text": response_html
             }))
 
-            self.messages.append({"role": "system", "content": response})
+            self.messages.append({"role": "system", "content": answer})
 
             # 対話ログを保存（部屋名も一緒に保存）
             await sync_to_async(ChatLog.objects.create)(
                 user=self.user,
                 room=self.room,
                 prompt=message_text,
-                response=response
+                response=answer
             )
         except Exception as e:
             print(f"Error processing GPT query: {e}")
