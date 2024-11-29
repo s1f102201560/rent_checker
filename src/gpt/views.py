@@ -1,14 +1,16 @@
-from django.shortcuts import render, get_object_or_404, redirect
+from django.shortcuts import get_object_or_404
 from django.urls import reverse_lazy
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.exceptions import PermissionDenied
 from django.views import generic
+from django.conf import settings
+from django.http import HttpResponse, HttpResponseForbidden
 from .models import Memo
 from .forms import MemoForm
 import os
-from django.http import HttpResponseForbidden
-from django.conf import settings
-from django.http import HttpResponse, Http404
+import openai
+import base64
+from markdown import markdown
 
 base_url = "https://api.openai.iniad.org/api/v1"
 api_key = os.getenv('OPENAI_API_KEY')
@@ -18,10 +20,8 @@ api_key = os.getenv('OPENAI_API_KEY')
 def protected_media(request, path):
     file_path = os.path.join(settings.MEDIA_ROOT, 'uploads', path)
     memo = get_object_or_404(Memo, file='uploads/' + path)
-    
     if memo.author != request.user:
         return HttpResponseForbidden("You do not have permission to access this file.")
-
     with open(file_path, 'rb') as f:
         response = HttpResponse(f.read(), content_type="application/octet-stream")
         response['Content-Disposition'] = f'attachment; filename={os.path.basename(file_path)}'
@@ -71,6 +71,61 @@ class MemoListView(LoginRequiredMixin, generic.ListView):
     def get_queryset(self):
         return Memo.objects.filter(author=self.request.user)
 
+
+# この下のMemoDetailViewが生成系AIを使用して解説をしてるもの
+class MemoDetailView(LoginRequiredMixin, generic.DetailView):
+    model = Memo
+    template_name = 'gpt/article_detail.html'
+    context_object_name = 'memo'
+
+    def dispatch(self, request, *args, **kwargs):
+        obj = self.get_object()
+
+        if obj.author != self.request.user:
+            raise PermissionDenied('You do not have permission to view this.')
+
+        if not obj.explanation and obj.file:
+            photo_path = os.path.join(settings.MEDIA_ROOT, obj.file.name)
+            photo64_url = encode_image(photo_path)
+            client = openai.OpenAI(api_key=api_key, base_url=base_url)
+            response = client.chat.completions.create(
+                model="gpt-4o",
+                messages=[
+                    {
+                        "role": "user",
+                        "content": [
+                            {"type": "text", "text": "次の画像は賃貸契約の見積書です。余計なコストがかかっているところやアドバイスをしてください"},
+                            {
+                                "type": "image_url",
+                                "image_url": {
+                                    "url":f"data:image/jpeg;base64,{photo64_url}"
+                                }
+                            }
+                        ]
+                    }
+                ],
+            )
+            # マークダウン形式に対応するために記載
+            explanation_markdown = response.choices[0].message.content
+            obj.explanation = explanation_markdown
+            obj.save()
+
+        return super().dispatch(request, *args, **kwargs)
+    
+    # 写真の形式を識別
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        memo = self.get_object()
+        file_extension = memo.file.name.split('.')[-1].lower()
+        context['is_image'] = file_extension in ['png', 'jpg', 'jpeg']
+        if memo.explanation:
+            context['explanation_html'] = markdown(memo.explanation)
+        return context
+
+
+# このMemoDetailViewが生成系AIが解説していないもの
+# トークンを減らさないように、こちらも残してある
+'''
 class MemoDetailView(LoginRequiredMixin, generic.DetailView):
     model = Memo
     template_name = 'gpt/article_detail.html'
@@ -91,3 +146,10 @@ class MemoDetailView(LoginRequiredMixin, generic.DetailView):
         file_extension = memo.file.name.split('.')[-1].lower()
         context['is_image'] = file_extension in ['png', 'jpg', 'jpeg']
         return context
+'''
+
+
+# 写真のエンコード
+def encode_image(image_path):
+    with open(image_path, "rb") as image_file:
+        return base64.b64encode(image_file.read()).decode("utf-8")
