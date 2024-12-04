@@ -58,8 +58,8 @@ class ChatConsumer(AsyncWebsocketConsumer):
         prompt_template = PromptTemplate(
             #template="Use the following context to answer the question: {context}\nQuestion: {question}\nAnswer:",
             template = (
-            "あなたは賃貸物件を探している人の手助けになるAIです。"
-            "以下のコンテキストと会話履歴を使用して、適切な内容をユーザーに提供してください。\n"
+            "あたたは日本の賃貸仲介業に関する法律の専門家です。"
+            "以下のコンテキストと会話履歴を使用して、主に金額で交渉余地がある部分の指摘をしてください。\n"
             "コンテキスト: {context}\n"
             "会話履歴: {chat_history}\n"
             "質問: {question}\n"
