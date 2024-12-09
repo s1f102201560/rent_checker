@@ -16,6 +16,9 @@ def top(request):
 def index(request):
     return render(request, 'app/index.html')
 
+def document(request):
+    return render(request, 'app/document.html')
+
 def chat(request, room_name):
     room, created = ChatRoom.objects.get_or_create(name=room_name)
     chat_logs = ChatLog.objects.filter(room=room, user=request.user).order_by('created_at')

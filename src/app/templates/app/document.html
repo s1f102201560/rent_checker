@@ -1,0 +1,12 @@
+{% extends "app/base.html" %}
+{% load static %}
+
+{% block head %}
+    <script src="https://unpkg.com/htmx.org@1.9.11"></script>
+    <script src="https://unpkg.com/htmx.org/dist/ext/ws.js"></script>
+    {{ block.super }}
+{% endblock %}
+
+{% block main %}
+<h1>ここに画像をアップロードする</h1>
+{% endblock main %}
