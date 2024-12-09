@@ -1,14 +1,16 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect, get_object_or_404
+from django.http import HttpResponse, HttpResponseForbidden
+from django.contrib.auth.decorators import login_required
+from django.views.decorators.http import require_safe, require_http_methods
 from django.http import JsonResponse
 from django.conf import settings
 from django.views.decorators.csrf import csrf_exempt
 from django.core.exceptions import ObjectDoesNotExist
-from app.models import ChatLog, ChatRoom
-from app.forms import ImageForm
 from django.urls import reverse_lazy
 from django.views.generic import TemplateView
 from django.views.generic.edit import FormView
-from .forms import ContactForm
+from app.models import ChatLog, ChatRoom, Document
+from app.forms import ContactForm, DocumentForm, ImageForm
 
 def top(request):
     return render(request, "app/top.html")
@@ -16,8 +18,55 @@ def top(request):
 def index(request):
     return render(request, 'app/index.html')
 
+@require_safe
 def document(request):
-    return render(request, 'app/document.html')
+    documents = Document.objects.all()
+    context = {
+        "documents": documents,
+    }
+    return render(request, 'app/document.html', context)
+
+def document_detail(request, document_id):
+    document = get_object_or_404(Document, pk=document_id)
+    context = {
+        "document": document,
+    }
+    return render(request, "app/document_detail.html", context)
+
+@login_required
+@require_http_methods(["GET", "POST", "HEAD"])
+def document_new(request):
+    if request.method == "POST":
+        form = DocumentForm(request.POST)
+        if form.is_valid():
+            document = form.save(commit=False)
+            document.author = request.user
+            document.save()
+            return redirect(document_detail, document_id=document.pk)
+    else:
+        form = DocumentForm()
+        context = {
+            "form": form,
+        }
+        return render(request, "app/document_new.html", context)
+
+@login_required
+def document_edit(request, document_id):
+    document = get_object_or_404(Document, pk=document_id)
+    if document.author.id != request.user.id:
+        return HttpResponseForbidden("この相談の編集は許可されていません")
+    if request.method == "POST":
+        form = DocumentForm(request.POST, instance=document)
+        if form.is_valid():
+            form.save()
+            return redirect("document_detail", document_id=document_id)
+    else:
+        form = DocumentForm(instance=document)
+        context = {
+            "form": form,
+        }
+        return render(request, "app/document_edit.html", context)
+
 
 def chat(request, room_name):
     room, created = ChatRoom.objects.get_or_create(name=room_name)

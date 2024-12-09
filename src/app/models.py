@@ -18,8 +18,8 @@ class Resource(models.Model):
       self.save()
 
 class Document(models.Model):
-    title = models.CharField(max_length=200)
-    file = models.FileField(upload_to='uploads/')
+    title = models.CharField("相談名", max_length=256)
+    file = models.FileField("書類", upload_to='uploads/', blank=True)
     author = models.ForeignKey(
         get_user_model(),
         on_delete=models.CASCADE,

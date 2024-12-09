@@ -1,12 +1,33 @@
 {% extends "app/base.html" %}
 {% load static %}
 
-{% block head %}
-    <script src="https://unpkg.com/htmx.org@1.9.11"></script>
-    <script src="https://unpkg.com/htmx.org/dist/ext/ws.js"></script>
-    {{ block.super }}
-{% endblock %}
-
 {% block main %}
-<h1>ここに画像をアップロードする</h1>
+  <div>
+    <p>あなたの相談を共有しよう！</p>
+    <a href="{% url "document_new" %}">新しい相談を共有する</a>
+  </div>
+
+  <h2>書類一覧</h2>
+  {% if documents %}
+    <table class="table">
+      <thead>
+        <tr>
+          <th>投稿者</th>
+          <th>投稿日</th>
+          <th>タイトル</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for document in documents %}
+          <tr>
+            <th>{{ document.author.username }}</th>
+            <th>{{ document.created_at }}</th>
+            <th><a href="{% url "document_detail" document.id %}">{{ document.title }}</a></th>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  {% else %}
+    <p>過去にアップロードした書類ははありません。</p>
+  {% endif %}
 {% endblock main %}

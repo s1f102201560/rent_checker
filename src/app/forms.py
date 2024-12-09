@@ -1,9 +1,8 @@
 from django import forms
-from app.models import Image
+from app.models import Image, Document
 from django.core.mail import send_mail, BadHeaderError
 from django.http import HttpResponse
 from django.conf import settings
-from django import forms
 
 class ImageForm(forms.ModelForm):
     MAX_FILE_SIZE_MB = 20  # 最大ファイルサイズ (MB)
@@ -80,3 +79,8 @@ class ContactForm(forms.Form):
             send_mail("お問い合わせありがとうございます", user_message, from_email, [self.cleaned_data['email']])
         except BadHeaderError:
             return HttpResponse("無効なヘッダが検出されました。")
+
+class DocumentForm(forms.ModelForm):
+    class Meta:
+        model = Document
+        fields = ("title", "file")
