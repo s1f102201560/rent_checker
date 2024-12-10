@@ -5,7 +5,7 @@ from django.contrib.auth import get_user_model
 
 class Resource(models.Model):
     name = models.CharField(max_length=100)
-    document = models.FileField()
+    document = models.FileField(blank=True)
     embedding = VectorField(dimensions=1536, null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -16,19 +16,6 @@ class Resource(models.Model):
     def update_embedding(self, embedding):
       self.embedding = embedding
       self.save()
-
-class Document(models.Model):
-    title = models.CharField("相談名", max_length=256)
-    file = models.FileField("書類", upload_to='uploads/', blank=True)
-    author = models.ForeignKey(
-        get_user_model(),
-        on_delete=models.CASCADE,
-    )
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-
-    def __str__(self):
-        return self.title
 
 class ChatRoom(models.Model):
     name = models.CharField('Room Name', max_length=255, unique=True)
@@ -56,3 +43,18 @@ class ChatLog(models.Model):
 
     def __str__(self):
         return f"ChatLog {self.id} for {self.user.username} in {self.room_name} on {self.created_at}"
+    
+class Consultation(models.Model):
+    title = models.CharField("相談名", max_length=256)
+    room_name = models.CharField("チャット名", max_length=256)
+    file = models.FileField("書類", upload_to='uploads/', blank=True, null=True)
+    checklist = models.JSONField("質問項目", blank=True, null=True)
+    author = models.ForeignKey(
+        get_user_model(),
+        on_delete=models.CASCADE,
+    )
+    created_at = models.DateTimeField("作成日時", auto_now_add=True)
+    updated_at = models.DateTimeField("更新日時", auto_now=True)
+
+    def __str__(self):
+        return self.title

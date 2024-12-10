@@ -1,5 +1,5 @@
 from django import forms
-from app.models import Image, Document
+from app.models import Image, Consultation
 from django.core.mail import send_mail, BadHeaderError
 from django.http import HttpResponse
 from django.conf import settings
@@ -80,7 +80,7 @@ class ContactForm(forms.Form):
         except BadHeaderError:
             return HttpResponse("無効なヘッダが検出されました。")
 
-class DocumentForm(forms.ModelForm):
+class ConsultationForm(forms.ModelForm):
     class Meta:
-        model = Document
-        fields = ("title", "file")
+        model = Consultation
+        fields = ("title", "room_name", "file", "checklist")

@@ -9,8 +9,8 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.urls import reverse_lazy
 from django.views.generic import TemplateView
 from django.views.generic.edit import FormView
-from app.models import ChatLog, ChatRoom, Document
-from app.forms import ContactForm, DocumentForm, ImageForm
+from app.models import ChatLog, ChatRoom, Consultation
+from app.forms import ContactForm, ConsultationForm, ImageForm
 
 def top(request):
     return render(request, "app/top.html")
@@ -19,53 +19,53 @@ def index(request):
     return render(request, 'app/index.html')
 
 @require_safe
-def document(request):
-    documents = Document.objects.all()
+def consultation(request):
+    consultations = Consultation.objects.all()
     context = {
-        "documents": documents,
+        "consultations": consultations,
     }
-    return render(request, 'app/document.html', context)
+    return render(request, 'app/consultation.html', context)
 
-def document_detail(request, document_id):
-    document = get_object_or_404(Document, pk=document_id)
+def consultation_detail(request, consultation_id):
+    consultation = get_object_or_404(Consultation, pk=consultation_id)
     context = {
-        "document": document,
+        "consultation": consultation,
     }
-    return render(request, "app/document_detail.html", context)
+    return render(request, "app/consultation_detail.html", context)
 
 @login_required
 @require_http_methods(["GET", "POST", "HEAD"])
-def document_new(request):
+def consultation_new(request):
     if request.method == "POST":
-        form = DocumentForm(request.POST)
+        form = ConsultationForm(request.POST)
         if form.is_valid():
-            document = form.save(commit=False)
-            document.author = request.user
-            document.save()
-            return redirect(document_detail, document_id=document.pk)
+            consultation = form.save(commit=False)
+            consultation.author = request.user
+            consultation.save()
+            return redirect(consultation_detail, consultation_id=consultation.pk)
     else:
-        form = DocumentForm()
+        form = ConsultationForm()
         context = {
             "form": form,
         }
-        return render(request, "app/document_new.html", context)
+        return render(request, "app/consultation_new.html", context)
 
 @login_required
-def document_edit(request, document_id):
-    document = get_object_or_404(Document, pk=document_id)
-    if document.author.id != request.user.id:
+def consultation_edit(request, consultation_id):
+    consultation = get_object_or_404(Consultation, pk=consultation_id)
+    if consultation.author.id != request.user.id:
         return HttpResponseForbidden("この相談の編集は許可されていません")
     if request.method == "POST":
-        form = DocumentForm(request.POST, instance=document)
+        form = ConsultationForm(request.POST, instance=consultation)
         if form.is_valid():
             form.save()
-            return redirect("document_detail", document_id=document_id)
+            return redirect("consultation_detail", consultation_id=consultation_id)
     else:
-        form = DocumentForm(instance=document)
+        form = ConsultationForm(instance=consultation)
         context = {
             "form": form,
         }
-        return render(request, "app/document_edit.html", context)
+        return render(request, "app/consultation_edit.html", context)
 
 
 def chat(request, room_name):
