@@ -1,3 +1,5 @@
+import random
+import string
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse, HttpResponseForbidden
 from django.contrib.auth.decorators import login_required
@@ -6,11 +8,19 @@ from django.http import JsonResponse
 from django.conf import settings
 from django.views.decorators.csrf import csrf_exempt
 from django.core.exceptions import ObjectDoesNotExist
-from django.urls import reverse_lazy
+from django.urls import reverse_lazy, reverse
 from django.views.generic import TemplateView
 from django.views.generic.edit import FormView
 from app.models import ChatLog, ChatRoom, Consultation
 from app.forms import ContactForm, ConsultationForm, ImageForm
+
+def generate_url(request):
+    room_name = ''.join(random.choices(string.ascii_letters + string.digits, k=12))
+    base_url = request.build_absolute_uri().rstrip('/')
+    if base_url.endswith('/new'):
+        base_url = base_url[:-4]
+    full_url = f"{base_url}/chat/{room_name}"
+    return full_url
 
 def top(request):
     return render(request, "app/top.html")
@@ -41,6 +51,7 @@ def consultation_new(request):
         if form.is_valid():
             consultation = form.save(commit=False)
             consultation.author = request.user
+            consultation.room_link = generate_url(request)
             consultation.save()
             return redirect(consultation_detail, consultation_id=consultation.pk)
     else:
