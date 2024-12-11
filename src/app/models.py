@@ -46,7 +46,7 @@ class ChatLog(models.Model):
     
 class Consultation(models.Model):
     title = models.CharField("相談名", max_length=256)
-    room_name = models.CharField("チャット名", max_length=256)
+    room_link = models.URLField("チャット名")
     file = models.FileField("書類", upload_to='uploads/', blank=True, null=True)
     checklist = models.JSONField("質問項目", blank=True, null=True)
     author = models.ForeignKey(

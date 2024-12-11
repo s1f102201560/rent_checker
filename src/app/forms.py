@@ -83,4 +83,4 @@ class ContactForm(forms.Form):
 class ConsultationForm(forms.ModelForm):
     class Meta:
         model = Consultation
-        fields = ("title", "room_name", "file", "checklist")
+        fields = ("title", "room_link", "file", "checklist")
