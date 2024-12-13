@@ -4,7 +4,12 @@
 {% block main %}
   <h2>{{ consultation.title }} by {{ consultation.author.username }}</h2>
   <div>
-    <p>チャットURL：<a href="{{ consultation.room_link }}">{{ consultation.room_link }}</a></p>
+    <div>
+      チャットURL：
+      <a href="#" onclick="navigateToChat('{{ consultation.room_link }}')">
+        {{ consultation.room_link }}
+      </a>
+    </div>
     <div>
       {% if consultation.file %}
         書類: <img class="" src="{{ consultation.file.url }}" alt="" />
@@ -18,4 +23,12 @@
   {% if user.is_authenticated and consultation.author_id == user.id %}
     <a href="{% url 'consultation_edit' consultation.id %}">編集</a>
   {% endif %}
+
+  <script>
+    function navigateToChat(roomLink) {
+      const roomName = roomLink.split('/').filter(Boolean).pop();
+      const ws = new WebSocket('ws://' + window.location.host + '/ws/consultation/chat/' + roomName + '/');
+      window.location.href = '/consultation/chat/' + roomName + '/';
+    }
+  </script>
 {% endblock main %}
