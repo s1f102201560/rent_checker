@@ -46,8 +46,8 @@
   <script>
     function navigateToChat(roomLink) {
       const roomName = roomLink.split('/').filter(Boolean).pop();
-      const ws = new WebSocket('ws://' + window.location.host + '/ws/chat/' + roomName + '/');
-      window.location.href = '/chat/' + roomName + '/';
+      const ws = new WebSocket('ws://' + window.location.host + '/ws/consultation/chat/' + roomName + '/');
+      window.location.href = '/consultation/chat/' + roomName + '/';
     }
   </script>
 {% endblock main %}
