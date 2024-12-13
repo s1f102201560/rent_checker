@@ -88,7 +88,6 @@ class ChatConsumer(AsyncWebsocketConsumer):
     async def receive(self, text_data):
         text_data_json = json.loads(text_data)
         message_text = text_data_json.get("message", "")
-        image_data = text_data_json.get("image", "")
 
         # ユーザーメッセージをHTMLに変換して送信
         user_message_html = render_to_string(
@@ -116,24 +115,6 @@ class ChatConsumer(AsyncWebsocketConsumer):
             "message_text": system_message_html
         }))
 
-        # 画像が送信された場合、OCRで画像からテキストを抽出
-        if image_data:            
-            try:
-                # Base64デコード
-                decoded_image_data = base64.b64decode(image_data)
-                # 画像を開く
-                image = Image.open(io.BytesIO(decoded_image_data))
-                image.verify()
-                image = Image.open(io.BytesIO(decoded_image_data))
-                # OCRでテキストを抽出
-                ocr_text = pytesseract.image_to_string(image, lang="jpn")
-
-                print(ocr_text)
-                # GPTに投げるメッセージとして、抽出したテキストを含める
-                message_text += f"\n[画像から抽出されたテキスト]\n{ocr_text}"
-            except Exception as e:
-                print(f"Error loading image; {e}")
-                return
         try:
             # OpenAIを使って応答を生成
             response = await sync_to_async(self.qa_chain)({"question": message_text})

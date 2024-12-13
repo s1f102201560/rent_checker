@@ -42,7 +42,7 @@ class ChatLog(models.Model):
     created_at = models.DateTimeField('対話日時', auto_now_add=True)
 
     def __str__(self):
-        return f"ChatLog {self.id} for {self.user.username} in {self.room_name} on {self.created_at}"
+        return f"ChatLog {self.id} for {self.user.username} in {self.room} on {self.created_at}"
     
 class Consultation(models.Model):
     title = models.CharField("相談名", max_length=256)

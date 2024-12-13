@@ -83,12 +83,12 @@ def consultation_edit(request, consultation_id):
         return render(request, "app/consultation_edit.html", context)
 
 
-def chat(request, room_name):
-    room, created = ChatRoom.objects.get_or_create(name=room_name)
+def chat(request, room_url):
+    room, created = ChatRoom.objects.get_or_create(name=room_url)
     chat_logs = ChatLog.objects.filter(room=room, user=request.user).order_by('created_at')
     room_logs = ChatRoom.objects.filter(chat_logs__user=request.user).distinct().order_by('-created_at')
     return render(request, 'app/chat.html', {
-        'room_name': room_name,
+        'room_name': room_url,
         'chat_logs': chat_logs,
         'room_logs': room_logs,
     })
