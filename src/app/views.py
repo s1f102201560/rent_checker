@@ -52,6 +52,8 @@ def consultation_new(request):
             consultation = form.save(commit=False)
             consultation.author = request.user
             consultation.room_link = generate_url(request)
+            if request.FILES:
+                consultation.file = request.FILES.get('file')
             consultation.save()
             return redirect(consultation_detail, consultation_id=consultation.pk)
     else:
@@ -69,6 +71,8 @@ def consultation_edit(request, consultation_id):
     if request.method == "POST":
         form = ConsultationForm(request.POST, instance=consultation)
         if form.is_valid():
+            if request.FILES:
+                consultation.file = request.FILES.get('file')
             form.save()
             return redirect("consultation_detail", consultation_id=consultation_id)
     else:

@@ -5,7 +5,13 @@
   <h2>{{ consultation.title }} by {{ consultation.author.username }}</h2>
   <div>
     <p>チャットURL：<a href="{{ consultation.room_link }}">{{ consultation.room_link }}</a></p>
-    <p>書類：{{ consultation.document }}</p>
+    <div>
+      {% if consultation.file %}
+        書類: <img class="" src="{{ consultation.file.url }}" alt="" />
+      {% else %}
+        書類：アップロードされていません。
+      {% endif %}
+    </div>
     <p>質問事項：{{ consultation.checklist }}</p>
     <p>投稿日：{{ consultation.created_at }}</p>
   </div>
