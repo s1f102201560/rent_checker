@@ -19,7 +19,7 @@ def generate_url(request):
     base_url = request.build_absolute_uri().rstrip('/')
     if base_url.endswith('/new'):
         base_url = base_url[:-4]
-    full_url = f"{base_url}/chat/{room_name}"
+    full_url = f"{base_url}/chat-{room_name}"
     return full_url
 
 def top(request):

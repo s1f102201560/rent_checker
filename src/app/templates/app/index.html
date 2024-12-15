@@ -1,4 +1,4 @@
-{% extends "app/base.html" %}
+{% comment %} {% extends "app/base.html" %}
 {% load static %}
 
 {% block main %}
@@ -6,6 +6,6 @@
       // 乱数値で部屋を生成
       var roomName = Math.random().toString(36).substring(2, 15);
       // 生成された部屋にリダイレクト
-      window.location.href = '/chat/' + roomName + '/';
+      window.location.href = '/chat' + roomName + '/';
   </script>
-{% endblock main %}
+{% endblock main %} {% endcomment %}
