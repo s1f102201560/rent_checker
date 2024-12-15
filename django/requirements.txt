@@ -16,6 +16,7 @@ pgvector
 langchain-community
 langchain-core
 langchainhub
+langchain_openai
 tiktoken
 faiss-cpu
 pytesseract

@@ -1,91 +1,37 @@
 import json
 import uuid
-import pytesseract
-from PIL import Image
-import base64
-import io
+from config import settings
 from channels.generic.websocket import AsyncWebsocketConsumer
-from django.conf import settings
 from django.template.loader import render_to_string
-
-import fitz
 from asgiref.sync import sync_to_async
-from channels.db import database_sync_to_async
-from langchain_community.embeddings import OpenAIEmbeddings
-from langchain_community.vectorstores import FAISS
-from langchain.chains import RetrievalQA
-from langchain.chains.question_answering import load_qa_chain
-from langchain.prompts import PromptTemplate
-from langchain_community.llms import OpenAI
-from langchain.chains import ConversationalRetrievalChain
-from langchain.memory import ConversationBufferMemory
-from .models import Resource, ChatLog, ChatRoom
+from .rag_initializer import initialize_rag_chain
+from .vectorstore_initializer import initialize_vectorstore
+from .models import ChatLog, ChatRoom
 
+# Consumerクラス
 class ChatConsumer(AsyncWebsocketConsumer):
     async def connect(self):
+        # ユーザー情報とセッションIDを設定
         self.user = self.scope["user"]
-        self.room_name = self.scope['url_route']['kwargs']['room_name']
-        self.room = await database_sync_to_async(ChatRoom.objects.get)(name=self.room_name)
-        self.messages = []
+        self.room_name = self.scope["url_route"]["kwargs"]["room_name"]
+        self.session_id = f"{self.user.id}-{self.room_name}"
+        self.room = await sync_to_async(ChatRoom.objects.get)(name=self.room_name)
+
+        # Retrieverを初期化
+        self.retriever = await initialize_vectorstore()
+        
+        # RAGチェーンの初期化（環境変数や設定を渡す）
+        self.rag_chain, self.get_session_history = initialize_rag_chain(
+            api_key=settings.OPENAI_API_KEY,
+            base_url=settings.OPENAI_API_BASE,
+            model_name=settings.OPENAI_MODEL,
+            retriever=self.retriever
+        )
 
         await self.accept()
 
-        # 非同期でデータベースクエリを実行
-        resources = await sync_to_async(list)(Resource.objects.all())
-        documents = []
-
-        #OpenAIモデルを初期化
-        llm = OpenAI(openai_api_key=settings.OPENAI_API_KEY, base_url=settings.OPENAI_API_BASE)
-        # OpenAIの埋め込みモデルを初期化
-        embeddings = OpenAIEmbeddings(openai_api_key=settings.OPENAI_API_KEY, base_url=settings.OPENAI_API_BASE)
-
-        for resource in resources:
-            pdf_path = resource.document.path
-            text = ""
-            with fitz.open(pdf_path) as pdf_doc:  # PDFを開く処理
-                for page in pdf_doc:
-                    text += page.get_text()
-            documents.append(text)
-            
-            # テキストをベクトル化して保存
-            embedding_vector = embeddings.embed_query(text)
-            await sync_to_async(resource.update_embedding)(embedding_vector)
-
-        # ベクトルを使ってFAISSのベクトルストアを作成
-        vectorstore = FAISS.from_texts(documents, embeddings)
-
-        # QAのプロンプトテンプレートを作成
-        prompt_template = PromptTemplate(
-            #template="Use the following context to answer the question: {context}\nQuestion: {question}\nAnswer:",
-            template = (
-            "あたたは日本の賃貸仲介業に関する法律の専門家です。"
-            "以下のコンテキストと会話履歴を使用して、主に金額で交渉余地がある部分の指摘をしてください。\n"
-            "コンテキスト: {context}\n"
-            "会話履歴: {chat_history}\n"
-            "質問: {question}\n"
-            "回答:"
-            ),
-            input_variables=["context", "chat_history", "question"]
-        )
-
-        self.memory = ConversationBufferMemory(
-            memory_key="chat_history",
-            input_key="question"
-        )
-
-        # ドキュメントのチェインをロード
-        combine_documents_chain = load_qa_chain(
-            llm=llm,
-            prompt=prompt_template
-        )
-        # RetrievalQAチェインを初期化
-        self.qa_chain = ConversationalRetrievalChain.from_llm(
-            llm=llm,
-            retriever=vectorstore.as_retriever(),
-            memory=self.memory
-        )
-
     async def receive(self, text_data):
+        # クライアントからのメッセージを取得
         text_data_json = json.loads(text_data)
         message_text = text_data_json.get("message", "")
 
@@ -98,54 +44,41 @@ class ChatConsumer(AsyncWebsocketConsumer):
             "message_text": user_message_html
         }))
 
-        self.messages.append({"role": "user", "content": message_text})
-
-        # 空のシステムメッセージを表示
+        # スピナーを表示する空のシステムメッセージ
         message_id = f"message-{uuid.uuid4().hex}"
-        system_message_html = render_to_string(
+        spinner_html = render_to_string(
             "app/chat_message.html",
             {
                 "message_text": "<i class='fas fa-spinner fa-spin'></i>",
                 "is_system": True,
-                "message_id": message_id
-            }
+                "message_id": message_id,
+            },
         )
-        await self.send(text_data=json.dumps({
-            "message_id": message_id,
-            "message_text": system_message_html
-        }))
+        await self.send(text_data=json.dumps({"message_id": message_id, "message_text": spinner_html}))
 
         try:
-            # OpenAIを使って応答を生成
-            response = await sync_to_async(self.qa_chain)({"question": message_text})
+            # 質問をRAGチェーンに渡して応答を生成
+            result = self.rag_chain.invoke(
+                {"input": message_text},
+                {"configurable": {"session_id": self.session_id}}
+            )
+            answer = result["answer"]
 
-            answer = response["answer"]
-
-            # 応答メッセージを同じmessage_idで送信
+            # 応答を同じIDでクライアントに送信
             response_html = render_to_string(
                 "app/chat_message.html",
-                {
-                    "message_text": answer,
-                    "is_system": True,
-                    "message_id": message_id,  # スピナーと同じmessage_idを使用
-                }
+                {"message_text": answer, "is_system": True, "message_id": message_id},
             )
+            await self.send(text_data=json.dumps({"message_id": message_id, "message_text": response_html}))
 
-            # WebSocketでスピナーを応答に置き換える
-            await self.send(text_data=json.dumps({
-                "message_id": message_id,
-                "message_text": response_html
-            }))
-
-            self.messages.append({"role": "system", "content": answer})
-
-            # 対話ログを保存（部屋名も一緒に保存）
+            # 会話ログをデータベースに保存
             await sync_to_async(ChatLog.objects.create)(
-                user=self.user,
-                room=self.room,
-                prompt=message_text,
-                response=answer
+                user=self.user, room=self.room, prompt=message_text, response=answer
             )
         except Exception as e:
-            print(f"Error processing GPT query: {e}")
-
+            print(f"Error processing query: {e}")
+            error_html = render_to_string(
+                "app/chat_message.html",
+                {"message_text": "エラーが発生しました。もう一度お試しください。", "is_system": True},
+            )
+            await self.send(text_data=json.dumps({"message_id": message_id, "message_text": error_html}))
