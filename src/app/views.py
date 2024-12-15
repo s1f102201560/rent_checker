@@ -25,9 +25,6 @@ def generate_url(request):
 def top(request):
     return render(request, "app/top.html")
 
-def index(request):
-    return render(request, 'app/index.html')
-
 @require_safe
 def consultation(request):
     consultations = Consultation.objects.all()

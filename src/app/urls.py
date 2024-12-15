@@ -1,13 +1,10 @@
 from django.urls import path
 from django.contrib.auth.decorators import login_required
-from django.views.generic import TemplateView
 from app.views import top, chat, consultation, consultation_detail, consultation_new, consultation_edit, upload_image, ContactFormView, ContactResultView, template, security_deposit, before_move, brokerage_fee, penalty_fee, restoration, insurance
 
-# index_view = TemplateView.as_view(template_name="app/index.html")
 
 urlpatterns = [
     path('', top, name="top"),
-    # path('index/', login_required(index_view), name="index"),
     path('consultation/', consultation, name="consultation"),
     path("consultation/new/", consultation_new, name="consultation_new"),
     path("consultation/<int:consultation_id>/", consultation_detail, name="consultation_detail"),
