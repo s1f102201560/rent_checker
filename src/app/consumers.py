@@ -1,5 +1,6 @@
 import json
 import uuid
+from asgiref.sync import sync_to_async
 from config import settings
 from channels.generic.websocket import AsyncWebsocketConsumer
 from django.template.loader import render_to_string
@@ -8,7 +9,6 @@ from .rag_initializer import initialize_rag_chain
 from .vectorstore_initializer import initialize_vectorstore
 from .models import ChatLog, ChatRoom
 
-# Consumerクラス
 class ChatConsumer(AsyncWebsocketConsumer):
     async def connect(self):
         # ユーザー情報とセッションIDを設定
@@ -20,7 +20,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
         # Retrieverを初期化
         self.retriever = await initialize_vectorstore()
         
-        # RAGチェーンの初期化（環境変数や設定を渡す）
+        # RAGチェーンの初期化
         self.rag_chain, self.get_session_history = initialize_rag_chain(
             api_key=settings.OPENAI_API_KEY,
             base_url=settings.OPENAI_API_BASE,
@@ -35,41 +35,47 @@ class ChatConsumer(AsyncWebsocketConsumer):
         text_data_json = json.loads(text_data)
         message_text = text_data_json.get("message", "")
 
-        # ユーザーメッセージをHTMLに変換して送信
+        # ユーザーメッセージ用のIDを生成
+        user_message_id = f"user-{uuid.uuid4().hex}"
         user_message_html = render_to_string(
             "app/chat_message.html",
-            {"message_text": message_text, "is_system": False},
+            {
+                "message_text": message_text,
+                "is_system": False,
+                "message_id": user_message_id,
+            },
         )
-        await self.send(text_data=json.dumps({
-            "message_text": user_message_html
-        }))
+        await self.send(text_data=json.dumps({"message_id": user_message_id, "message_text": user_message_html}))
 
-        # スピナーを表示する空のシステムメッセージ
-        message_id = f"message-{uuid.uuid4().hex}"
+        # スピナーを表示するためのIDを生成
+        system_message_id = f"system-{uuid.uuid4().hex}"
         spinner_html = render_to_string(
             "app/chat_message.html",
             {
                 "message_text": "<i class='fas fa-spinner fa-spin'></i>",
                 "is_system": True,
-                "message_id": message_id,
+                "message_id": system_message_id,
             },
         )
-        await self.send(text_data=json.dumps({"message_id": message_id, "message_text": spinner_html}))
+
+        await self.send(text_data=json.dumps({"message_id": system_message_id, "message_text": spinner_html}))
 
         try:
             # 質問をRAGチェーンに渡して応答を生成
-            result = self.rag_chain.invoke(
+            result = await sync_to_async(self.rag_chain.invoke)(
                 {"input": message_text},
                 {"configurable": {"session_id": self.session_id}}
             )
             answer = result["answer"]
 
-            # 応答を同じIDでクライアントに送信
             response_html = render_to_string(
                 "app/chat_message.html",
-                {"message_text": answer, "is_system": True, "message_id": message_id},
+                {
+                    "message_text": answer,
+                    "is_system": True,
+                    "message_id": system_message_id},
             )
-            await self.send(text_data=json.dumps({"message_id": message_id, "message_text": response_html}))
+            await self.send(text_data=json.dumps({"message_id": system_message_id, "message_text": response_html}))
 
             # 会話ログをデータベースに保存
             await sync_to_async(ChatLog.objects.create)(
@@ -81,4 +87,4 @@ class ChatConsumer(AsyncWebsocketConsumer):
                 "app/chat_message.html",
                 {"message_text": "エラーが発生しました。もう一度お試しください。", "is_system": True},
             )
-            await self.send(text_data=json.dumps({"message_id": message_id, "message_text": error_html}))
+            await self.send(text_data=json.dumps({"message_id": system_message_id, "message_text": error_html}))

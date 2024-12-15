@@ -34,7 +34,7 @@
                 {% endfor %}
             </div>
 
-            <!-- チャット入力フォームと画像アップロードフォーム -->
+            <!-- チャット入力フォーム -->
             <div class="border-t-2 border-gray-200 px-4 py-4 mx-2">
                 <form id='chat-form' class="relative flex items-center" hx-ext="ws" ws-send>
                     <!-- チャット入力フィールド -->
@@ -58,17 +58,17 @@
 
         ws.onmessage = function(event) {
             let messageData = JSON.parse(event.data);
-            let messageId = messageData.message_id; // サーバーから送信されたmessage_idを取得
-            let messageText = messageData.message_text; // サーバーからのメッセージ内容を取得
+            let messageId = messageData.message_id;  // サーバーから送信された一意のmessage_id
+            let messageText = messageData.message_text;  // サーバーからのメッセージ内容
 
-            // message_idに対応する要素を取得
-            let messageElement = document.getElementById(messageId);
+            // メッセージ要素を探す
+            let existingElement = document.getElementById(messageId);
 
-            if (messageElement) {
-                // 既存のスピナー要素をメッセージで置き換え
-                messageElement.innerHTML = messageText;
+            if (existingElement) {
+                // スピナーをメッセージで置き換える
+                existingElement.innerHTML = messageText;
             } else {
-                // メッセージがない場合は新しく作成して追加
+                // スピナーを追加
                 let newMessageDiv = document.createElement('div');
                 newMessageDiv.id = messageId;
                 newMessageDiv.innerHTML = messageText;
@@ -76,19 +76,20 @@
                 let messageList = document.getElementById('message-list');
                 messageList.appendChild(newMessageDiv);
             }
-        }
+        };
 
-        // 入力フォームの送信ロジック
+        // 入力フォームの送信
         document.getElementById('chat-form').addEventListener('submit', function(event) {
             event.preventDefault();  // フォーム送信のリダイレクトを防ぐ
 
-            formData = new FormData(document.getElementById('chat-form'));
+            let formData = new FormData(document.getElementById('chat-form'));
             let message = formData.get('message');
 
             ws.send(JSON.stringify({ message: message }));
-            
+
             // メッセージフィールドを送信後すぐにクリア
             document.getElementById('message-input').value = '';
         });
+
     </script>
 {% endblock main %}
