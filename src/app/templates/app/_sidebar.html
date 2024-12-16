@@ -5,7 +5,9 @@
     <ul class="bg-gray-100 text-gray-500">
         {% for room in room_logs %}
             <li class="text-center">
-                <a href="{% url 'chat' room.name %}" class="block">{{ room.name }}</a>
+                <a href="{% url 'chat' room.name %}" class="block">
+                    {{ room.consultation.title }}
+                </a>
             </li>
         {% endfor %}
     </ul>

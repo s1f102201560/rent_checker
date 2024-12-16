@@ -49,6 +49,8 @@ def consultation_new(request):
             consultation = form.save(commit=False)
             consultation.author = request.user
             consultation.room_link = generate_url(request)
+            chat_room = ChatRoom.objects.create(name=f"Room for {consultation.title}")
+            consultation.room = chat_room
             if request.FILES:
                 consultation.file = request.FILES.get('file')
             consultation.save()

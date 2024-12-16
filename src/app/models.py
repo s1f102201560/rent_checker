@@ -14,16 +14,38 @@ class Resource(models.Model):
         return self.name
     
     def update_embedding(self, embedding):
-      self.embedding = embedding
-      self.save()
+        self.embedding = embedding
+        self.save()
+
+class Consultation(models.Model):
+    title = models.CharField("相談名", max_length=256)
+    room = models.OneToOneField(
+        'ChatRoom',
+        on_delete=models.CASCADE,
+        related_name='consultation',
+        verbose_name="チャットルーム"
+    )
+    file = models.FileField("書類", upload_to='uploads/', blank=True, null=True)
+    checklist = models.JSONField("質問項目", blank=True, null=True)
+    author = models.ForeignKey(
+        get_user_model(),
+        on_delete=models.CASCADE,
+    )
+    created_at = models.DateTimeField("作成日時", auto_now_add=True)
+    updated_at = models.DateTimeField("更新日時", auto_now=True)
+
+    def __str__(self):
+        return self.title
+
 
 class ChatRoom(models.Model):
     name = models.CharField('Room Name', max_length=255, unique=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    
+
     def __str__(self):
-        return self.name
+        return self.consultation.title if hasattr(self, 'consultation') else self.name
+
 
 class Image(models.Model):
     file = models.FileField(upload_to='uploads/')
@@ -46,6 +68,12 @@ class ChatLog(models.Model):
     
 class Consultation(models.Model):
     title = models.CharField("相談名", max_length=256)
+    room = models.OneToOneField(
+        'ChatRoom',
+        on_delete=models.CASCADE,
+        related_name='consultation',
+        verbose_name="チャットルーム",
+    )
     room_link = models.URLField("チャット名")
     file = models.FileField("書類", upload_to='uploads/', blank=True, null=True)
     checklist = models.JSONField("質問項目", blank=True, null=True)
