@@ -1,37 +1,49 @@
 {% extends 'layout.html' %}
 
 {% block content %}
-
+{% load humanize %}
 <div>
     <p>タイトル：{{ memo.title }}</p>
     <p>投稿内容：<br>
-        <!--viewのget_context_dataでpng, jpeg, jpgを判別し、それらなら写真を表示し、
-        それ以外ならurlで投稿した写真を見れるようにしてる-->
         {% if is_image %}
             <img src="{{ memo.file.url }}" alt="{{ memo.title }}">
         {% else %}
             <a href="{{ memo.file.url }}">{{ memo.file.name }}</a>
         {% endif %}
     </p>
+
     {% if memo.explanation %}
-    <!--markdownで表示させている-->
-    <div class="markdown-content">
-        <p>生成系AIの解説:<br>{{ explanation_html | safe }}</p>
+        <!--markdownで表示させている-->
+        <div class="markdown-content">
+            <p>生成系AIの解説:<br>{{ explanation_html | safe }}</p>
+        </div>
+        {% endif %}
+        <p>{{ memo.author }}</p>
+        <p>{{ memo.created_at|date:"Y-m-j H:i:s" }}<br>
+        {{ memo.updated_at|date:"Y-m-j H:i:s" }}</p>
     </div>
-    {% endif %}
-    <p>{{ memo.author }}</p>
-    <p>{{ memo.created_at|date:"Y-m-j H:i:s" }}<br>
-    {{ memo.updated_at|date:"Y-m-j H:i:s" }}</p>
-</div>
-<div class='mt-4'>
-    {% if request.user.id == memo.author_id %}
-    <a href='{% url "gpt:update" memo.pk %}'  class='btn btn-outline-primary mr-2'>編集</a>
-    {% endif %}
-
-    <a href='{% url "gpt:index" %}' class='btn btn-outline-primary'>一覧に戻る</a>
-
-    {% if request.user.id == memo.author_id %}
-    <a href='{% url "gpt:delete" memo.pk %}'  class='btn btn-danger ml-5'>削除</a>
+    <div class='mt-4'>
+        {% if request.user.id == memo.author_id %}
+        <a href='{% url "gpt:update" memo.pk %}'  class='btn btn-outline-primary mr-2'>編集</a>
+        {% endif %}
+    
+        <a href='{% url "gpt:index" %}' class='btn btn-outline-primary'>一覧に戻る</a>
+    
+        {% if request.user.id == memo.author_id %}
+        <a href='{% url "gpt:delete" memo.pk %}'  class='btn btn-danger ml-5'>削除</a>
     {% endif %}
 </div>
+
+<hr>
+<h2>デバッグ: explanation.items の展開</h2>
+<ul>
+    {% for key, value in explanation.items %}
+        <li>{{ key }}: {{ value|intcomma }}</li>
+    {% endfor %}
+</ul>
+
+<h2>test</h2>
+<pre>{{ memo.explanation }}</pre>
+
+
 {% endblock %}

@@ -12,6 +12,7 @@ import openai
 import base64
 from markdown import markdown
 import re
+import json
 
 base_url = "https://api.openai.iniad.org/api/v1"
 api_key = os.getenv('OPENAI_API_KEY')
@@ -138,7 +139,7 @@ class MemoDetailView(LoginRequiredMixin, generic.DetailView):
                     {
                         "role": "user",
                         "content": [
-                            {"type": "text", "text": "次の画像は賃貸契約の見積書です。次の内容を写真から抜き出し、*で数値を囲んでください。例えば、賃料:*50000*みたいな感じです。なお、記載がない場合は0と出力し、次の内容に書いていないものがあった場合は全てその他に足し合わせて入れてください。。賃料 当月,賃料 翌月,敷金,礼金,仲介手数料,管理費 当月,管理費 翌月,共益費 当月,共益費 翌月,町内会費 当月,町内会費 翌月,駐車料 当月,駐車料 翌月,保険料,鍵交換,インターネット代,消毒代,退去時クリーニング費用,その他,合計金額"},
+                            {"type": "text", "text": "次の画像は賃貸契約の見積書です。次の内容を写真から抜き出し、*で数値を囲んでください。例えば、賃料:*50,000*みたいな感じです。なお、記載がない場合は0と出力し、次の内容に書いていないものがあった場合は全てその他に足し合わせて入れてください。賃料 当月,賃料 翌月,敷金,礼金,仲介手数料,管理費 当月,管理費 翌月,共益費 当月,共益費 翌月,町内会費 当月,町内会費 翌月,駐車料 当月,駐車料 翌月,保険料,鍵交換,インターネット代,消毒代,退去時クリーニング費用,その他,合計金額"},
                             {
                                 "type": "image_url",
                                 "image_url": {
@@ -151,26 +152,26 @@ class MemoDetailView(LoginRequiredMixin, generic.DetailView):
             )
 
             patterns = {
-                "賃料 当月": r"賃料 当月:\*(\d+)\*",
-                "賃料 翌月": r"賃料 翌月:\*(\d+)\*",
-                "敷金": r"敷金:\*(\d+)\*",
-                "礼金": r"礼金:\*(\d+)\*",
-                "仲介手数料": r"仲介手数料:\*(\d+)\*",
-                "管理費 当月": r"管理費 当月:\*(\d+)\*",
-                "管理費 翌月": r"管理費 翌月:\*(\d+)\*",
-                "共益費 当月": r"共益費 当月:\*(\d+)\*",
-                "共益費 翌月": r"共益費 翌月:\*(\d+)\*",
-                "町内会費 当月": r"町内会費 当月:\*(\d+)\*",
-                "町内会費 翌月": r"町内会費 翌月:\*(\d+)\*",
-                "駐車料 当月": r"駐車料 当月:\*(\d+)\*",
-                "駐車料 翌月": r"駐車料 翌月:\*(\d+)\*",
-                "保険料": r"保険料:\*(\d+)\*",
-                "鍵交換": r"鍵交換:\*(\d+)\*",
-                "インターネット代": r"インターネット代:\*(\d+)\*",
-                "消毒代": r"消毒代:\*(\d+)\*",
-                "退去時クリーニング費用": r"退去時クリーニング費用:\*(\d+)\*",
-                "その他": r"その他:\*(\d+)\*",
-                "合計金額": r"合計金額:\*(\d+)\*"
+                "賃料 当月": r"賃料 当月:\s*\*([\d,]+)\*",
+                "賃料 翌月": r"賃料 翌月:\s*\*([\d,]+)\*",
+                "敷金": r"敷金:\s*\*([\d,]+)\*",
+                "礼金": r"礼金:\s*\*([\d,]+)\*",
+                "仲介手数料": r"仲介手数料:\s*\*([\d,]+)\*",
+                "管理費 当月": r"管理費 当月:\s*\*([\d,]+)\*",
+                "管理費 翌月": r"管理費 翌月:\s*\*([\d,]+)\*",
+                "共益費 当月": r"共益費 当月:\s*\*([\d,]+)\*",
+                "共益費 翌月": r"共益費 翌月:\s*\*([\d,]+)\*",
+                "町内会費 当月": r"町内会費 当月:\s*\*([\d,]+)\*",
+                "町内会費 翌月": r"町内会費 翌月:\s*\*([\d,]+)\*",
+                "駐車料 当月": r"駐車料 当月:\s*\*([\d,]+)\*",
+                "駐車料 翌月": r"駐車料 翌月:\s*\*([\d,]+)\*",
+                "保険料": r"保険料:\s*\*([\d,]+)\*",
+                "鍵交換": r"鍵交換:\s*\*([\d,]+)\*",
+                "インターネット代": r"インターネット代:\s*\*([\d,]+)\*",
+                "消毒代": r"消毒代:\s*\*([\d,]+)\*",
+                "退去時クリーニング費用": r"退去時クリーニング費用:\s*\*([\d,]+)\*",
+                "その他": r"その他:\s*\*([\d,]+)\*",
+                "合計金額": r"合計金額:\s*\*([\d,]+)\*"
             }
 
             # 各項目を辞書形式で抽出
@@ -178,24 +179,23 @@ class MemoDetailView(LoginRequiredMixin, generic.DetailView):
             response_text = response.choices[0].message.content
             for key, pattern in patterns.items():
                 match = re.search(pattern, response_text)
-                result[key] = int(match.group(1)) if match else 0
+                result[key] = int(match.group(1).replace(',', '')) if match else 0
 
 
-            # マークダウン形式に対応するために記載
-            explanation_markdown = result
-            obj.explanation = explanation_markdown
+            obj.explanation = json.dumps(result)
             obj.save()
 
         return super().dispatch(request, *args, **kwargs)
 
     # 写真の形式を識別
+    
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         memo = self.get_object()
         file_extension = memo.file.name.split('.')[-1].lower()
         context['is_image'] = file_extension in ['png', 'jpg', 'jpeg']
         if memo.explanation:
-            context['explanation_html'] = markdown(memo.explanation)
+            context['explanation'] = json.loads(memo.explanation)
         return context
 
 
