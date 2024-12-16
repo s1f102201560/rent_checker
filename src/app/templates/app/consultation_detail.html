@@ -2,7 +2,7 @@
 {% load static %}
 
 {% block main %}
-  <h2>{{ consultation.title }} by {{ consultation.author.username }}</h2>
+  <h2>{{ consultation.title }} by {{ consultation.user.username }}</h2>
   <div>
     <div>
       チャットURL：
@@ -20,7 +20,7 @@
     <p>質問事項：{{ consultation.checklist }}</p>
     <p>投稿日：{{ consultation.created_at }}</p>
   </div>
-  {% if user.is_authenticated and consultation.author_id == user.id %}
+  {% if user.is_authenticated and consultation.user_id == user.id %}
     <a href="{% url 'consultation_edit' consultation.id %}">編集</a>
   {% endif %}
 

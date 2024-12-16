@@ -12,7 +12,7 @@ from django.urls import reverse_lazy, reverse
 from django.views.generic import TemplateView
 from django.views.generic.edit import FormView
 from app.models import ChatLog, ChatRoom, Consultation
-from app.forms import ContactForm, ConsultationForm, ImageForm
+from app.forms import ContactForm, ConsultationForm, FileForm
 
 def generate_url(request):
     room_name = ''.join(random.choices(string.ascii_letters + string.digits, k=12))
@@ -47,7 +47,7 @@ def consultation_new(request):
         form = ConsultationForm(request.POST)
         if form.is_valid():
             consultation = form.save(commit=False)
-            consultation.author = request.user
+            consultation.user = request.user
             consultation.room_link = generate_url(request)
             chat_room = ChatRoom.objects.create(name=f"Room for {consultation.title}")
             consultation.room = chat_room
@@ -65,7 +65,7 @@ def consultation_new(request):
 @login_required
 def consultation_edit(request, consultation_id):
     consultation = get_object_or_404(Consultation, pk=consultation_id)
-    if consultation.author.id != request.user.id:
+    if consultation.user.id != request.user.id:
         return HttpResponseForbidden("この相談の編集は許可されていません")
     if request.method == "POST":
         form = ConsultationForm(request.POST, instance=consultation)
@@ -96,7 +96,7 @@ def chat(request, room_url):
 @csrf_exempt
 def upload_image(request):
     if request.method == 'POST':
-        form = ImageForm(request.POST, request.FILES)
+        form = FileForm(request.POST, request.FILES)
         if form.is_valid():
             image = form.save()  # 画像を保存
             image_url = image.file.url  # 画像のURLを取得
@@ -104,7 +104,7 @@ def upload_image(request):
         else:
             return JsonResponse({'status': 'error', 'message': form.errors.as_json()})
     else:
-        form = ImageForm()
+        form = FileForm()
     return render(request, 'app/chat.html', {'form': form})
 
 

@@ -1,15 +1,15 @@
 from django import forms
-from app.models import Image, Consultation
+from app.models import File, Consultation
 from django.core.mail import send_mail, BadHeaderError
 from django.http import HttpResponse
 from django.conf import settings
 
-class ImageForm(forms.ModelForm):
+class FileForm(forms.ModelForm):
     MAX_FILE_SIZE_MB = 20  # 最大ファイルサイズ (MB)
 
     class Meta:
-        model = Image
-        fields = ['file']
+        model = File
+        fields = ('file',)
 
     def clean_file(self):
         file = self.cleaned_data.get('file')
