@@ -19,11 +19,17 @@ class Resource(models.Model):
 
 class ChatRoom(models.Model):
     name = models.CharField(verbose_name="チャット部屋名", max_length=255, unique=True)
+    link = models.URLField(verbose_name="チャットURL")
+    user = models.ForeignKey(
+        get_user_model(),
+        verbose_name="ユーザ",
+        on_delete=models.CASCADE,
+    )
     created_at = models.DateTimeField(verbose_name="作成日時", auto_now_add=True)
     updated_at = models.DateTimeField(verbose_name="更新日時", auto_now=True)
 
     def __str__(self):
-        return self.consultation.title if hasattr(self, 'consultation') else self.verbose_name
+        return self.name
 
 class File(models.Model):
     file = models.FileField(verbose_name="書類名", upload_to='uploads/')
@@ -34,14 +40,14 @@ class File(models.Model):
         return self.file.verbose_name
 
 class ChatLog(models.Model):
-    verbose_name = models.CharField(verbose_name="チャット履歴名", max_length=255)
+    name = models.CharField(verbose_name="チャット履歴名", max_length=255)
     user = models.ForeignKey(get_user_model(), verbose_name="ユーザ", on_delete=models.CASCADE, related_name='chat_logs')
     room = models.ForeignKey(ChatRoom, verbose_name="チャット部屋", on_delete=models.CASCADE, related_name='chat_logs')
     file = models.ForeignKey(File, verbose_name="書類", on_delete=models.CASCADE, related_name='caht_logs', null=True, blank=True)
     prompt = models.TextField(verbose_name='ユーザメッセージ', max_length=1024)
     response = models.TextField(verbose_name='システムメッセージ')
-    created_at = models.DateTimeField('作成日時', auto_now_add=True)
-    updated_at = models.DateTimeField('更新日時', auto_now=True)
+    created_at = models.DateTimeField(verbose_name='作成日時', auto_now_add=True)
+    updated_at = models.DateTimeField(verbose_name='更新日時', auto_now=True)
 
     def __str__(self):
         return f"ChatLog {self.id} for {self.user.username} in {self.room} on {self.created_at}"

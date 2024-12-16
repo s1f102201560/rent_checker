@@ -49,7 +49,7 @@ def consultation_new(request):
             consultation = form.save(commit=False)
             consultation.user = request.user
             consultation.room_link = generate_url(request)
-            chat_room = ChatRoom.objects.create(name=f"Room for {consultation.title}")
+            chat_room = ChatRoom.objects.create(name=consultation.title, link=consultation.room_link, user=request.user)
             consultation.room = chat_room
             if request.FILES:
                 consultation.file = request.FILES.get('file')
@@ -83,9 +83,9 @@ def consultation_edit(request, consultation_id):
 
 
 def chat(request, room_url):
-    room, created = ChatRoom.objects.get_or_create(name=room_url)
+    room = ChatRoom.objects.get(name=consultation.title)
     chat_logs = ChatLog.objects.filter(room=room, user=request.user).order_by('created_at')
-    room_logs = ChatRoom.objects.filter(chat_logs__user=request.user).distinct().order_by('-created_at')
+    room_logs = ChatRoom.objects.filter(user=request.user).distinct().order_by('-created_at')
     return render(request, 'app/chat.html', {
         'room_name': room_url,
         'chat_logs': chat_logs,

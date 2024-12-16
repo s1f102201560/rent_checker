@@ -3,10 +3,10 @@
         <h1 class="mr-4">履歴</h1>
     </div>
     <ul class="bg-gray-100 text-gray-500">
-        {% for room in room_logs %}
+        {% for room_log in room_logs %}
             <li class="text-center">
-                <a href="{% url 'chat' room.name %}" class="block">
-                    {{ room.consultation.title }}
+                <a href="{% url 'chat' room_log.link %}" class="block">
+                    {{ room_log.name }}
                 </a>
             </li>
         {% endfor %}
