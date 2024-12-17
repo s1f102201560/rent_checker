@@ -35,15 +35,49 @@
 </div>
 
 <hr>
-<h2>デバッグ: explanation.items の展開</h2>
+
 <ul>
     {% for key, value in explanation.items %}
-        <li>{{ key }}: {{ value|intcomma }}</li>
+    {% if key != "合計金額" %}
+    <li>
+        <label>
+            <input type="checkbox" class="item-checkbox" data-value="{{ value }}" checked onchange="updateTotal()">
+            {{ key }}: {{ value|intcomma }}
+        </label>
+    </li>
+    {% endif %}
     {% endfor %}
 </ul>
 
-<h2>test</h2>
-<pre>{{ memo.explanation }}</pre>
+    <p>合計金額: <span id="total">{{ total|intcomma }}</span></p>
+
+    <h2> GPTが読み込んだ合計金額</h2>
+    {% for key, value in explanation.items %}
+    {% if key == "合計金額" %}
+        <label>
+            {{ key }}: {{ value|intcomma }}
+        </label>
+    {% endif %}
+    {% endfor %}
 
 
+
+<script>
+    function updateTotal() {
+        let total = 0;
+        const checkboxes = document.querySelectorAll('.item-checkbox');
+        checkboxes.forEach(checkbox => {
+            if (checkbox.checked) {
+                total += parseInt(checkbox.dataset.value);
+            }
+        });
+        document.getElementById('total').innerText = total.toLocaleString();
+    }
+</script>
+
+<style>
+    ul {
+        list-style: none;
+    }
+</style>
 {% endblock %}

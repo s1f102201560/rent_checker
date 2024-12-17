@@ -195,7 +195,14 @@ class MemoDetailView(LoginRequiredMixin, generic.DetailView):
         file_extension = memo.file.name.split('.')[-1].lower()
         context['is_image'] = file_extension in ['png', 'jpg', 'jpeg']
         if memo.explanation:
-            context['explanation'] = json.loads(memo.explanation)
+            explanation = json.loads(memo.explanation)
+            context['explanation'] = explanation
+            # jsonから合計金額を引いた額を足す。
+            context['total'] = sum(explanation.values()) - explanation['合計金額'] 
+        else:
+            context['explanation'] = {}
+            context['total'] = 0
+        
         return context
 
 
