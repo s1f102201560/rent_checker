@@ -5,17 +5,20 @@ from config import settings
 from channels.generic.websocket import AsyncWebsocketConsumer
 from django.template.loader import render_to_string
 from asgiref.sync import sync_to_async
+from config import settings
 from .rag_initializer import initialize_rag_chain
 from .vectorstore_initializer import initialize_vectorstore
 from .models import ChatLog, ChatRoom
+import pprint
 
 class ChatConsumer(AsyncWebsocketConsumer):
     async def connect(self):
         # ユーザー情報とセッションIDを設定
         self.user = self.scope["user"]
-        self.room_name = self.scope["url_route"]["kwargs"]["room_name"]
+        # FIXME localでしか動作しないハードコードをしている
+        self.room_name = settings.BASE_URL + self.scope["url_route"]["kwargs"]["room_name"]
         self.session_id = f"{self.user.id}-{self.room_name}"
-        self.room = await sync_to_async(ChatRoom.objects.get)(name=self.room_name)
+        self.room = await sync_to_async(ChatRoom.objects.get)(link=self.room_name)
 
         # Retrieverを初期化
         self.retriever = await initialize_vectorstore()

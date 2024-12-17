@@ -5,10 +5,18 @@
     <ul class="bg-gray-100 text-gray-500">
         {% for room_log in room_logs %}
             <li class="text-center">
-                <a href="{% url 'chat' room_log.link %}" class="block">
+                <a href="#" onclick="navigateToChat('{{ consultation.room_link }}')" class="block">
                     {{ room_log.name }}
                 </a>
             </li>
         {% endfor %}
     </ul>
 </div>
+
+<script>
+function navigateToChat(roomLink) {
+    const roomName = roomLink.split('/').filter(Boolean).pop();
+    const ws = new WebSocket('ws://' + window.location.host + '/ws/consultation/' + roomName + '/');
+    window.location.href = '/consultation/' + roomName + '/';
+}
+</script>

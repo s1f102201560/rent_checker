@@ -1,7 +1,7 @@
 import random
 import string
 from django.shortcuts import render, redirect, get_object_or_404
-from django.http import HttpResponse, HttpResponseForbidden
+from django.http import HttpResponse, HttpResponseForbidden, HttpResponseNotFound
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_safe, require_http_methods
 from django.http import JsonResponse
@@ -82,10 +82,29 @@ def consultation_edit(request, consultation_id):
         return render(request, "app/consultation_edit.html", context)
 
 
+@login_required
 def chat(request, room_url):
-    room = ChatRoom.objects.get(name=consultation.title)
+    full_url = request.build_absolute_uri().rstrip('/')
+    print("====================")
+    print(f"Full URL: {full_url}")
+
+    try:
+        # Consultationからroom_linkを確認
+        consultation = Consultation.objects.get(room_link=full_url)
+        print(f"Consultation Link: {consultation.room_link}")
+    except Consultation.DoesNotExist:
+        return HttpResponseNotFound("対応する相談が見つかりません")
+
+    room, created = ChatRoom.objects.get_or_create(
+        link=full_url,
+        defaults={"name": consultation.title}
+    )
+    print(f"Room: {room.name}, Created: {created}")
+    print("====================")
+
     chat_logs = ChatLog.objects.filter(room=room, user=request.user).order_by('created_at')
-    room_logs = ChatRoom.objects.filter(user=request.user).distinct().order_by('-created_at')
+    room_logs = ChatRoom.objects.filter().distinct().order_by('-created_at')
+
     return render(request, 'app/chat.html', {
         'room_name': room_url,
         'chat_logs': chat_logs,

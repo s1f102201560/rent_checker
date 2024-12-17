@@ -162,3 +162,8 @@ OPENAI_API_KEY = env('OPENAI_API_KEY')
 OPENAI_API_BASE = env('OPENAI_API_BASE')
 OPENAI_MODEL = 'gpt-4o'
 
+##########
+# その他 #
+##########
+BASE_URL = "http://localhost/consultation/chat-"
+
