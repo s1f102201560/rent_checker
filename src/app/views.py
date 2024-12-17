@@ -85,23 +85,11 @@ def consultation_edit(request, consultation_id):
 @login_required
 def chat(request, room_url):
     full_url = request.build_absolute_uri().rstrip('/')
-    print("====================")
-    print(f"Full URL: {full_url}")
-
-    try:
-        # Consultationからroom_linkを確認
-        consultation = Consultation.objects.get(room_link=full_url)
-        print(f"Consultation Link: {consultation.room_link}")
-    except Consultation.DoesNotExist:
-        return HttpResponseNotFound("対応する相談が見つかりません")
-
+    consultation = Consultation.objects.get(room_link=full_url)
     room, created = ChatRoom.objects.get_or_create(
         link=full_url,
         defaults={"name": consultation.title}
     )
-    print(f"Room: {room.name}, Created: {created}")
-    print("====================")
-
     chat_logs = ChatLog.objects.filter(room=room, user=request.user).order_by('created_at')
     room_logs = ChatRoom.objects.filter().distinct().order_by('-created_at')
 
