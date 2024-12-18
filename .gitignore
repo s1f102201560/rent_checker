@@ -162,3 +162,5 @@ npm-debug.log
 yarn-error.log
 
 # End of https://www.toptal.com/developers/gitignore/api/django
+
+reset_db.sh

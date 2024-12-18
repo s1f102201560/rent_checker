@@ -37,6 +37,7 @@ services:
     volumes:
       - ./nginx:/etc/nginx/conf.d
       - ./src/collected_static:/code/src/collected_static
+      - ./src/media:/code/src/media
     depends_on:
       - django
 

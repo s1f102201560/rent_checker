@@ -1,0 +1,11 @@
+{% extends "app/base.html" %}
+{% load static %}
+
+{% block main %}
+  <h1>相談の登録</h1>
+  <form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">登録</button>
+  </form>
+{% endblock main %}

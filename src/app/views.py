@@ -1,27 +1,100 @@
-from django.shortcuts import render
+import random
+import string
+from django.shortcuts import render, redirect, get_object_or_404
+from django.http import HttpResponse, HttpResponseForbidden, HttpResponseNotFound
+from django.contrib.auth.decorators import login_required
+from django.views.decorators.http import require_safe, require_http_methods
 from django.http import JsonResponse
 from django.conf import settings
 from django.views.decorators.csrf import csrf_exempt
 from django.core.exceptions import ObjectDoesNotExist
-from app.models import ChatLog, ChatRoom
-from app.forms import ImageForm
-from django.urls import reverse_lazy
+from django.urls import reverse_lazy, reverse
 from django.views.generic import TemplateView
 from django.views.generic.edit import FormView
-from .forms import ContactForm
+from app.models import ChatLog, ChatRoom, Consultation
+from app.forms import ContactForm, ConsultationForm, FileForm
+
+def generate_url(request):
+    room_name = ''.join(random.choices(string.ascii_letters + string.digits, k=12))
+    base_url = request.build_absolute_uri().rstrip('/')
+    if base_url.endswith('/new'):
+        base_url = base_url[:-4]
+    full_url = f"{base_url}/chat-{room_name}"
+    return full_url
 
 def top(request):
     return render(request, "app/top.html")
 
-def index(request):
-    return render(request, 'app/index.html')
+@require_safe
+def consultation(request):
+    consultations = Consultation.objects.all()
+    context = {
+        "consultations": consultations,
+    }
+    return render(request, 'app/consultation.html', context)
 
-def chat(request, room_name):
-    room, created = ChatRoom.objects.get_or_create(name=room_name)
+def consultation_detail(request, consultation_id):
+    consultation = get_object_or_404(Consultation, pk=consultation_id)
+    context = {
+        "consultation": consultation,
+    }
+    return render(request, "app/consultation_detail.html", context)
+
+@login_required
+@require_http_methods(["GET", "POST", "HEAD"])
+def consultation_new(request):
+    if request.method == "POST":
+        form = ConsultationForm(request.POST)
+        if form.is_valid():
+            consultation = form.save(commit=False)
+            consultation.user = request.user
+            consultation.room_link = generate_url(request)
+            chat_room = ChatRoom.objects.create(name=consultation.title, link=consultation.room_link, user=request.user)
+            consultation.room = chat_room
+            if request.FILES:
+                consultation.file = request.FILES.get('file')
+            consultation.save()
+            return redirect(consultation_detail, consultation_id=consultation.pk)
+    else:
+        form = ConsultationForm()
+        context = {
+            "form": form,
+        }
+        return render(request, "app/consultation_new.html", context)
+
+@login_required
+def consultation_edit(request, consultation_id):
+    consultation = get_object_or_404(Consultation, pk=consultation_id)
+    if consultation.user.id != request.user.id:
+        return HttpResponseForbidden("この相談の編集は許可されていません")
+    if request.method == "POST":
+        form = ConsultationForm(request.POST, instance=consultation)
+        if form.is_valid():
+            if request.FILES:
+                consultation.file = request.FILES.get('file')
+            form.save()
+            return redirect("consultation_detail", consultation_id=consultation_id)
+    else:
+        form = ConsultationForm(instance=consultation)
+        context = {
+            "form": form,
+        }
+        return render(request, "app/consultation_edit.html", context)
+
+
+@login_required
+def chat(request, room_url):
+    full_url = request.build_absolute_uri().rstrip('/')
+    consultation = Consultation.objects.get(room_link=full_url)
+    room, created = ChatRoom.objects.get_or_create(
+        link=full_url,
+        defaults={"name": consultation.title}
+    )
     chat_logs = ChatLog.objects.filter(room=room, user=request.user).order_by('created_at')
-    room_logs = ChatRoom.objects.filter(chat_logs__user=request.user).distinct().order_by('-created_at')
+    room_logs = ChatRoom.objects.filter().distinct().order_by('-created_at')
+
     return render(request, 'app/chat.html', {
-        'room_name': room_name,
+        'room_name': room_url,
         'chat_logs': chat_logs,
         'room_logs': room_logs,
     })
@@ -30,7 +103,7 @@ def chat(request, room_name):
 @csrf_exempt
 def upload_image(request):
     if request.method == 'POST':
-        form = ImageForm(request.POST, request.FILES)
+        form = FileForm(request.POST, request.FILES)
         if form.is_valid():
             image = form.save()  # 画像を保存
             image_url = image.file.url  # 画像のURLを取得
@@ -38,7 +111,7 @@ def upload_image(request):
         else:
             return JsonResponse({'status': 'error', 'message': form.errors.as_json()})
     else:
-        form = ImageForm()
+        form = FileForm()
     return render(request, 'app/chat.html', {'form': form})
 
 

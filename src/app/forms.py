@@ -1,16 +1,15 @@
 from django import forms
-from app.models import Image
+from app.models import File, Consultation
 from django.core.mail import send_mail, BadHeaderError
 from django.http import HttpResponse
 from django.conf import settings
-from django import forms
 
-class ImageForm(forms.ModelForm):
+class FileForm(forms.ModelForm):
     MAX_FILE_SIZE_MB = 20  # 最大ファイルサイズ (MB)
 
     class Meta:
-        model = Image
-        fields = ['file']
+        model = File
+        fields = ('file',)
 
     def clean_file(self):
         file = self.cleaned_data.get('file')
@@ -80,3 +79,8 @@ class ContactForm(forms.Form):
             send_mail("お問い合わせありがとうございます", user_message, from_email, [self.cleaned_data['email']])
         except BadHeaderError:
             return HttpResponse("無効なヘッダが検出されました。")
+
+class ConsultationForm(forms.ModelForm):
+    class Meta:
+        model = Consultation
+        fields = ("title", "file", "checklist")

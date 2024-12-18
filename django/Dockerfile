@@ -1,27 +1,35 @@
 # ベースイメージ
-FROM python:3.12
+FROM python:3.12-slim
 
 # 環境変数の設定
-ENV PYTHONUNBUFFERED=1
-ENV DJANGO_SETTINGS_MODULE=config.settings
-  ENV PYTHONPATH=/code/src
+ENV PYTHONUNBUFFERED=1 \
+    DJANGO_SETTINGS_MODULE=config.settings \
+    PYTHONPATH=/code/src
 
-  # 作業ディレクトリの設定
-  WORKDIR /code
+# 作業ディレクトリの設定
+WORKDIR /code
 
-# 必要なパッケージのインストール
-RUN apt-get update 
-RUN apt-get install -y ca-certificates curl gnupg
-RUN curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key | gpg --dearmor -o /etc/apt/keyrings/nodesource.gpg
-RUN echo "deb [signed-by=/etc/apt/keyrings/nodesource.gpg] https://deb.nodesource.com/node_20.x nodistro main" | tee /etc/apt/sources.list.d/nodesource.list
-RUN apt-get update
-RUN apt-get install nodejs -y
+# 必要なパッケージのインストールとキャッシュの削除
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends \
+        ca-certificates \
+        curl \
+        gnupg \
+        tesseract-ocr \
+        tesseract-ocr-jpn && \
+    rm -rf /var/lib/apt/lists/*
+
+# Node.jsのインストール
+RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash - && \
+    apt-get update && \
+    apt-get install -y --no-install-recommends nodejs && \
+    rm -rf /var/lib/apt/lists/*
 
 # Python依存パッケージのインストール
 COPY ./django/requirements.txt /code/django/
-RUN pip install -r /code/django/requirements.txt
+RUN pip install --no-cache-dir -r /code/django/requirements.txt
 
-# ソースコードのコピー
+# ソースコードとエントリーポイントのコピー
 COPY ./src /code/src
 COPY ./django/entrypoint.sh /code/django/entrypoint.sh
 
@@ -35,5 +43,4 @@ EXPOSE 8000
 ENTRYPOINT ["/code/django/entrypoint.sh"]
 
 # サーバーの起動
-# CMD ["uvicorn", "config.asgi:application", "--host", "0.0.0.0", "--port", "8000"]
 CMD ["daphne", "-b", "0.0.0.0", "-p", "8000", "config.asgi:application"]
