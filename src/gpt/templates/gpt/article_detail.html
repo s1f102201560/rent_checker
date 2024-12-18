@@ -1,37 +1,83 @@
 {% extends 'layout.html' %}
 
 {% block content %}
-
+{% load humanize %}
 <div>
     <p>タイトル：{{ memo.title }}</p>
     <p>投稿内容：<br>
-        <!--viewのget_context_dataでpng, jpeg, jpgを判別し、それらなら写真を表示し、
-        それ以外ならurlで投稿した写真を見れるようにしてる-->
         {% if is_image %}
             <img src="{{ memo.file.url }}" alt="{{ memo.title }}">
         {% else %}
             <a href="{{ memo.file.url }}">{{ memo.file.name }}</a>
         {% endif %}
     </p>
+
     {% if memo.explanation %}
-    <!--markdownで表示させている-->
-    <div class="markdown-content">
-        <p>生成系AIの解説:<br>{{ explanation_html | safe }}</p>
+        <!--markdownで表示させている-->
+        <div class="markdown-content">
+            <p>生成系AIの解説:<br>{{ explanation_html | safe }}</p>
+        </div>
+        {% endif %}
+        <p>{{ memo.author }}</p>
+        <p>{{ memo.created_at|date:"Y-m-j H:i:s" }}<br>
+        {{ memo.updated_at|date:"Y-m-j H:i:s" }}</p>
     </div>
-    {% endif %}
-    <p>{{ memo.author }}</p>
-    <p>{{ memo.created_at|date:"Y-m-j H:i:s" }}<br>
-    {{ memo.updated_at|date:"Y-m-j H:i:s" }}</p>
-</div>
-<div class='mt-4'>
-    {% if request.user.id == memo.author_id %}
-    <a href='{% url "gpt:update" memo.pk %}'  class='btn btn-outline-primary mr-2'>編集</a>
-    {% endif %}
-
-    <a href='{% url "gpt:index" %}' class='btn btn-outline-primary'>一覧に戻る</a>
-
-    {% if request.user.id == memo.author_id %}
-    <a href='{% url "gpt:delete" memo.pk %}'  class='btn btn-danger ml-5'>削除</a>
+    <div class='mt-4'>
+        {% if request.user.id == memo.author_id %}
+        <a href='{% url "gpt:update" memo.pk %}'  class='btn btn-outline-primary mr-2'>編集</a>
+        {% endif %}
+    
+        <a href='{% url "gpt:index" %}' class='btn btn-outline-primary'>一覧に戻る</a>
+    
+        {% if request.user.id == memo.author_id %}
+        <a href='{% url "gpt:delete" memo.pk %}'  class='btn btn-danger ml-5'>削除</a>
     {% endif %}
 </div>
+
+<hr>
+
+<ul>
+    {% for key, value in explanation.items %}
+    {% if key != "合計金額" %}
+    <li>
+        <label>
+            <input type="checkbox" class="item-checkbox" data-value="{{ value }}" checked onchange="updateTotal()">
+            {{ key }}: {{ value|intcomma }}
+        </label>
+    </li>
+    {% endif %}
+    {% endfor %}
+</ul>
+
+    <p>合計金額: <span id="total">{{ total|intcomma }}</span></p>
+
+    <h2> GPTが読み込んだ合計金額</h2>
+    {% for key, value in explanation.items %}
+    {% if key == "合計金額" %}
+        <label>
+            {{ key }}: {{ value|intcomma }}
+        </label>
+    {% endif %}
+    {% endfor %}
+
+
+
+<script>
+    function updateTotal() {
+        let total = 0;
+        const checkboxes = document.querySelectorAll('.item-checkbox');
+        checkboxes.forEach(checkbox => {
+            if (checkbox.checked) {
+                total += parseInt(checkbox.dataset.value);
+            }
+        });
+        document.getElementById('total').innerText = total.toLocaleString();
+    }
+</script>
+
+<style>
+    ul {
+        list-style: none;
+    }
+</style>
 {% endblock %}

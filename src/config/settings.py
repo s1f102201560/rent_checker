@@ -15,7 +15,10 @@ SECRET_KEY = env('SECRET_KEY')
 DEBUG = True
 
 ALLOWED_HOSTS = ['*']
-CSRF_TRUSTED_ORIGINS = ['http://localhost:8080']
+CSRF_TRUSTED_ORIGINS = [
+    'http://localhost:8080',
+    'http://172.16.244.114:8080'
+]
 
 
 #################
@@ -34,6 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.humanize',
 ]
 
 SITE_ID = 1
@@ -162,3 +166,4 @@ OPENAI_API_KEY = env('OPENAI_API_KEY')
 OPENAI_API_BASE = env('OPENAI_API_BASE')
 OPENAI_MODEL = 'gpt-4o'
 
+NUMBER_GROUPING = 3
