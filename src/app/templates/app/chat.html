@@ -13,7 +13,7 @@
         {% include "app/_sidebar.html" %}
 
         <!-- メインチャットコンテンツ -->
-        <div class="flex-1 flex flex-col bg-white overflow-hidden shadow-md" hx-ext="ws" ws-connect="/ws/consultation/chat-{{ room_name }}/">
+        <div class="flex-1 flex flex-col bg-white overflow-hidden shadow-md" hx-ext="ws" ws-connect="/ws/consultation/{{ room_name }}/">
             <!-- ナビゲーションバー -->
             {% include "app/_navigation.html" %}
 
@@ -54,7 +54,8 @@
     </div>
 
     <script>
-        const ws = new WebSocket('ws://' + window.location.host + '/ws/consultation/chat-{{ room_name }}/');
+        const roomName = "{{ room_name|escapejs }}";
+        const ws = new WebSocket('ws://' + window.location.host + '/ws/consultation/' + roomName + '/');
 
         ws.onmessage = function(event) {
             let messageData = JSON.parse(event.data);

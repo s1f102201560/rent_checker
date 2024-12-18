@@ -166,4 +166,4 @@ OPENAI_MODEL = 'gpt-4o'
 # その他 #
 ##########
 if DEBUG == True:
-    BASE_URL = "http://localhost/consultation/chat-"
+    BASE_URL = "http://localhost/consultation/"

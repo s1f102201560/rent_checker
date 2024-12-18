@@ -1,12 +1,13 @@
 {% extends "app/base.html" %}
 {% load static %}
+{% load custom_filters %}
 
 {% block main %}
   <h2>{{ consultation.title }} by {{ consultation.user.username }}</h2>
   <div>
     <div>
       チャットURL：
-      <a href="#" onclick="navigateToChat('{{ consultation.room_link }}')">
+      <a href="{% url 'chat' consultation.room_link|extract_last_segment %}" onclick="navigateToChat('{{ consultation.room_link|extract_last_segment }}')">
         {{ consultation.room_link }}
       </a>
     </div>
@@ -25,8 +26,7 @@
   {% endif %}
 
   <script>
-    function navigateToChat(roomLink) {
-      const roomName = roomLink.split('/').filter(Boolean).pop();
+    function navigateToChat(roomName) {
       const ws = new WebSocket('ws://' + window.location.host + '/ws/consultation/' + roomName + '/');
       window.location.href = '/consultation/' + roomName + '/';
     }
