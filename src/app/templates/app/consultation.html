@@ -1,0 +1,54 @@
+{% extends "app/base.html" %}
+{% load static %}
+{% load custom_filters %}
+
+{% block main %}
+  <div>
+    <p>あなたの相談を共有しよう！</p>
+    <a href="{% url "consultation_new" %}">新しい相談を共有する</a>
+  </div>
+
+  <h2>相談一覧</h2>
+  {% if consultations %}
+    <table class="table">
+      <thead>
+        <tr>
+          <th>相談名</th>
+          <th>チャットURL</th>
+          <th>書類</th>
+          <th>質問項目</th>
+          <th>投稿者</th>
+          <th>投稿日</th>
+          <th></th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for consultation in consultations %}
+          <tr>
+            <th>{{ consultation.title }}</th>
+            <th>
+              <a href="{% url 'chat' consultation.room_link|extract_last_segment %}" 
+                onclick="navigateToChat('{{ consultation.room_link|extract_last_segment }}')">
+                  {{ consultation.room_link }}
+              </a>
+            </th>
+            <th>{{ consultation.file }}</th>
+            <th>{{ consultation.checklist }}</th>
+            <th>{{ consultation.created_at }}</th>
+            <th><a href="{% url "consultation_detail" consultation.id %}">詳細</a></th>
+            <th><a href="{% url "consultation_edit" consultation.id %}">編集</a></th>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  {% else %}
+    <p>過去にアップロードした書類ははありません。</p>
+  {% endif %}
+  <script>
+    function navigateToChat(roomName) {
+      const ws = new WebSocket('ws://' + window.location.host + '/ws/consultation/' + roomName + '/');
+      window.location.href = '/consultation/' + roomName + '/';
+    }
+  </script>
+{% endblock main %}

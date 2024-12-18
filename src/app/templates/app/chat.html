@@ -13,7 +13,7 @@
         {% include "app/_sidebar.html" %}
 
         <!-- メインチャットコンテンツ -->
-        <div class="flex-1 flex flex-col bg-white overflow-hidden shadow-md" hx-ext="ws" ws-connect="/ws/chat/{{ room_name }}/">
+        <div class="flex-1 flex flex-col bg-white overflow-hidden shadow-md" hx-ext="ws" ws-connect="/ws/consultation/{{ room_name }}/">
             <!-- ナビゲーションバー -->
             {% include "app/_navigation.html" %}
 
@@ -34,20 +34,14 @@
                 {% endfor %}
             </div>
 
-            <!-- チャット入力フォームと画像アップロードフォーム -->
+            <!-- チャット入力フォーム -->
             <div class="border-t-2 border-gray-200 px-4 py-4 mx-2">
                 <form id='chat-form' class="relative flex items-center" hx-ext="ws" ws-send>
                     <!-- チャット入力フィールド -->
                     <div class="relative flex-1">
-                        <!-- 画像アップロードアイコン -->
-                        <label for="image-upload" class="absolute inset-y-0 left-0 flex items-center pl-3 cursor-pointer">
-                            <i class="fa-solid fa-image text-gray-500 hover:text-gray-800"></i>
-                        </label>
-                        <input type="file" name="file" id="image-upload" class="hidden">
-                
                         <!-- テキスト入力 -->
                         <input type="text" id="message-input" placeholder="RENT CHECKERにメッセージを送る..." name="message"
-                            class="w-full pl-10 pr-10 py-3 rounded-xl border-2 border-gray-200 focus:outline-none focus:border-yellow-200" required>
+                            class="w-full pl-5 pr-10 py-3 rounded-xl border-2 border-gray-200 focus:outline-none focus:border-yellow-200" required>
                 
                         <!-- 送信アイコン -->
                         <button type="submit" class="absolute inset-y-0 right-0 flex items-center pr-3">
@@ -60,32 +54,22 @@
     </div>
 
     <script>
-        const ws = new WebSocket('ws://' + window.location.host + '/ws/chat/{{ room_name }}/');
+        const roomName = "{{ room_name|escapejs }}";
+        const ws = new WebSocket('ws://' + window.location.host + '/ws/consultation/' + roomName + '/');
 
-        // // WebSocket メッセージを受信したときに、メッセージリストに追加する
-        // ws.onmessage = function(event) {
-        //     let messageList = document.getElementById('message-list');
-            
-        //     // 新しいdiv要素を作成して安全にメッセージを追加
-        //     let newMessageDiv = document.createElement('div');
-        //     newMessageDiv.innerHTML = event.data;
-
-        //     // メッセージリストに追加
-        //     messageList.appendChild(newMessageDiv);
-        // }
         ws.onmessage = function(event) {
             let messageData = JSON.parse(event.data);
-            let messageId = messageData.message_id; // サーバーから送信されたmessage_idを取得
-            let messageText = messageData.message_text; // サーバーからのメッセージ内容を取得
+            let messageId = messageData.message_id;  // サーバーから送信された一意のmessage_id
+            let messageText = messageData.message_text;  // サーバーからのメッセージ内容
 
-            // message_idに対応する要素を取得
-            let messageElement = document.getElementById(messageId);
+            // メッセージ要素を探す
+            let existingElement = document.getElementById(messageId);
 
-            if (messageElement) {
-                // 既存のスピナー要素をメッセージで置き換え
-                messageElement.innerHTML = messageText;
+            if (existingElement) {
+                // スピナーをメッセージで置き換える
+                existingElement.innerHTML = messageText;
             } else {
-                // メッセージがない場合は新しく作成して追加
+                // スピナーを追加
                 let newMessageDiv = document.createElement('div');
                 newMessageDiv.id = messageId;
                 newMessageDiv.innerHTML = messageText;
@@ -93,35 +77,20 @@
                 let messageList = document.getElementById('message-list');
                 messageList.appendChild(newMessageDiv);
             }
-        }
+        };
 
-        // 入力フォームの送信ロジック
+        // 入力フォームの送信
         document.getElementById('chat-form').addEventListener('submit', function(event) {
             event.preventDefault();  // フォーム送信のリダイレクトを防ぐ
 
-            formData = new FormData(document.getElementById('chat-form'));
+            let formData = new FormData(document.getElementById('chat-form'));
             let message = formData.get('message');
-            let file = formData.get('file');  // 画像ファイルの取得
 
-            if (file && file.size > 0) {
-                let reader = new FileReader();
-                reader.onload = function(e) {
-                    let base64Data = e.target.result;  // Base64エンコードされた画像データ
+            ws.send(JSON.stringify({ message: message }));
 
-                    // WebSocketを通じて画像データを送信
-                    ws.send(JSON.stringify({
-                        message: message,
-                        image: base64Data
-                    }));
-                };
-                reader.readAsDataURL(file);
-            } else {
-                // メッセージのみを送信
-                ws.send(JSON.stringify({ message: message }));
-            }
-            
             // メッセージフィールドを送信後すぐにクリア
             document.getElementById('message-input').value = '';
         });
+
     </script>
 {% endblock main %}

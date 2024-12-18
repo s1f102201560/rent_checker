@@ -143,7 +143,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # 認証周り #
 ###########
 LOGIN_URL = "/registration/login/"
-LOGIN_REDIRECT_URL = "/index/"
+LOGIN_REDIRECT_URL = "/top/"
 LOGOUT_REDIRECT_URL = "/"
 
 AUTH_USER_MODEL = 'registration.User'
@@ -165,5 +165,11 @@ DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 OPENAI_API_KEY = env('OPENAI_API_KEY')
 OPENAI_API_BASE = env('OPENAI_API_BASE')
 OPENAI_MODEL = 'gpt-4o'
+
+##########
+# その他 #
+##########
+if DEBUG == True:
+    BASE_URL = "http://localhost/consultation/"
 
 NUMBER_GROUPING = 3

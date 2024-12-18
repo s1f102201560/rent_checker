@@ -31,6 +31,9 @@
   * Git
   * Github
 
+### ER図
+![image](https://github.com/user-attachments/assets/b24bee65-d957-4f73-89d5-6a59f9cd2ed0)
+
 
 ### 動作イメージ
 ![トップ画面](https://github.com/user-attachments/assets/68f96584-7bff-45cf-82cb-eb0ea09fe540)
