@@ -8,10 +8,9 @@
 
 {% block main %}
   <div class="mt-4 px-4 sm:px-6 lg:px-8">
-    <div class="flex">
-      <div class="md:w-1/3">
-        <a href="{% url "consultation_new" %}" class="hover:underline">新しい相談を共有する</a>
-      </div>
+    <div class="flex flex-wrap justify-between items-center">
+      <div class="md:w-1/3 text-center">
+        <a href="{% url 'consultation_new' %}" class="text-center p-4 text-sm text-gray-300 border border-gray-300 rounded-lg bg--200 font-semibold hover:bg-yellow-200 hover:text-white">新しい相談を作成</a>      </div>
       <div class="md:w-2/3 max-w-md mx-auto">
         <div class="space-y-4">
           {% include "app/_consultation_search_title.html" %}
