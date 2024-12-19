@@ -2,52 +2,66 @@
 {% load static %}
 {% load custom_filters %}
 
-{% block main %}
-  <div>
-    <p>あなたの相談を共有しよう！</p>
-    <a href="{% url "consultation_new" %}">新しい相談を共有する</a>
-  </div>
+{% block nav %}
+  {% include "app/_consultation_navigation.html" %}
+{% endblock nav %}
 
-  <h2>相談一覧</h2>
-  {% if consultations %}
-    <div class="relative overflow-x-auto">
-      <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-        <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-          <tr>
-            <th scope="col" class="px-6 py-3">相談名</th>
-            <td scope="col" class="px-6 py-3">チャットURL</td>
-            <td scope="col" class="px-6 py-3">書類</td>
-            <td scope="col" class="px-6 py-3">質問項目</td>
-            <td scope="col" class="px-6 py-3">投稿日時</td>
-            <td></td>
-            <td></td>
-            <td></td>
-          </tr>
-        </thead>
-        <tbody>
-          {% for consultation in consultations %}
-            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-              <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">{{ consultation.title }}</th>
-              <td class="px-6 py-4">
-                <a href="{% url 'chat' consultation.room_link|extract_last_segment %}" 
-                  onclick="navigateToChat('{{ consultation.room_link|extract_last_segment }}')">
-                    {{ consultation.room_link }}
-                </a>
-              </td>
-              <td class="px-6 py-4">{{ consultation.file }}</td>
-              <td class="px-6 py-4">{{ consultation.checklist }}</td>
-              <td class="px-6 py-4">{{ consultation.created_at }}</td>
-              <td class="px-6 py-4"><a href="{% url "consultation_detail" consultation.id %}">詳細</a></td>
-              <td class="px-6 py-4"><a href="{% url "consultation_edit" consultation.id %}">編集</a></td>
-              <td class="px-6 py-4"><a href="{% url "consultation_edit" consultation.id %}">削除</a></td>
-            </tr>
-          {% endfor %}
-        </tbody>
-      </table>
+{% block main %}
+  <div class="mt-4 px-4 sm:px-6 lg:px-8">
+    <div class="flex justify-between">
+      <div>
+        <a href="{% url "consultation_new" %}" class="hover:underline">新しい相談を共有する</a>
+      </div>
+      <div>
+        <h2>検索機能</h2>
+        <ul>
+          <li>相談名</li>
+          <li>作成日時</li>
+        </ul>
+      </div>
     </div>
-  {% else %}
-    <p>過去にアップロードした書類ははありません。</p>
-  {% endif %}
+
+    <h2 class="mt-10 text-2xl font-semibold text-gray-800">相談一覧</h2>
+    {% if consultations %}
+      <div class="relative overflow-x-auto">
+        <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+          <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+            <tr>
+              <th scope="col" class="px-6 py-3">相談名</th>
+              <td scope="col" class="px-6 py-3">チャットURL</td>
+              <td scope="col" class="px-6 py-3">書類</td>
+              <td scope="col" class="px-6 py-3">質問項目</td>
+              <td scope="col" class="px-6 py-3">投稿日時</td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+          </thead>
+          <tbody>
+            {% for consultation in consultations %}
+              <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">{{ consultation.title }}</th>
+                <td class="px-6 py-4">
+                  <a href="{% url 'chat' consultation.room_link|extract_last_segment %}" 
+                    onclick="navigateToChat('{{ consultation.room_link|extract_last_segment }}')" class="hover:underline">
+                      {{ consultation.room_link }}
+                  </a>
+                </td>
+                <td class="px-6 py-4">{{ consultation.file }}</td>
+                <td class="px-6 py-4">{{ consultation.checklist }}</td>
+                <td class="px-6 py-4">{{ consultation.created_at }}</td>
+                <td class="px-6 py-4"><a href="{% url "consultation_detail" consultation.id %}">詳細</a></td>
+                <td class="px-6 py-4"><a href="{% url "consultation_edit" consultation.id %}">編集</a></td>
+                <td class="px-6 py-4"><a href="{% url "consultation_edit" consultation.id %}">削除</a></td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    {% else %}
+      <p class="mt-4 text-gray-600">過去の相談がありません。</p>
+    {% endif %}
+  </div>
   <script>
     function navigateToChat(roomName) {
       const ws = new WebSocket('ws://' + window.location.host + '/ws/consultation/' + roomName + '/');
