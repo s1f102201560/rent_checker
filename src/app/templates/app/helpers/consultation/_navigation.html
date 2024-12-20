@@ -1,24 +1,24 @@
-<nav class="fixed w-full z-30 top-0 h-1/8 text-gray-400 bg-yellow-200">
-  <div class="w-full container mx-auto flex flex-wrap items-center justify-between mt-0">
-      <div class="pl-4 flex items-center text-gray-500">
-          <a class="no-underline hover:no-underline font-bold" href="#">
-              <i class="fa-solid fa-check inline"></i>
-              RENT CHECKER
-          </a>
-      </div>
-      <div class="block lg:hidden pr-4">
-          <button id="nav-toggle" class="flex items-center p-1">
-              <i class="fa-solid fa-bars h-8 w-8"></i>
-          </button>
-      </div>
-      <div class="hidden lg:flex lg:items-center lg:w-auto w-full" id="nav-content">
-          <ul class="lg:flex items-center justify-between text-base pt-4 lg:pt-0">
-              <form class="lg:p-4 py-3 px-0 block border-b-2 border-transparent hover:border-yellow-400 hover:text-gray-600" action="{% url 'logout' %}" method="POST">
-                {% csrf_token %}
-                <button type="submit">ログアウト</button>
-              </form>
-              <li><a class="lg:p-4 py-3 px-0 block border-b-2 border-transparent hover:border-yellow-400 hover:text-gray-600" href="{% url 'password_change' %}">パスワード変更</a></li>
-          </ul>
-      </div>
-  </div>
+<nav class="fixed w-full z-30 top-0 h-1/8 text-gray-500 bg-yellow-200">
+    <div class="w-full container mx-auto flex flex-wrap items-center justify-between mt-0">
+        <div class="pl-4 flex items-center text-gray-600">
+            <a class="no-underline hover:no-underline font-bold" href="#">
+                <i class="fa-solid fa-check inline"></i>
+                RENT CHECKER
+            </a>
+        </div>
+        <div class="block lg:hidden pr-4">
+            <button id="nav-toggle" class="flex items-center p-1">
+                <i class="fa-solid fa-bars h-8 w-8"></i>
+            </button>
+        </div>
+        <div class="hidden lg:flex lg:items-center lg:w-auto w-full" id="nav-content">
+            <ul class="lg:flex items-center justify-between text-base pt-4 lg:pt-0">
+                <form class="lg:p-4 py-3 px-0 block border-b-2 border-transparent hover:border-yellow-400 hover:text-gray-700" action="{% url 'logout' %}" method="POST">
+                    {% csrf_token %}
+                    <button type="submit">ログアウト</button>
+                </form>
+                <li><a class="lg:p-4 py-3 px-0 block border-b-2 border-transparent hover:border-yellow-400 hover:text-gray-700" href="{% url 'password_change' %}">パスワード変更</a></li>
+            </ul>
+        </div>
+    </div>
 </nav>
