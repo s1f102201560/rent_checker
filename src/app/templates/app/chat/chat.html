@@ -10,12 +10,12 @@
 {% block main %}
     <div class="flex h-screen overflow-hidden">
         <!-- サイドバー -->
-        {% include "app/_chat_sidebar.html" %}
+        {% include "app/helpers/chat/_sidebar.html" %}
 
         <!-- メインチャットコンテンツ -->
         <div class="flex-1 flex flex-col bg-white overflow-hidden shadow-md" hx-ext="ws" ws-connect="/ws/consultation/{{ room_name }}/">
             <!-- ナビゲーションバー -->
-            {% include "app/_chat_navigation.html" %}
+            {% include "app/helpers/chat/_navigation.html" %}
 
             <!-- チャット履歴の表示 -->
             <div id="message-list" class="p-6 flex-1 overflow-y-scroll">

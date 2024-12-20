@@ -1,0 +1,93 @@
+{% extends "app/base.html" %}
+{% load static %}
+{% load custom_filters %}
+
+{% block nav %}
+  {% include "app/helpers/consultation/_navigation.html" %}
+{% endblock nav %}
+
+{% block main %}
+  <div class="mt-20 px-4 sm:px-6 lg:px-8 bg-white text-gray-500 font-semibold">
+    <div class="flex flex-col md:flex-row lg:items-start lg:justify-between">
+      <div class="flex flex-col justify-between ml-2">
+        <h2 class="text-2xl text-gray-700">相談一覧</h2>
+        <a href="{% url 'consultation_new' %}"
+          class="mt-12 font-semibold px-3 py-2 text-white bg-yellow-200 border-2 border-yellow-200 rounded-full hover:text-yellow-200 hover:bg-white">
+          新規相談を作成
+        </a>
+      </div>
+      <div class="max-w-md space-y-4 mb-8">
+        {% include "app/helpers/consultation/_search_title.html" %}
+        {% include "app/helpers/consultation/_search_datetime.html" %}
+      </div>
+    </div>
+    {% if consultations %}
+      <div class="relative overflow-x-auto bg-gray-50 border border-gray-300 rounded-lg">
+        <table class="w-full text-sm text-left">
+          <thead class="text-xs text-gray-600 bg-yellow-200">
+            <tr>
+              <th scope="col" class="px-6 py-3">
+                <input type="checkbox" id="select-all" class="rounded border-gray-300">
+              </th>
+              <th scope="col" class="px-6 py-3">相談名</th>
+              <td scope="col" class="px-6 py-3">チャットURL</td>
+              <td scope="col" class="px-6 py-3">書類</td>
+              <td scope="col" class="px-6 py-3">質問項目</td>
+              <td scope="col" class="px-6 py-3">作成日時</td>
+              <td></td>
+              <td></td>
+              <td>
+                <form method="POST" action="">
+                  {% csrf_token %}
+                  <button type="submit" 
+                    class="font-semibold px-2 py-1 text-white bg-red-400 border-2 border-red-400 rounded-full hover:text-red-400 hover:bg-white">
+                    一括削除
+                  </button>
+                </form>
+              </td>
+            </tr>
+          </thead>
+          <tbody>
+            {% for consultation in consultations %}
+              {% if request.user.id == consultation.user_id %}
+                <tr class="bg-white border-b border-gray-300">
+                  <td class="px-6 py-4">
+                    <input type="checkbox" name="consultations" value="{{ consultation.id }}" class="rounded border-gray-300">
+                  </td>
+                  <td class="px-6 py-4 font-medium text-gray-600 whitespace-nowrap">{{ consultation.title }}</th>
+                  <td class="px-6 py-4">
+                    <a href="{% url 'chat' consultation.room_link|extract_last_segment %}" 
+                      onclick="navigateToChat('{{ consultation.room_link|extract_last_segment }}')" 
+                      class="hover:underline">
+                      {{ consultation.room_link }}
+                    </a>
+                  </td>
+                  <td class="px-6 py-4">{{ consultation.file }}</td>
+                  <td class="px-6 py-4">{{ consultation.checklist }}</td>
+                  <td class="px-6 py-4">{{ consultation.created_at }}</td>
+                  <td class="px-3 py-4"><a href="{% url "consultation_detail" consultation.id %}" class="text-blue-400 hover:underline">詳細</a></td>
+                  <td class="px-3 py-4"><a href="{% url "consultation_edit" consultation.id %}" class="text-green-400 hover:underline">編集</a></td>
+                  <td class="px-3 py-4"><a href="{% url "consultation_edit" consultation.id %}" class="text-red-400 hover:underline">削除</a></td>
+                </tr>
+              {% endif %}
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    {% else %}
+      <p class="mt-4 text-gray-600">過去の相談がありません。</p>
+    {% endif %}
+  </div>
+  <script>
+    function navigateToChat(roomName) {
+      const ws = new WebSocket('ws://' + window.location.host + '/ws/consultation/' + roomName + '/');
+      window.location.href = '/consultation/' + roomName + '/';
+    }
+
+    // 全選択/全解除のチェックボックス動作
+    document.getElementById('select-all').addEventListener('change', function() {
+      const checkboxes = document.querySelectorAll('input[name="consultations"]');
+      checkboxes.forEach(checkbox => checkbox.checked = this.checked);
+    });
+  </script>
+{% endblock main %}
