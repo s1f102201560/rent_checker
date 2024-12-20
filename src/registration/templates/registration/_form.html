@@ -74,6 +74,11 @@
       {% if form.password.help_text %}
           <small class="text-gray-600">{{ form.password.help_text }}</small>
       {% endif %}
+      {% if form.non_field_errors %}
+          <div class="mb-4">
+              <span class="text-red-500 text-xs italic">{{ form.non_field_errors.as_text }}</span>
+          </div>
+      {% endif %}
     </div>    
   {% elif form_type == 'password_change' %}
     <div class="mb-4">
