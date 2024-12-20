@@ -29,6 +29,9 @@
         <table class="w-full text-sm text-left">
           <thead class="text-xs text-gray-600 bg-yellow-200">
             <tr>
+              <th scope="col" class="px-6 py-3">
+                <input type="checkbox" id="select-all" class="rounded border-gray-300">
+              </th>
               <th scope="col" class="px-6 py-3">相談名</th>
               <td scope="col" class="px-6 py-3">チャットURL</td>
               <td scope="col" class="px-6 py-3">書類</td>
@@ -43,7 +46,10 @@
             {% for consultation in consultations %}
               {% if request.user.id == consultation.user_id %}
                 <tr class="bg-white border-b border-gray-300">
-                  <th scope="row" class="px-6 py-4 font-medium text-gray-600 whitespace-nowrap">{{ consultation.title }}</th>
+                  <td class="px-6 py-4">
+                    <input type="checkbox" name="consultations" value="{{ consultation.id }}" class="rounded border-gray-300">
+                  </td>
+                  <td class="px-6 py-4 font-medium text-gray-600 whitespace-nowrap">{{ consultation.title }}</th>
                   <td class="px-6 py-4">
                     <a href="{% url 'chat' consultation.room_link|extract_last_segment %}" 
                       onclick="navigateToChat('{{ consultation.room_link|extract_last_segment }}')" 
@@ -72,5 +78,11 @@
       const ws = new WebSocket('ws://' + window.location.host + '/ws/consultation/' + roomName + '/');
       window.location.href = '/consultation/' + roomName + '/';
     }
+
+    // 全選択/全解除のチェックボックス動作
+    document.getElementById('select-all').addEventListener('change', function() {
+      const checkboxes = document.querySelectorAll('input[name="consultations"]');
+      checkboxes.forEach(checkbox => checkbox.checked = this.checked);
+    });
   </script>
 {% endblock main %}
