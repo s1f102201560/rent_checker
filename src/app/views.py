@@ -37,6 +37,8 @@ def consultation(request):
 @login_required
 def consultation_detail(request, consultation_id):
     consultation = get_object_or_404(Consultation, pk=consultation_id)
+    if consultation.user.id != request.user.id:
+        return HttpResponseForbidden("この相談の閲覧は許可されていません")
     context = {
         "consultation": consultation,
     }
