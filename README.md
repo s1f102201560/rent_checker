@@ -36,8 +36,19 @@
 
 
 ### 動作イメージ
-![トップ画面](https://github.com/user-attachments/assets/68f96584-7bff-45cf-82cb-eb0ea09fe540)
-![新規登録画面](https://github.com/user-attachments/assets/99571137-ce87-461e-bef3-5280308a7284)
-![ログイン画面](https://github.com/user-attachments/assets/961bef50-e026-4782-a14b-d8421d7ddb41)
-![チャット画面](https://github.com/user-attachments/assets/25d7b284-7f21-435f-ad9b-507471abeda7)
+![トップ画面](https://github.com/user-attachments/assets/c318e263-b997-47d5-8833-a265d35eed34)
+![新規登録画面](https://github.com/user-attachments/assets/17aee3a3-32f6-4b2f-9851-9cbd30688b47)
+![詳細画面](https://github.com/user-attachments/assets/88004c93-7f9b-49eb-b2b0-422512e8fbcb)
+![編集画面](https://github.com/user-attachments/assets/b9a15a98-cd59-4f01-8018-f2b7f2312261)
+![チャット画面1](https://github.com/user-attachments/assets/c9ea3289-b65f-4cdc-b7ab-f50b61a2fc04)
+![チャット画面2](https://github.com/user-attachments/assets/661d830e-2603-4b82-b7cc-8edc1380ae7a)
+![認証画面1](https://github.com/user-attachments/assets/4fbb814d-8091-42c1-ae66-d8b0930028ee)
+![認証画面2](https://github.com/user-attachments/assets/ab5e6712-9970-4310-9594-7f49c785233b)
+![認証画面3](https://github.com/user-attachments/assets/52813470-43db-41cb-bf8f-5a992268e599)
+![認証画面4](https://github.com/user-attachments/assets/fa2edee7-ba2a-4df5-86f3-f9c4460a6edc)
+
+
+
+
+
 
