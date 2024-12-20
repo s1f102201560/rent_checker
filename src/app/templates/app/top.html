@@ -9,7 +9,7 @@
   {% include "app/navi.html" %}
   
   <!-- メインイメージ -->
-  <div class="pt-24">
+  <div class="pt-24 px-8 text-gray-500">
     <div class="container px-3 mx-auto flex flex-wrap flex-col md:flex-row items-center">
       <!-- 左側 -->
       <div class="flex flex-col w-full md:w-3/5 justify-center items-start text-center md:text-left">
@@ -19,8 +19,8 @@
         <p class="leading-normal text-2xl mb-8">
           賃貸契約時の疑問点、金銭的な不安のあれこれを相談できます！
         </p>
-        <button class="mx-auto lg:mx-0 hover:underline bg-white text-gray-800 font-bold rounded-full my-6 py-4 px-8 shadow-lg focus:outline-none focus:shadow-outline transform transition hover:scale-105 duration-300 ease-in-out">
-          <a class="inline-block text-gray-500 no-underline py-2 px-4" href="{% url 'consultation' %}">使ってみる</a>
+        <button class="mx-auto lg:mx-0 hover:underline bg-white text-gray-600 font-bold rounded-full my-6 py-4 px-8 shadow-lg focus:outline-none focus:shadow-outline transform transition hover:scale-105 duration-300 ease-in-out">
+          <a class="inline-block  no-underline py-2 px-4" href="{% url 'consultation' %}">使ってみる</a>
         </button>
       </div>
       <!-- 右側 -->
@@ -50,7 +50,7 @@
   </div>
   <section class="bg-white border-b py-8">
     <div class="container max-w-5xl mx-auto m-8">
-      <h2 class="w-full my-2 text-5xl font-bold leading-tight text-center text-gray-800">
+      <h2 class="w-full my-2 text-5xl font-bold leading-tight text-center text-gray-600">
         RENT CHECKERで使える機能
       </h2>
       <div class="w-full mb-4">
@@ -58,7 +58,7 @@
       </div>
       <div class="flex flex-wrap">
         <div class="w-5/6 sm:w-1/2 p-6">
-          <h3 class="text-3xl text-gray-800 font-bold leading-none mb-3">
+          <h3 class="text-3xl text-gray-600 font-bold leading-none mb-3">
             賃貸契約情報についてのAI相談機能
           </h3>
           <p class="text-gray-600 mb-8">
@@ -76,7 +76,7 @@
         </div>
         <div class="w-full sm:w-1/2 p-6 mt-6">
           <div class="align-middle">
-            <h3 class="text-3xl text-gray-800 font-bold leading-none mb-3">
+            <h3 class="text-3xl text-gray-600 font-bold leading-none mb-3">
               画像をアップロード機能
             </h3>
             <p class="text-gray-600 mb-8">
@@ -90,7 +90,7 @@
   </section>
   <section class="bg-white border-b py-8">
     <div class="container mx-auto flex flex-wrap pt-4 pb-12">
-      <h2 class="w-full my-2 text-5xl font-bold leading-tight text-center text-gray-800">
+      <h2 class="w-full my-2 text-5xl font-bold leading-tight text-center text-gray-600">
         こんな時にお困りではありませんか？
       </h2>
       <div class="w-full mb-4">
@@ -102,17 +102,17 @@
             <p class="w-full text-gray-600 text-xs md:text-sm px-6">
               地方から上京する高校生
             </p>
-            <div class="w-full font-bold text-xl text-gray-800 px-6">
+            <div class="w-full font-bold text-xl text-gray-600 px-6">
               短時間で賃貸契約が必要なあなたへ
             </div>
-            <p class="text-gray-800 text-base px-6 mb-5">
+            <p class="text-gray-600 text-base px-6 mb-5">
               地方から東京に進学する高校生は、時間がない中で賃貸契約を進める必要があります。不動産契約に関する知識が不足していると、悪徳仲介業者に騙されるリスクが高くなります。
             </p>
           </a>
         </div>
         <div class="flex-none mt-auto bg-white rounded-b rounded-t-none overflow-hidden shadow p-6">
           <div class="flex items-center justify-center">
-            <a href="{% url 'template' %}" class="mx-auto lg:mx-0 hover:underline gradient text-gray-500 font-bold rounded-full my-6 py-4 px-8 shadow-lg focus:outline-none focus:shadow-outline transform transition hover:scale-105 duration-300 ease-in-out">
+            <a href="{% url 'template' %}" class="mx-auto lg:mx-0 hover:underline gradient  font-bold rounded-full my-6 py-4 px-8 shadow-lg focus:outline-none focus:shadow-outline transform transition hover:scale-105 duration-300 ease-in-out">
               知識をつける
             </a>            
           </div>
@@ -124,17 +124,17 @@
             <p class="w-full text-gray-600 text-xs md:text-sm px-6">
               短時間で賃貸契約をする必要がある方
             </p>
-            <div class="w-full font-bold text-xl text-gray-800 px-6">
+            <div class="w-full font-bold text-xl text-gray-600 px-6">
               知識不足で損をしないために
             </div>
-            <p class="text-gray-800 text-base px-6 mb-5">
+            <p class="text-gray-600 text-base px-6 mb-5">
               賃貸契約の知識がないまま短時間で契約を進めると、予期せぬ費用を請求されるリスクが高まります。契約前にしっかりとした知識を持つことが大切です。
             </p>
           </a>
         </div>
         <div class="flex-none mt-auto bg-white rounded-b rounded-t-none overflow-hidden shadow p-6">
           <div class="flex items-center justify-center">
-            <a href="{% url 'template' %}" class="mx-auto lg:mx-0 hover:underline gradient text-gray-500 font-bold rounded-full my-6 py-4 px-8 shadow-lg focus:outline-none focus:shadow-outline transform transition hover:scale-105 duration-300 ease-in-out">
+            <a href="{% url 'template' %}" class="mx-auto lg:mx-0 hover:underline gradient  font-bold rounded-full my-6 py-4 px-8 shadow-lg focus:outline-none focus:shadow-outline transform transition hover:scale-105 duration-300 ease-in-out">
               知識を得る
             </a> 
           </div>
@@ -146,17 +146,17 @@
             <p class="w-full text-gray-600 text-xs md:text-sm px-6">
               不動産賃貸契約に不安がある方
             </p>
-            <div class="w-full font-bold text-xl text-gray-800 px-6">
+            <div class="w-full font-bold text-xl text-gray-600 px-6">
               AIを活用してリテラシーを向上
             </div>
-            <p class="text-gray-800 text-base px-6 mb-5">
+            <p class="text-gray-600 text-base px-6 mb-5">
               不動産業者との情報の非対称性を埋めるため、AIを活用したリテラシー向上のサポートが有効です。短時間で賃貸契約に必要な知識を補完できます。
             </p>
           </a>
         </div>
         <div class="flex-none mt-auto bg-white rounded-b rounded-t-none overflow-hidden shadow p-6">
           <div class="flex items-center justify-center">
-            <a href="{% url 'consultation' %}" class="mx-auto lg:mx-0 hover:underline gradient text-gray-500 font-bold rounded-full my-6 py-4 px-8 shadow-lg focus:outline-none focus:shadow-outline transform transition hover:scale-105 duration-300 ease-in-out">
+            <a href="{% url 'consultation' %}" class="mx-auto lg:mx-0 hover:underline gradient  font-bold rounded-full my-6 py-4 px-8 shadow-lg focus:outline-none focus:shadow-outline transform transition hover:scale-105 duration-300 ease-in-out">
               AIサポートを試す
             </a> 
           </div>
@@ -195,8 +195,8 @@
     <h3 class="my-4 text-3xl leading-tight">
       賃貸契約で損をしないために、今こそ必要な知識を手に入れる時です！
     </h3>
-    <button class="mx-auto lg:mx-0 hover:underline bg-white text-gray-800 font-bold rounded-full my-6 py-4 px-8 shadow-lg focus:outline-none focus:shadow-outline transform transition hover:scale-105 duration-300 ease-in-out">
-      <a class="inline-block text-gray-500 no-underline py-2 px-4" href="{% url 'consultation' %}">使ってみる</a>
+    <button class="mx-auto lg:mx-0 hover:underline bg-white text-gray-600 font-bold rounded-full my-6 py-4 px-8 shadow-lg focus:outline-none focus:shadow-outline transform transition hover:scale-105 duration-300 ease-in-out">
+      <a class="inline-block  no-underline py-2 px-4" href="{% url 'consultation' %}">使ってみる</a>
     </button>
   </section>
   <!--Footer-->
