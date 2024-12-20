@@ -41,7 +41,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
         # ユーザーメッセージ用のIDを生成
         user_message_id = f"user-{uuid.uuid4().hex}"
         user_message_html = render_to_string(
-            "app/chat_message.html",
+            "app/chat/message.html",
             {
                 "message_text": message_text,
                 "is_system": False,
@@ -53,7 +53,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
         # スピナーを表示するためのIDを生成
         system_message_id = f"system-{uuid.uuid4().hex}"
         spinner_html = render_to_string(
-            "app/chat_message.html",
+            "app/chat/message.html",
             {
                 "message_text": "<i class='fas fa-spinner fa-spin'></i>",
                 "is_system": True,
@@ -72,7 +72,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
             answer = result["answer"]
 
             response_html = render_to_string(
-                "app/chat_message.html",
+                "app/chat/message.html",
                 {
                     "message_text": answer,
                     "is_system": True,
@@ -87,7 +87,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
         except Exception as e:
             print(f"Error processing query: {e}")
             error_html = render_to_string(
-                "app/chat_message.html",
+                "app/chat/message.html",
                 {"message_text": "エラーが発生しました。もう一度お試しください。", "is_system": True},
             )
             await self.send(text_data=json.dumps({"message_id": system_message_id, "message_text": error_html}))

@@ -1,0 +1,38 @@
+{% load widget_tweaks %}
+
+<form method="post" enctype="multipart/form-data" class="w-full max-w-sm mx-auto md:max-w-md lg:max-w-lg text-center">
+  {% csrf_token %}
+  <div class="mb-4">
+    {{ form.title|add_class:"appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"|attr:"placeholder:相談タイトル" }}
+    {% if form.title.errors %}
+      <span class="text-red-500 text-xs italic">{{ form.title.errors.as_text }}</span>
+    {% endif %}
+    {% if form.title.help_text %}
+      <small class="text-gray-600">{{ form.title.help_text }}</small>
+    {% endif %}
+  </div>
+
+  {% if form.file %}
+    <div class="mb-4">
+      {{ form.file|add_class:"appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" }}
+      {% if form.file.errors %}
+        <span class="text-red-500 text-xs italic">{{ form.file.errors.as_text }}</span>
+      {% endif %}
+      {% if form.file.help_text %}
+        <small class="text-gray-600">{{ form.file.help_text }}</small>
+      {% endif %}
+    </div>
+  {% endif %}
+
+  <div class="mb-4">
+    {{ form.checklist|add_class:"appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"|attr:"placeholder:相談の詳細" }}
+    {% if form.checklist.errors %}
+      <span class="text-red-500 text-xs italic">{{ form.checklist.errors.as_text }}</span>
+    {% endif %}
+    {% if form.checklist.help_text %}
+      <small class="text-gray-600">{{ form.checklist.help_text }}</small>
+    {% endif %}
+  </div>
+
+  <input type="submit" value="登録" class="w-full bg-yellow-200 text-white font-bold py-2 px-4 rounded hover:bg-yellow-300" />
+</form>
