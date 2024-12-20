@@ -58,7 +58,7 @@
                   <td class="px-6 py-4">
                     <a href="{% url 'chat' consultation.room_link|extract_last_segment %}" 
                       onclick="navigateToChat('{{ consultation.room_link|extract_last_segment }}')" 
-                      class="hover:underline">
+                      class="text-blue-400 hover:underline break-all">
                       {{ consultation.room_link }}
                     </a>
                   </td>
