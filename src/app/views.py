@@ -25,6 +25,7 @@ def generate_url(request):
 def top(request):
     return render(request, "app/top.html")
 
+@login_required
 @require_safe
 def consultation(request):
     consultations = Consultation.objects.all()
@@ -33,8 +34,11 @@ def consultation(request):
     }
     return render(request, 'app/consultation.html', context)
 
+@login_required
 def consultation_detail(request, consultation_id):
     consultation = get_object_or_404(Consultation, pk=consultation_id)
+    if consultation.user.id != request.user.id:
+        return HttpResponseForbidden("この相談の閲覧は許可されていません")
     context = {
         "consultation": consultation,
     }

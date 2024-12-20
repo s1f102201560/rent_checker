@@ -21,9 +21,7 @@
     <p>質問事項：{{ consultation.checklist }}</p>
     <p>投稿日：{{ consultation.created_at }}</p>
   </div>
-  {% if user.is_authenticated and consultation.user_id == user.id %}
-    <a href="{% url 'consultation_edit' consultation.id %}">編集</a>
-  {% endif %}
+  <a href="{% url 'consultation_edit' consultation.id %}">編集</a>
 
   <script>
     function navigateToChat(roomName) {
