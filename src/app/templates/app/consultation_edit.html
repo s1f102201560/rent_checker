@@ -2,9 +2,11 @@
 {% load static %}
 
 {% block main %}
-  <form method="post" enctype="multipart/form-data">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">登録</button>
-  </form>
+  {% if user.is_authenticated and request.user.id == consultation.user_id %}
+    <form method="post" enctype="multipart/form-data">
+      {% csrf_token %}
+      {{ form.as_p }}
+      <button type="submit">登録</button>
+    </form>
+  {% endif %}
 {% endblock main %}

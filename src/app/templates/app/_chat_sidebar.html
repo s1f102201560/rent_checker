@@ -6,12 +6,14 @@
     </div>
     <ul class="bg-gray-100 text-gray-500">
         {% for room_log in room_logs %}
-            <li class="text-center">
-                <a href="{% url 'chat' room_log.link|extract_last_segment %}" 
-                    onclick="navigateToChat('{{ room_log.link|extract_last_segment }}')" class="block">
-                    {{ room_log.name }}
-                </a>
-            </li>
+            {% if user.is_authenticated and request.user.id == room_log.user_id %}
+                <li class="text-center">
+                    <a href="{% url 'chat' room_log.link|extract_last_segment %}" 
+                        onclick="navigateToChat('{{ room_log.link|extract_last_segment }}')" class="block">
+                        {{ room_log.name }}
+                    </a>
+                </li>
+            {% endif %}
         {% endfor %}
     </ul>
 </div>

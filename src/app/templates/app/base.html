@@ -12,12 +12,17 @@
     <!-- tailwindcss -->
     <!-- <link rel="stylesheet" type="text/css" href="{% static 'css/style.min.css' %" /> -->
     <link rel="stylesheet" href="https://unpkg.com/tailwindcss@2.2.19/dist/tailwind.min.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
     <!-- モリサワフォント -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=BIZ+UDGothic:wght@400;700&display=swap" rel="stylesheet">
     <!-- FontAwesome -->
     <link href="https://use.fontawesome.com/releases/v6.2.0/css/all.css" rel="stylesheet">
+    <!-- DatePicker -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/ja.js"></script>
   {% endblock %}
 </head>
 <body class="leading-normal tracking-normal text-gray-500 bg-gray-100">
@@ -27,5 +32,22 @@
   {% block main %}
     <p>※コンテンツがありません。</p>
   {% endblock main %}
+  <script>
+    // 開始日入力フィールドのデートピッカーを初期化
+    flatpickr("#datepicker-range-start", {
+      altInput: true,
+      altFormat: "Y年m月d日",
+      dateFormat: "Y-m-d",
+      locale: "ja"
+    });
+
+    // 終了日入力フィールドのデートピッカーを初期化
+    flatpickr("#datepicker-range-end", {
+      altInput: true,
+      altFormat: "Y年m月d日",
+      dateFormat: "Y-m-d",
+      locale: "ja"
+    });
+  </script>
 </body>
 </html>

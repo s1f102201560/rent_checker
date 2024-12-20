@@ -3,25 +3,25 @@
 {% load custom_filters %}
 
 {% block main %}
-  <h2>{{ consultation.title }} by {{ consultation.user.username }}</h2>
-  <div>
+  {% if user.is_authenticated and request.user.id == consultation.user_id %}
+    <h2>{{ consultation.title }} by {{ consultation.user.username }}</h2>
     <div>
-      チャットURL：
-      <a href="{% url 'chat' consultation.room_link|extract_last_segment %}" onclick="navigateToChat('{{ consultation.room_link|extract_last_segment }}')">
-        {{ consultation.room_link }}
-      </a>
+      <div>
+        チャットURL：
+        <a href="{% url 'chat' consultation.room_link|extract_last_segment %}" onclick="navigateToChat('{{ consultation.room_link|extract_last_segment }}')">
+          {{ consultation.room_link }}
+        </a>
+      </div>
+      <div>
+        {% if consultation.file %}
+          書類: <img class="" src="{{ consultation.file.url }}" alt="" />
+        {% else %}
+          書類：アップロードされていません。
+        {% endif %}
+      </div>
+      <p>質問事項：{{ consultation.checklist }}</p>
+      <p>投稿日：{{ consultation.created_at }}</p>
     </div>
-    <div>
-      {% if consultation.file %}
-        書類: <img class="" src="{{ consultation.file.url }}" alt="" />
-      {% else %}
-        書類：アップロードされていません。
-      {% endif %}
-    </div>
-    <p>質問事項：{{ consultation.checklist }}</p>
-    <p>投稿日：{{ consultation.created_at }}</p>
-  </div>
-  {% if user.is_authenticated and consultation.user_id == user.id %}
     <a href="{% url 'consultation_edit' consultation.id %}">編集</a>
   {% endif %}
 
