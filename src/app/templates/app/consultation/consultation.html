@@ -7,12 +7,12 @@
 {% endblock nav %}
 
 {% block main %}
-  <div class="mt-20 px-4 sm:px-6 lg:px-8 bg-white text-gray-500">
+  <div class="mt-20 px-4 sm:px-6 lg:px-8 bg-white text-gray-500 font-semibold">
     <div class="flex flex-wrap justify-between items-center">
       <div class="md:w-1/3 text-center">
         <a href="{% url 'consultation_new' %}" 
-          class="text-center p-4 text-sm border-2 border-yellow-200 rounded-lg bg-white hover:bg-yellow-300 hover:text-white">
-          新しい相談を作成
+          class="font-semibold px-3 py-2 text-white bg-yellow-200 border-2 border-yellow-200 rounded-full hover:text-yellow-200 hover:bg-white">
+          新規相談を作成
         </a>
       </div>
       <div class="md:w-2/3 max-w-md mx-auto">
@@ -23,7 +23,16 @@
       </div>
     </div>
 
-    <h2 class="mt-10 text-2xl text-gray-700">相談一覧</h2>
+    <div class="mx-2 my-2 flex justify-between items-center">
+      <h2 class="text-2xl text-gray-700">相談一覧</h2>
+      <form method="POST" action="">
+      {% comment %} <form method="POST" action="{% url 'consultation_bulk_delete' %}"> {% endcomment %}
+        {% csrf_token %}
+        <button type="submit" class="font-semibold px-2 py-1 text-white bg-red-400 border-2 border-red-400 rounded-full hover:text-red-400 hover:bg-white">
+          一括削除
+        </button>
+      </form>
+    </div>
     {% if consultations %}
       <div class="relative overflow-x-auto bg-gray-50 border border-gray-300 rounded-lg">
         <table class="w-full text-sm text-left">
