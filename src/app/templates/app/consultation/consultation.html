@@ -3,7 +3,7 @@
 {% load custom_filters %}
 
 {% block nav %}
-  {% include "app/_consultation_navigation.html" %}
+  {% include "app/helpers/consultation/_navigation.html" %}
 {% endblock nav %}
 
 {% block main %}
@@ -13,8 +13,8 @@
         <a href="{% url 'consultation_new' %}" class="text-center p-4 text-sm text-white border border-gray-300 rounded-lg bg-yellow-200 font-semibold hover:bg-yellow-300">新しい相談を作成</a>      </div>
       <div class="md:w-2/3 max-w-md mx-auto">
         <div class="space-y-4">
-          {% include "app/_consultation_search_title.html" %}
-          {% include "app/_consultation_search_datetime.html" %}
+          {% include "app/helpers/consultation/_search_title.html" %}
+          {% include "app/helpers/consultation/_search_datetime.html" %}
         </div>
       </div>
     </div>

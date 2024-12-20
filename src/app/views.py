@@ -32,7 +32,7 @@ def consultation(request):
     context = {
         "consultations": consultations,
     }
-    return render(request, 'app/consultation.html', context)
+    return render(request, 'app/consultation/consultation.html', context)
 
 @login_required
 def consultation_detail(request, consultation_id):
@@ -42,7 +42,7 @@ def consultation_detail(request, consultation_id):
     context = {
         "consultation": consultation,
     }
-    return render(request, "app/consultation_detail.html", context)
+    return render(request, "app/consultation/detail.html", context)
 
 @login_required
 @require_http_methods(["GET", "POST", "HEAD"])
@@ -64,7 +64,7 @@ def consultation_new(request):
         context = {
             "form": form,
         }
-        return render(request, "app/consultation_new.html", context)
+        return render(request, "app/consultation/new.html", context)
 
 @login_required
 def consultation_edit(request, consultation_id):
@@ -83,7 +83,7 @@ def consultation_edit(request, consultation_id):
         context = {
             "form": form,
         }
-        return render(request, "app/consultation_edit.html", context)
+        return render(request, "app/consultation/edit.html", context)
 
 
 @login_required
@@ -97,7 +97,7 @@ def chat(request, room_url):
     chat_logs = ChatLog.objects.filter(room=room, user=request.user).order_by('created_at')
     room_logs = ChatRoom.objects.filter().distinct().order_by('-created_at')
 
-    return render(request, 'app/chat.html', {
+    return render(request, 'app/chat/chat.html', {
         'room_name': room_url,
         'chat_logs': chat_logs,
         'room_logs': room_logs,
@@ -116,7 +116,7 @@ def upload_image(request):
             return JsonResponse({'status': 'error', 'message': form.errors.as_json()})
     else:
         form = FileForm()
-    return render(request, 'app/chat.html', {'form': form})
+    return render(request, 'app/chat/chat.html', {'form': form})
 
 
 #問い合わせフォーム

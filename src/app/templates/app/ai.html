@@ -6,7 +6,7 @@
   <!-- パソコン向けコンテンツ（lg以上）-->
   <div class="hidden lg:block pt-24 border-2">
     {% if user.is_authenticated %}
-      {% include "app/chat.html" %}
+      {% include "app/chat/chat.html" %}
     {% else %}
     <h3
       class="text-center w-full text-3xl text-gray-800 font-bold leading-none mb-3 bg-yellow-100 border-yellow-200 border-b-8 p-2">
@@ -39,7 +39,7 @@
 
     <!-- 認証済みと未認証のコンテンツ（スマホ向けのみクリックで切り替え）-->
     <div id="authenticated-content" style="display: none;" class="fixed top-24 right-0">
-      {% include "app/chat.html" %}
+      {% include "app/chat/chat.html" %}
     </div>
     <div id="unauthenticated-content" style="display: none;" class="fixed top-24 right-0">
       <!-- 画像と×ボタンを配置 -->
