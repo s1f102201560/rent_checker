@@ -18,7 +18,7 @@ class Resource(models.Model):
         self.save()
 
 class ChatRoom(models.Model):
-    name = models.CharField(verbose_name="チャット部屋名", max_length=255, unique=True)
+    name = models.CharField(verbose_name="チャット部屋名", max_length=255)
     link = models.URLField(verbose_name="チャットURL")
     user = models.ForeignKey(
         get_user_model(),

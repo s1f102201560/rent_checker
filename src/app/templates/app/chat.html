@@ -20,17 +20,19 @@
             <!-- チャット履歴の表示 -->
             <div id="message-list" class="p-6 flex-1 overflow-y-scroll">
                 {% for log in chat_logs %}
-                    <div class="mb-4">
-                        <!-- 質問のスタイル -->
-                        <div class="mt-1 bg-gray-100 rounded-lg px-4 py-2 text-gray-500 text-right border-r border-yellow-200" style="border-right-width: 5px;">
-                            <strong>{{ log.created_at|date:"Y-m-d H:i" }}</strong><br>
-                            <span class="text-gray-500">{{ log.prompt }}</span>
+                    {% if user.is_authenticated and request.user.id == log.user_id %}
+                        <div class="mb-4">
+                            <!-- 質問のスタイル -->
+                            <div class="mt-1 bg-gray-100 rounded-lg px-4 py-2 text-gray-500 text-right border-r border-yellow-200" style="border-right-width: 5px;">
+                                <strong>{{ log.created_at|date:"Y-m-d H:i" }}</strong><br>
+                                <span class="text-gray-500">{{ log.prompt }}</span>
+                            </div>
+                            <!-- 返信のスタイル -->
+                            <div class="mt-1 bg-gray-100 rounded-lg px-4 py-2 text-gray-500 text-left border-l border-yellow-200" style="border-left-width: 5px;">
+                                <em class="text-gray-500">{{ log.response }}</em>
+                            </div>
                         </div>
-                        <!-- 返信のスタイル -->
-                        <div class="mt-1 bg-gray-100 rounded-lg px-4 py-2 text-gray-500 text-left border-l border-yellow-200" style="border-left-width: 5px;">
-                            <em class="text-gray-500">{{ log.response }}</em>
-                        </div>
-                    </div>
+                    {% endif %}
                 {% endfor %}
             </div>
 

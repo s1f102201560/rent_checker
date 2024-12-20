@@ -37,21 +37,23 @@
           </thead>
           <tbody>
             {% for consultation in consultations %}
-              <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">{{ consultation.title }}</th>
-                <td class="px-6 py-4">
-                  <a href="{% url 'chat' consultation.room_link|extract_last_segment %}" 
-                    onclick="navigateToChat('{{ consultation.room_link|extract_last_segment }}')" class="hover:underline">
-                      {{ consultation.room_link }}
-                  </a>
-                </td>
-                <td class="px-6 py-4">{{ consultation.file }}</td>
-                <td class="px-6 py-4">{{ consultation.checklist }}</td>
-                <td class="px-6 py-4">{{ consultation.created_at }}</td>
-                <td class="px-6 py-4"><a href="{% url "consultation_detail" consultation.id %}">詳細</a></td>
-                <td class="px-6 py-4"><a href="{% url "consultation_edit" consultation.id %}">編集</a></td>
-                <td class="px-6 py-4"><a href="{% url "consultation_edit" consultation.id %}">削除</a></td>
-              </tr>
+              {% if request.user.id == consultation.user_id %}
+                <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                  <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">{{ consultation.title }}</th>
+                  <td class="px-6 py-4">
+                    <a href="{% url 'chat' consultation.room_link|extract_last_segment %}" 
+                      onclick="navigateToChat('{{ consultation.room_link|extract_last_segment }}')" class="hover:underline">
+                        {{ consultation.room_link }}
+                    </a>
+                  </td>
+                  <td class="px-6 py-4">{{ consultation.file }}</td>
+                  <td class="px-6 py-4">{{ consultation.checklist }}</td>
+                  <td class="px-6 py-4">{{ consultation.created_at }}</td>
+                  <td class="px-6 py-4"><a href="{% url "consultation_detail" consultation.id %}">詳細</a></td>
+                  <td class="px-6 py-4"><a href="{% url "consultation_edit" consultation.id %}">編集</a></td>
+                  <td class="px-6 py-4"><a href="{% url "consultation_edit" consultation.id %}">削除</a></td>
+                </tr>
+              {% endif %}
             {% endfor %}
           </tbody>
         </table>
