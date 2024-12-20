@@ -28,7 +28,7 @@
       <form method="POST" action="">
       {% comment %} <form method="POST" action="{% url 'consultation_bulk_delete' %}"> {% endcomment %}
         {% csrf_token %}
-        <button type="submit" class="font-semibold px-2 py-1 text-white bg-red-400 border-2 border-red-400 rounded-full hover:text-red-400 hover:bg-white">
+        <button type="submit" class="w-24 h-8 font-semibold px-2 py-1 text-white bg-red-400 border-2 border-red-400 rounded-full hover:text-red-400 hover:bg-white">
           一括削除
         </button>
       </form>
