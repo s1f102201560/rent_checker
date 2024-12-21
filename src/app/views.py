@@ -98,6 +98,16 @@ def consultation_delete(request, consultation_id):
     return redirect('consultation_detail', consultation_id=consultation_id)
 
 @login_required
+def consultation_bulk_delete(request):
+    if request.method == "POST":
+        consultation_ids = request.POST.getlist('consultations')
+        if not consultation_ids:
+            return redirect('consultation')
+        Consultation.objects.filter(id__in=consultation_ids, user=request.user).delete()
+        return redirect('consultation')
+    return redirect('consultation')
+
+@login_required
 def chat(request, room_url):
     full_url = request.build_absolute_uri().rstrip('/')
     consultation = Consultation.objects.get(room_link=full_url)

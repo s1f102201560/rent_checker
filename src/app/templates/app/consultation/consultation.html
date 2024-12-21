@@ -22,68 +22,71 @@
       </div>
     </div>
     {% if consultations %}
-      <div class="relative overflow-x-auto bg-gray-50 border border-gray-300 rounded-lg">
-        <table class="w-full text-sm text-left">
-          <thead class="text-xs text-gray-600 bg-yellow-200">
-            <tr>
-              <th scope="col" class="px-6 py-3">
-                <input type="checkbox" id="select-all" class="rounded border-gray-300">
-              </th>
-              <th scope="col" class="px-6 py-3">相談名</th>
-              <td scope="col" class="px-6 py-3">チャットURL</td>
-              <td scope="col" class="px-6 py-3">書類</td>
-              <td scope="col" class="px-6 py-3">質問項目</td>
-              <td scope="col" class="px-6 py-3">作成日時</td>
-              <td></td>
-              <td colspan="2" class="text-right">
-                <form method="POST" action="">
-                  {% csrf_token %}
-                  <button type="submit" 
-                    class="font-semibold px-2 py-1 text-white bg-red-400 border-2 border-red-400 rounded-full hover:text-red-400 hover:bg-white">
+      <form id="bulk-delete-form" method="POST" action="{% url 'consultation_bulk_delete' %}">
+        {% csrf_token %}
+        <div class="relative overflow-x-auto bg-gray-50 border border-gray-300 rounded-lg">
+          <table class="w-full text-sm text-left">
+            <thead class="text-xs text-gray-600 bg-yellow-200">
+              <tr>
+                <th scope="col" class="px-6 py-3">
+                  <input type="checkbox" id="select-all" class="rounded border-gray-300">
+                </th>
+                <th scope="col" class="px-6 py-3">相談名</th>
+                <td scope="col" class="px-6 py-3">チャットURL</td>
+                <td scope="col" class="px-6 py-3">書類</td>
+                <td scope="col" class="px-6 py-3">質問項目</td>
+                <td scope="col" class="px-6 py-3">作成日時</td>
+                <td></td>
+                <td colspan="2" class="text-right">
+                  <button 
+                    type="button" 
+                    class="font-semibold px-2 py-1 text-white bg-red-400 border-2 border-red-400 rounded-full hover:text-red-400 hover:bg-white"
+                    onclick="openBulkDeleteModal()"
+                  >
                     一括削除
                   </button>
-                </form>
-              </td>
-            </tr>
-          </thead>
-          <tbody>
-            {% for consultation in consultations %}
-              {% if request.user.id == consultation.user_id %}
-                <tr class="bg-white border-b border-gray-300">
-                  <td class="px-6 py-4">
-                    <input type="checkbox" name="consultations" value="{{ consultation.id }}" class="rounded border-gray-300">
-                  </td>
-                  <td class="px-6 py-4 font-medium text-gray-600 whitespace-nowrap">{{ consultation.title }}</th>
-                  <td class="px-6 py-4">
-                    <a href="{% url 'chat' consultation.room_link|extract_last_segment %}" 
-                      onclick="navigateToChat('{{ consultation.room_link|extract_last_segment }}')" 
-                      class="text-blue-400 hover:underline break-all">
-                      {{ consultation.room_link }}
-                    </a>
-                  </td>
-                  <td class="px-6 py-4">{{ consultation.file }}</td>
-                  <td class="px-6 py-4">{{ consultation.checklist }}</td>
-                  <td class="px-6 py-4">{{ consultation.created_at }}</td>
-                  <td class="px-3 py-4"><a href="{% url "consultation_detail" consultation.id %}" class="text-blue-400 hover:underline">詳細</a></td>
-                  <td class="px-3 py-4"><a href="{% url "consultation_edit" consultation.id %}" class="text-green-400 hover:underline">編集</a></td>
-                  <td class="px-3 py-4">
-                    <button type="button" class="font-semibold text-red-400 hover:underline" 
-                      onclick="openDeleteModal('{{ consultation.id }}')">
-                      削除
-                    </button>
-                  </td>
-                </tr>
-              {% endif %}
-            {% endfor %}
-          </tbody>
-        </table>
-      </div>
+                </td>
+              </tr>
+            </thead>
+            <tbody>
+              {% for consultation in consultations %}
+                {% if request.user.id == consultation.user_id %}
+                  <tr class="bg-white border-b border-gray-300">
+                    <td class="px-6 py-4">
+                      <input type="checkbox" name="consultations" value="{{ consultation.id }}" class="rounded border-gray-300">
+                    </td>
+                    <td class="px-6 py-4 font-medium text-gray-600 whitespace-nowrap">{{ consultation.title }}</th>
+                    <td class="px-6 py-4">
+                      <a href="{% url 'chat' consultation.room_link|extract_last_segment %}" 
+                        onclick="navigateToChat('{{ consultation.room_link|extract_last_segment }}')" 
+                        class="text-blue-400 hover:underline break-all">
+                        {{ consultation.room_link }}
+                      </a>
+                    </td>
+                    <td class="px-6 py-4">{{ consultation.file }}</td>
+                    <td class="px-6 py-4">{{ consultation.checklist }}</td>
+                    <td class="px-6 py-4">{{ consultation.created_at }}</td>
+                    <td class="px-3 py-4"><a href="{% url "consultation_detail" consultation.id %}" class="text-blue-400 hover:underline">詳細</a></td>
+                    <td class="px-3 py-4"><a href="{% url "consultation_edit" consultation.id %}" class="text-green-400 hover:underline">編集</a></td>
+                    <td class="px-3 py-4">
+                      <button type="button" class="font-semibold text-red-400 hover:underline" 
+                        onclick="openDeleteModal('{{ consultation.id }}')">
+                        削除
+                      </button>
+                    </td>
+                  </tr>
+                {% endif %}
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </form>
     {% else %}
       <p class="mt-4 text-gray-600">過去の相談がありません。</p>
     {% endif %}
   </div>
 
-  <!-- モーダル -->
+  <!-- 削除用のモーダル -->
   <div id="delete-modal" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 hidden">
     <div class="bg-white p-6 rounded shadow-md max-w-sm w-full">
       <h2 class="text-lg font-semibold mb-4">本当に削除しますか？</h2>
@@ -101,6 +104,40 @@
       </form>
     </div>
   </div>
+
+  <!-- 一括削除用のモーダル -->
+  <div 
+    id="bulk-delete-modal" 
+    class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 hidden"
+  >
+    <div class="bg-white p-6 rounded shadow-md max-w-sm w-full">
+      <h2 class="text-lg font-semibold mb-4">本当に削除しますか？</h2>
+      <!-- 一括削除専用メッセージ例 -->
+      <p class="mb-4 text-gray-700">選択されたアイテムを一括で削除します。よろしいですか？</p>
+
+      <!-- フォームは外部にあり、 form="bulk-delete-form" で紐づける想定 -->
+      <div class="flex justify-end space-x-4">
+        <!-- キャンセルボタン -->
+        <button 
+          type="button" 
+          class="px-3 py-2 rounded bg-gray-200 hover:bg-gray-300" 
+          onclick="closeBulkDeleteModal()"
+        >
+          キャンセル
+        </button>
+
+        <!-- 削除ボタン：同じフォームを送信 -->
+        <button 
+          type="submit" 
+          form="bulk-delete-form"
+          class="px-3 py-2 rounded bg-red-400 text-white hover:bg-red-500"
+        >
+          削除
+        </button>
+      </div>
+    </div>
+  </div>
+
   
   <!-- javascript -->
   <script>
@@ -125,6 +162,24 @@
 
     function closeDeleteModal() {
       const modal = document.getElementById('delete-modal');
+      modal.classList.add('hidden');
+    }
+
+    function openBulkDeleteModal() {
+      // モーダル要素
+      const modal = document.getElementById('bulk-delete-modal');
+      // モーダル内のフォーム
+      const form = document.getElementById('bulk-delete-form');
+      // 削除URL（urls.pyで指定したもの）
+      form.action = "/consultation/bulk-delete/";
+      
+      // モーダルを表示
+      modal.classList.remove('hidden');
+    }
+
+    function closeBulkDeleteModal() {
+      const modal = document.getElementById('bulk-delete-modal');
+      // モーダルを非表示
       modal.classList.add('hidden');
     }
   </script>
