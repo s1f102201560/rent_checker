@@ -116,7 +116,7 @@ def chat(request, room_url):
         defaults={"name": consultation.title}
     )
     chat_logs = ChatLog.objects.filter(room=room, user=request.user).order_by('created_at')
-    room_logs = ChatRoom.objects.filter().distinct().order_by('-created_at')
+    room_logs = ChatRoom.objects.order_by('-created_at')
 
     return render(request, 'app/chat/chat.html', {
         'room_name': room_url,
