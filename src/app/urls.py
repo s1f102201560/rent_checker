@@ -1,6 +1,6 @@
 from django.urls import path
 from django.contrib.auth.decorators import login_required
-from app.views import top, chat, consultation, consultation_detail, consultation_new, consultation_edit, upload_image, ContactFormView, ContactResultView, template, security_deposit, before_move, brokerage_fee, penalty_fee, restoration, insurance
+from app.views import top, chat, consultation, consultation_detail, consultation_new, consultation_edit, consultation_delete, upload_image, ContactFormView, ContactResultView, template, security_deposit, before_move, brokerage_fee, penalty_fee, restoration, insurance
 
 
 urlpatterns = [
@@ -9,6 +9,7 @@ urlpatterns = [
     path("consultation/new/", consultation_new, name="consultation_new"),
     path("consultation/<int:consultation_id>/", consultation_detail, name="consultation_detail"),
     path("consultation/<int:consultation_id>/edit/", consultation_edit, name="consultation_edit"),
+    path("consultation/<int:consultation_id>/delete/", consultation_delete, name="consultation_delete"),
     path("consultation/<str:room_url>/", login_required(chat), name="chat"),
     path('upload_image/', upload_image, name='upload_image'),
     path('contact/', ContactFormView.as_view(), name='contact_form'), # 問い合わせフォーム
