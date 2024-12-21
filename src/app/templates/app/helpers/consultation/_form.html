@@ -34,5 +34,10 @@
     {% endif %}
   </div>
 
-  <input type="submit" value="登録" class="w-full bg-yellow-200 text-white font-bold py-2 px-4 rounded hover:bg-yellow-300" />
+  {% if is_edit %}
+    <input type="submit" value="更新" class="w-full font-semibold py-2 px-4 text-white bg-green-400 border-2 border-green4200 rounded hover:text-green-400 hover:bg-white" />
+  {% else %}
+    <input type="submit" value="登録" class="w-full bg-yellow-200 text-white font-semibold py-2 px-4 rounded hover:bg-yellow-300" />
+  {% endif %}
+
 </form>

@@ -63,6 +63,7 @@ def consultation_new(request):
         form = ConsultationForm()
         context = {
             "form": form,
+            'is_edit': False
         }
         return render(request, "app/consultation/new.html", context)
 
@@ -82,6 +83,7 @@ def consultation_edit(request, consultation_id):
         form = ConsultationForm(instance=consultation)
         context = {
             "form": form,
+            'is_edit': True
         }
         return render(request, "app/consultation/edit.html", context)
 
