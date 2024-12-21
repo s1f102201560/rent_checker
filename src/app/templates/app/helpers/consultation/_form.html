@@ -34,5 +34,19 @@
     {% endif %}
   </div>
 
-  <input type="submit" value="登録" class="w-full bg-yellow-200 text-white font-bold py-2 px-4 rounded hover:bg-yellow-300" />
+    <div class="flex gap-4 justify-end">
+      <a href="javascript:history.back()"
+        class="inline-flex items-center text-sm font-semibold px-2 py-1 text-white bg-gray-400 border-2 border-gray-400 rounded-full hover:text-gray-400 hover:bg-white inline-flex items-center">
+        <i class="fa-solid fa-arrow-left fa-sm mr-2"></i>
+        戻る
+      </a>
+      {% if is_edit %}
+        <input type="submit" value="更新" class="inline-block font-semibold px-3 py-2 text-white bg-green-400 border-2 border-green-400 rounded-full hover:text-green-400 hover:bg-white" />
+      {% else %}
+        <input type="submit" value="登録" class="inline-block bg-yellow-200 text-white font-semibold py-2 px-4 rounded-full hover:bg-yellow-300"/>
+      {% endif %}
+    </div>
+
+
+
 </form>

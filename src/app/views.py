@@ -58,11 +58,12 @@ def consultation_new(request):
             if request.FILES:
                 consultation.file = request.FILES.get('file')
             consultation.save()
-            return redirect(consultation_detail, consultation_id=consultation.pk)
+            return redirect("consultation")
     else:
         form = ConsultationForm()
         context = {
             "form": form,
+            'is_edit': False
         }
         return render(request, "app/consultation/new.html", context)
 
@@ -82,9 +83,29 @@ def consultation_edit(request, consultation_id):
         form = ConsultationForm(instance=consultation)
         context = {
             "form": form,
+            'is_edit': True
         }
         return render(request, "app/consultation/edit.html", context)
 
+@login_required
+def consultation_delete(request, consultation_id):
+    consultation = get_object_or_404(Consultation, pk=consultation_id)
+    if consultation.user.id != request.user.id:
+        return HttpResponseForbidden("この相談の削除は許可されていません")
+    if request.method == "POST":
+        consultation.delete()
+        return redirect('consultation')
+    return redirect('consultation_detail', consultation_id=consultation_id)
+
+@login_required
+def consultation_bulk_delete(request):
+    if request.method == "POST":
+        consultation_ids = request.POST.getlist('consultations')
+        if not consultation_ids:
+            return redirect('consultation')
+        Consultation.objects.filter(id__in=consultation_ids, user=request.user).delete()
+        return redirect('consultation')
+    return redirect('consultation')
 
 @login_required
 def chat(request, room_url):
@@ -95,7 +116,7 @@ def chat(request, room_url):
         defaults={"name": consultation.title}
     )
     chat_logs = ChatLog.objects.filter(room=room, user=request.user).order_by('created_at')
-    room_logs = ChatRoom.objects.filter().distinct().order_by('-created_at')
+    room_logs = ChatRoom.objects.order_by('-created_at')
 
     return render(request, 'app/chat/chat.html', {
         'room_name': room_url,
