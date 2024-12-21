@@ -58,7 +58,7 @@ def consultation_new(request):
             if request.FILES:
                 consultation.file = request.FILES.get('file')
             consultation.save()
-            return redirect(consultation_detail, consultation_id=consultation.pk)
+            return redirect("consultation")
     else:
         form = ConsultationForm()
         context = {
