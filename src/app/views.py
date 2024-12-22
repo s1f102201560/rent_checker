@@ -35,6 +35,26 @@ def consultation(request):
     return render(request, 'app/consultation/consultation.html', context)
 
 @login_required
+@require_safe
+def search_consultations(request):
+    query = request.GET.get('query', '')
+    if query:
+        consultations = Consultation.objects.filter(title__icontains=query)
+    else:
+        consultations = Consultation.objects.all()
+
+    consultations_data = [{
+        'id': consultation.id,
+        'title': consultation.title,
+        'room_link': consultation.room_link,
+        'file': None,
+        'checklist': consultation.checklist,
+        'created_at': consultation.created_at.strftime('%Y-%m-%d %H:%M'),
+    } for consultation in consultations]
+    
+    return JsonResponse({'consultations': consultations_data})
+
+@login_required
 def consultation_detail(request, consultation_id):
     consultation = get_object_or_404(Consultation, pk=consultation_id)
     if consultation.user.id != request.user.id:

@@ -2,6 +2,16 @@
 {% load static %}
 {% load custom_filters %}
 
+{% block head %}
+  {{ block.super }}
+  <script>
+      window.searchConsultationsUrl = "{% url 'search_consultations' %}";
+  </script>
+  <!-- JQuery -->
+  <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="{% static 'app/js/search-title.js' %}" defer></script>
+{% endblock head %}
+
 {% block nav %}
   {% include "app/helpers/_navigation.html" %}
 {% endblock nav %}
@@ -25,7 +35,7 @@
       <form id="bulk-delete-form" method="POST" action="{% url 'consultation_bulk_delete' %}">
         {% csrf_token %}
         <div class="relative overflow-x-auto bg-gray-50 border border-gray-300 rounded-lg">
-          <table class="w-full text-sm text-left">
+          <table id="search-results" class="w-full text-sm text-left">
             <thead class="text-xs text-gray-600 bg-yellow-200">
               <tr>
                 <th scope="col" class="px-6 py-3">
