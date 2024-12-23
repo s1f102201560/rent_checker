@@ -4,7 +4,7 @@ $(document).ready(function () {
     return parts[parts.length - 1] || parts[parts.length - 2];
   }
   function navigateToChat(roomLinkSegment) {
-    window.location.href = `/chat/${roomLinkSegment}/`;
+    window.location.href = `/consultation/${roomLinkSegment}/`;
   }
   function openDeleteModal(consultationId) {
     if (confirm('この相談を削除してもよろしいですか？')) {
@@ -33,7 +33,7 @@ $(document).ready(function () {
           '</td>' +
           '<td class="px-6 py-4 font-medium text-gray-600 whitespace-nowrap">' + consultation.title + '</td>' +
           '<td class="px-6 py-4">' +
-              '<a href="/chat/' + extractLastSegment(consultation.room_link) + '" ' +
+              '<a href="/consultation/' + extractLastSegment(consultation.room_link) + '" ' +
                   'onclick="navigateToChat(\'' + extractLastSegment(consultation.room_link) + '\')" ' +
                   'class="text-blue-400 hover:underline break-all">' +
                   consultation.room_link +
