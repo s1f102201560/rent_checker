@@ -1,11 +1,12 @@
 from django.urls import path
 from django.contrib.auth.decorators import login_required
-from app.views import top, chat, consultation, consultation_detail, consultation_new, consultation_edit, consultation_delete, consultation_bulk_delete, upload_image, ContactFormView, ContactResultView, template, security_deposit, before_move, brokerage_fee, penalty_fee, restoration, insurance
+from app.views import top, chat, consultation, search_consultations,  consultation_detail, consultation_new, consultation_edit, consultation_delete, consultation_bulk_delete, upload_image, ContactFormView, ContactResultView, template, security_deposit, before_move, brokerage_fee, penalty_fee, restoration, insurance
 
 
 urlpatterns = [
     path('', top, name="top"),
     path('consultation/', consultation, name="consultation"),
+    path('search-consultation/', search_consultations, name="search_consultations"),
     path("consultation/new/", consultation_new, name="consultation_new"),
     path("consultation/<int:consultation_id>/", consultation_detail, name="consultation_detail"),
     path("consultation/<int:consultation_id>/edit/", consultation_edit, name="consultation_edit"),

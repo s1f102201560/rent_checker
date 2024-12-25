@@ -1,8 +1,13 @@
 {% load custom_filters %}
 
 <div class="w-1/4 px-4 sm:px-6 lg:px-8 border-r border-gray-200 overflow-y-auto bg-white text-gray-500 font-semibold">
-    <div class="flex items-center text-gray-700 bg-white border-b border-gray-200 py-4 pl-4">
+    <div class="flex items-center text-gray-700 bg-white border-b border-gray-200 py-4 pl-4 justify-between">
         <h1 class="text-xl">履歴</h1>
+        <a href="javascript:history.back()"
+            class="inline-flex items-center text-sm font-semibold px-2 py-1 text-white bg-gray-400 border-2 border-gray-400 rounded-full hover:text-gray-400 hover:bg-white inline-flex items-center">
+            <i class="fa-solid fa-arrow-left fa-sm mr-2"></i>
+            戻る
+        </a>
     </div>
 
     <ul class="divide-y divide-gray-200">

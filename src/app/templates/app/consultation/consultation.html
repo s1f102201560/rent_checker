@@ -2,30 +2,42 @@
 {% load static %}
 {% load custom_filters %}
 
+{% block head %}
+  {{ block.super }}
+  <script>
+      window.searchConsultationsUrl = "{% url 'search_consultations' %}";
+  </script>
+  <!-- JQuery -->
+  <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="{% static 'app/js/search-title.js' %}" defer></script>
+{% endblock head %}
+
 {% block nav %}
   {% include "app/helpers/_navigation.html" %}
 {% endblock nav %}
 
 {% block main %}
   <div class="mt-20 px-4 sm:px-6 lg:px-8 bg-white text-gray-500 font-semibold">
-    <div class="flex flex-col md:flex-row lg:items-start lg:justify-between">
-      <div class="flex flex-col justify-between ml-2">
+    <div class="flex flex-col md:flex-row lg:items-start lg:justify-between p-4">
+      <!-- 左側: 相談一覧 -->
+      <div class="flex-1 ml-2 mb-4 md:mb-0">
         <h2 class="text-2xl text-gray-700">相談一覧</h2>
+      </div>
+
+      <!-- 右側: 新規作成ボタンと検索フォーム -->
+      <div class="flex flex-col items-end space-y-4 max-w-md">
         <a href="{% url 'consultation_new' %}"
-          class="mt-12 font-semibold px-3 py-2 text-white bg-yellow-200 border-2 border-yellow-200 rounded-full hover:text-yellow-200 hover:bg-white">
+          class="font-semibold text-white bg-yellow-200 border-2 border-yellow-200 rounded-full px-4 py-2 hover:text-yellow-200 hover:bg-white transition">
           新規相談を作成
         </a>
-      </div>
-      <div class="max-w-md space-y-4 mb-8">
         {% include "app/helpers/consultation/_search_title.html" %}
-        {% include "app/helpers/consultation/_search_datetime.html" %}
       </div>
     </div>
     {% if consultations %}
       <form id="bulk-delete-form" method="POST" action="{% url 'consultation_bulk_delete' %}">
         {% csrf_token %}
         <div class="relative overflow-x-auto bg-gray-50 border border-gray-300 rounded-lg">
-          <table class="w-full text-sm text-left">
+          <table id="search-results" class="w-full text-sm text-left">
             <thead class="text-xs text-gray-600 bg-yellow-200">
               <tr>
                 <th scope="col" class="px-6 py-3">
