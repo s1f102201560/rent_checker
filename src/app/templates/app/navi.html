@@ -128,33 +128,16 @@
 </nav>
 
 <script>
-  document.addEventListener('DOMContentLoaded', function () {
-    // ハンバーガーメニューのトグルボタン取得
-    const navToggle = document.getElementById('nav-toggle');
-    const navContent = document.getElementById('nav-content');
-
-    // ドロップダウンメニューのトグルボタン取得
-    const menuButton = document.getElementById('menu-button');
-    const dropdownMenu = document.getElementById('dropdown-menu');
-    const menuIcon = document.getElementById('menu-icon');
-
-    // ハンバーガーメニューのクリックイベント
-    navToggle.addEventListener('click', function () {
-      navContent.classList.toggle('hidden');
-    });
-
-    // ドロップダウンメニューのクリックイベント
-    menuButton.addEventListener('click', function () {
-      dropdownMenu.classList.toggle('hidden');
-      menuIcon.classList.toggle('rotate-180');
-    });
-
-    // ページ外クリックでドロップダウンを閉じる
-    document.addEventListener('click', function (event) {
-      if (!menuButton.contains(event.target) && !dropdownMenu.contains(event.target)) {
-        dropdownMenu.classList.add('hidden');
-        menuIcon.classList.remove('rotate-180');
-      }
-    });
-  });
+  function toggleMenu() {
+    const menu = document.getElementById('dropdown-menu');
+    const icon = document.getElementById('menu-icon');
+    menu.classList.toggle('hidden');
+    icon.classList.toggle('rotate-180'); // アイコンを回転させるクラスをトグル
+  }
 </script>
+
+<style>
+  .rotate-180 {
+    transform: rotate(180deg);
+  }
+</style>
