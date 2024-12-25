@@ -48,6 +48,11 @@
         <small class="text-gray-600">{{ form.password2.help_text }}</small>
       {% endif %}
     </div>
+    {% if form.non_field_errors %}
+      <div class="mb-4">
+        <span class="text-red-500 text-xs italic">{{ form.non_field_errors.as_text }}</span>
+      </div>
+    {% endif %}
   {% elif form_type == 'login' %}
     <div class="mb-4">
       {{ form.username|add_class:"appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"|attr:"placeholder:ユーザ名" }}
@@ -73,6 +78,11 @@
       {% endif %}
       {% if form.password.help_text %}
           <small class="text-gray-600">{{ form.password.help_text }}</small>
+      {% endif %}
+      {% if form.non_field_errors %}
+          <div class="mb-4">
+              <span class="text-red-500 text-xs italic">{{ form.non_field_errors.as_text }}</span>
+          </div>
       {% endif %}
     </div>    
   {% elif form_type == 'password_change' %}
@@ -113,6 +123,11 @@
         <small class="text-gray-600">{{ form.new_password2.help_text }}</small>
       {% endif %}
     </div>
+    {% if form.non_field_errors %}
+    <div class="mb-4">
+      <span class="text-red-500 text-xs italic">{{ form.non_field_errors.as_text }}</span>
+    </div>
+    {% endif %} 
   {% elif form_type == 'password_reset' %}
     <div class="mb-4">
       {{ form.email|add_class:"appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"|attr:"placeholder:メールアドレス" }}
