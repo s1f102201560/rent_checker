@@ -3,7 +3,7 @@ FROM python:3.12-slim
 
 # 環境変数の設定
 ENV PYTHONUNBUFFERED=1 \
-    DJANGO_SETTINGS_MODULE=config.settings \
+    DJANGO_SETTINGS_MODULE=config.settings.development \
     PYTHONPATH=/code/src
 
 # 作業ディレクトリの設定

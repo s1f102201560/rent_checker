@@ -5,20 +5,17 @@ from pathlib import Path
 import os
 import environ
 
-BASE_DIR = Path(__file__).resolve().parent.parent
+BASE_DIR = Path(__file__).resolve().parent.parent.parent
 
 env = environ.Env()
 env.read_env(os.path.join(BASE_DIR, '.env'))
 
 SECRET_KEY = env('SECRET_KEY')
 
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = ['*']
-CSRF_TRUSTED_ORIGINS = [
-    'http://localhost:8080',
-    'http://172.16.244.114:8080'
-]
+ALLOWED_HOSTS = []
+
 
 
 #################
@@ -50,6 +47,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    "whitenoise.middleware.WhiteNoiseMiddleware",
 ]
 
 ROOT_URLCONF = 'config.urls'
@@ -91,9 +89,7 @@ CHANNEL_LAYERS = {
 ##########
 # DB周り #
 ##########
-DATABASES = {
-    'default': env.db()
-}
+DATABASES = {}
 
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -137,6 +133,8 @@ STATICFILES_DIRS = [
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 ###########
@@ -164,12 +162,11 @@ DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 ###########
 OPENAI_API_KEY = env('OPENAI_API_KEY')
 OPENAI_API_BASE = env('OPENAI_API_BASE')
-OPENAI_MODEL = 'gpt-4o'
+OPENAI_MODEL = 'gpt-4o-mini'
 
 ##########
 # その他 #
 ##########
-if DEBUG == True:
-    BASE_URL = "http://localhost/consultation/"
+
 
 NUMBER_GROUPING = 3
