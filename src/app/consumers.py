@@ -1,11 +1,11 @@
 import json
 import uuid
 from asgiref.sync import sync_to_async
-from config import settings
+from config.settings import base
 from channels.generic.websocket import AsyncWebsocketConsumer
 from django.template.loader import render_to_string
 from asgiref.sync import sync_to_async
-from config import settings
+from config.settings import base
 from .rag_initializer import initialize_rag_chain
 from .vectorstore_initializer import initialize_vectorstore
 from .models import ChatLog, ChatRoom
@@ -16,7 +16,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
         # ユーザー情報とセッションIDを設定
         self.user = self.scope["user"]
         # FIXME localでしか動作しないハードコードをしている
-        self.room_name = settings.BASE_URL + self.scope["url_route"]["kwargs"]["room_name"]
+        self.room_name = base.BASE_URL + self.scope["url_route"]["kwargs"]["room_name"]
         self.session_id = f"{self.user.id}-{self.room_name}"
         self.room = await sync_to_async(ChatRoom.objects.get)(link=self.room_name)
 
@@ -25,9 +25,9 @@ class ChatConsumer(AsyncWebsocketConsumer):
         
         # RAGチェーンの初期化
         self.rag_chain, self.get_session_history = initialize_rag_chain(
-            api_key=settings.OPENAI_API_KEY,
-            base_url=settings.OPENAI_API_BASE,
-            model_name=settings.OPENAI_MODEL,
+            api_key=base.OPENAI_API_KEY,
+            base_url=base.OPENAI_API_BASE,
+            model_name=base.OPENAI_MODEL,
             retriever=self.retriever
         )
 
