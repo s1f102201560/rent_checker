@@ -7,7 +7,6 @@ on:
 
 jobs:
   deploy:
-    # ランナーを ubuntu-22.04 に指定
     runs-on: ubuntu-22.04
 
     steps:
@@ -17,7 +16,7 @@ jobs:
 
       # 2. ソースコードを本番サーバーに転送
       - name: Copy project to server
-        uses: appleboy/scp-action@v0.1.8
+        uses: appleboy/scp-action@v0.1.0
         with:
           host: ${{ secrets.SERVER_HOST }}
           username: ${{ secrets.SERVER_USER }}
@@ -27,7 +26,7 @@ jobs:
 
       # 3. 本番サーバーで Docker をビルドしてデプロイ
       - name: Build and Deploy on Server
-        uses: appleboy/ssh-action@v0.1.18
+        uses: appleboy/ssh-action@v0.1.6
         with:
           host: ${{ secrets.SERVER_HOST }}
           username: ${{ secrets.SERVER_USER }}
