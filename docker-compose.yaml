@@ -33,7 +33,7 @@ services:
   nginx:
     image: nginx:latest
     ports:
-      - "8080:80"
+      - "80:80"
     volumes:
       - ./nginx:/etc/nginx/conf.d
       - ./src/collected_static:/code/src/collected_static
