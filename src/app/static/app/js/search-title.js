@@ -39,14 +39,14 @@ $(document).ready(function () {
                   consultation.room_link +
               '</a>' +
           '</td>' +
-          '<td class="px-6 py-4">' + consultation.file + '</td>' +
+          '<td class="px-6 py-4">' + (consultation.file ? '有り' : '無し') + '</td>' +
           '<td class="px-6 py-4">' + consultation.checklist + '</td>' +
           '<td class="px-6 py-4">' + consultation.created_at + '</td>' +
           '<td class="px-3 py-4">' +
-              '<a href="/consultation_detail/' + consultation.id + '" class="text-blue-400 hover:underline">詳細</a>' +
+              '<a href="/consultation/' + consultation.id + '" class="text-blue-400 hover:underline">詳細</a>' +
           '</td>' +
           '<td class="px-3 py-4">' +
-              '<a href="/consultation_edit/' + consultation.id + '" class="text-green-400 hover:underline">編集</a>' +
+              '<a href="/consultation/' + consultation.id + '/edit/' + '" class="text-green-400 hover:underline">編集</a>' +
           '</td>' +
           '<td class="px-3 py-4">' +
               '<button type="button" class="font-semibold text-red-400 hover:underline" ' +
