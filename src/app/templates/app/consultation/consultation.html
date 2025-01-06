@@ -75,7 +75,13 @@
                         {{ consultation.room_link }}
                       </a>
                     </td>
-                    <td class="px-6 py-4">{{ consultation.file }}</td>
+                    <td class="px-6 py-4">
+                      {% if consultation.file %}
+                        有り
+                      {% else %}
+                        無し
+                      {% endif %}
+                    </td>
                     <td class="px-6 py-4">{{ consultation.checklist }}</td>
                     <td class="px-6 py-4">{{ consultation.created_at }}</td>
                     <td class="px-3 py-4"><a href="{% url "consultation_detail" consultation.id %}" class="text-blue-400 hover:underline">詳細</a></td>
