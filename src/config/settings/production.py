@@ -13,7 +13,7 @@ SECRET_KEY = env('SECRET_KEY')
 ALLOWED_HOSTS = env.list('ALLOWED_HOSTS')
 
 CSRF_TRUSTED_ORIGINS = [
-  'http://unohayato.com',
+  'http://206.189.148.153:8080'
 ]
 
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
