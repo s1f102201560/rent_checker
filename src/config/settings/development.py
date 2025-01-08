@@ -13,13 +13,13 @@ SECRET_KEY = env('SECRET_KEY')
 ALLOWED_HOSTS = ['*']
 
 CSRF_TRUSTED_ORIGINS = [
-    'http://localhost:8080',
-    'http://172.16.244.114:8080'
+    'http://localhost',
 ]
 
 DATABASES = {
     'default': env.db()
 }
 
-if DEBUG == True:
-    BASE_URL = "http://localhost/consultation/"
+##########
+# その他　#
+##########

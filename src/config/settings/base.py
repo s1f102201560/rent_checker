@@ -167,6 +167,9 @@ OPENAI_MODEL = 'gpt-4o-mini'
 ##########
 # その他 #
 ##########
-
+if  env("ENV")== "development":
+    BASE_URL = "http://localhost/consultation/"
+else:
+    BASE_URL = "http://206.189.148.153/consultation/"
 
 NUMBER_GROUPING = 3
