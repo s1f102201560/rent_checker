@@ -13,8 +13,12 @@ from channels.auth import AuthMiddlewareStack
 from channels.routing import ProtocolTypeRouter, URLRouter
 from channels.security.websocket import AllowedHostsOriginValidator
 from django.core.asgi import get_asgi_application
+from config.settings.base import DEBUG
 
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "config.settings.development")
+if DEBUG:
+    os.environ.setdefault("DJANGO_SETTINGS_MODULE", "config.settings.development")
+else:
+    os.environ.setdefault("DJANGO_SETTINGS_MODULE", "config.settings.production")
 django_asgi_app = get_asgi_application()
 import app.routing
 

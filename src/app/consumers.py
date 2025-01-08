@@ -5,7 +5,6 @@ from config.settings import base
 from channels.generic.websocket import AsyncWebsocketConsumer
 from django.template.loader import render_to_string
 from asgiref.sync import sync_to_async
-from config.settings import base
 from .rag_initializer import initialize_rag_chain
 from .vectorstore_initializer import initialize_vectorstore
 from .models import ChatLog, ChatRoom
