@@ -2,6 +2,10 @@
 {% load static %}
 {% load widget_tweaks %}
 
+{% block nav %}
+  {% include "app/helpers/_navigation.html" %}
+{% endblock nav %}
+
 {% block main %}
   <div class="mt-20 px-4 sm:px-6 lg:px-8 bg-white text-gray-500 font-semibold">
     <h1 class="text-2xl text-gray-700 mb-8 text-center">新規相談を作成</h1>
