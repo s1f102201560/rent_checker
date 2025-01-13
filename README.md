@@ -32,7 +32,7 @@
   * Github
 
 ### ER図
-![image](https://github.com/user-attachments/assets/b24bee65-d957-4f73-89d5-6a59f9cd2ed0)
+![image](https://github.com/user-attachments/assets/672e179d-2f80-4816-8d79-7aef92b5f611)
 
 
 ### 動作イメージ
