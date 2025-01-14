@@ -30,9 +30,11 @@
 * その他
   * Git
   * Github
+  * Githubactions
 
 ### ER図
-![image](https://github.com/user-attachments/assets/672e179d-2f80-4816-8d79-7aef92b5f611)
+![image](https://github.com/user-attachments/assets/b539e5b8-2ac3-498d-9f27-7a965811f796)
+
 
 
 ### 動作イメージ
